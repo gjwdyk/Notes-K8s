@@ -13,7 +13,7 @@ Filter based on (Version: 20.04):
       "amd64" : "ami-075520a13dc442833",
       "arm64" : "ami-06aa574bdb0802086"
      },
-	 "20.04" : {
+     "20.04" : {
       "amd64" : "ami-0c85b1d3c76beeb34",
       "arm64" : "ami-0bc3e054e358e0568"
      }
@@ -25,7 +25,7 @@ Filter based on (Version: 20.04):
       "amd64" : "ami-0a4e8c6468d92c210",
       "arm64" : "ami-05b55058097a955d7"
      },
-	 "20.04" : {
+     "20.04" : {
       "amd64" : "ami-0cb175a4bd5e1857b",
       "arm64" : "ami-028fd3ee5bf847e2a"
      }
