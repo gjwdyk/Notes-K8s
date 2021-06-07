@@ -2,23 +2,21 @@
  "AWSTemplateFormatVersion": "2010-09-09",
  "Description": "**WARNING** This template creates a new VPC and all necessary AWS Resources including EC2 Instances. You will be billed by AWS for the AWS Resources used if you create a stack from this template.",
  "Mappings": {
-   "SubnetConfig": {
-     "VPC": {
-       "CIDR": "10.1.0.0\/16"
-     },
-     "PublicManagement": {
-       "CIDR": "10.1.1.0\/24"
-     },
-     "PublicTraffic": {
-       "CIDR": "10.1.10.0\/24"
-     },
-     "PrivateControl": {
-       "CIDR": "10.1.2.0\/24"
-     },
-     "PrivateTraffic": {
-       "CIDR": "10.1.20.0\/24"
-     }
+
+  "SubNet": {
+   "VPC": {
+    "PreFix": "10.1"
    },
+   "K8sNode": {
+    "InFix": "1"
+   },
+   "K8sPod": {
+    "CIDR": "10.244.0.0/16"
+   },
+   "K8sService": {
+    "CIDR": "10.96.0.0/12"
+   }
+  },
 
   "RegionAMIMap": {
    "af-south-1" : {
