@@ -1,0 +1,3000 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Default values within this AWS CloudFormation Template are valid only for AWS Region Tokyo, Seoul and Singapore. **WARNING** This template creates a new VPC and all necessary AWS Resources including EC2 Instances. You will be billed by AWS for the AWS Resources used if you create a stack from this template.",
+  "Mappings": {
+    "SubnetConfig": {
+      "VPC": {
+        "CIDR": "10.1.0.0\/16"
+      },
+      "PublicManagement": {
+        "CIDR": "10.1.1.0\/24"
+      },
+      "PublicTraffic": {
+        "CIDR": "10.1.10.0\/24"
+      },
+      "PrivateControl": {
+        "CIDR": "10.1.2.0\/24"
+      },
+      "PrivateTraffic": {
+        "CIDR": "10.1.20.0\/24"
+      }
+    },
+
+  "RegionAMIMap": {
+   "ap-east-1": {
+    "BigIP": "ami-06e2d384ab36eb36c",
+    "LAMP": "ami-08246901116b4194f",
+    "Windows": "ami-07afa755407a2487e"
+   },
+   "ap-northeast-1": {
+    "BigIP": "ami-01059c3f3325d9619",
+    "LAMP": "ami-0d169f0d99a7de28b",
+    "Windows": "ami-04652190581b10ff0"
+   },
+   "ap-northeast-2": {
+    "BigIP": "ami-097d818e4963e017a",
+    "LAMP": "ami-076606ed5ccaa5031",
+    "Windows": "ami-0101280b24f19d47b"
+   },
+   "ap-south-1": {
+    "BigIP": "ami-07fd3f2ef5f902f86",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "ap-southeast-1": {
+    "BigIP": "ami-071c2bc10872531f5",
+    "LAMP": "ami-0df2622d7d4612d77",
+    "Windows": "ami-0eab3f51c4d3dd225"
+   },
+   "ap-southeast-2": {
+    "BigIP": "ami-04d1e8e98d3f5424e",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "ca-central-1": {
+    "BigIP": "ami-07a23cf5bd0e7a6cb",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "cn-north-1": {
+    "BigIP": "ami-0a057e7ec5bf5fd95",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "cn-northwest-1": {
+    "BigIP": "ami-04313f7d517937ba9",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "eu-central-1": {
+    "BigIP": "ami-06595fe1a66756714",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "eu-north-1": {
+    "BigIP": "ami-040d17864c9c3aad4",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "eu-south-1": {
+    "BigIP": "ami-0574f699fbd505454",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "eu-west-1": {
+    "BigIP": "ami-03c8e8b5f014b5e90",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "eu-west-2": {
+    "BigIP": "ami-0eac8ccf75d7ff1ca",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "eu-west-3": {
+    "BigIP": "ami-038614f050432d6d9",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "me-south-1": {
+    "BigIP": "ami-0a60fd9f3faf7c29d",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "sa-east-1": {
+    "BigIP": "ami-01925a4e0390f0e0c",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "us-east-1": {
+    "BigIP": "ami-0ee78e91f97dcb9a6",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "us-east-2": {
+    "BigIP": "ami-0648f74287ffaf373",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "us-gov-east-1": {
+    "BigIP": "ami-0e29443c0d2baed53",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "us-gov-west-1": {
+    "BigIP": "ami-0eb3a46cc8ab47c95",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "us-west-1": {
+    "BigIP": "ami-01d7302c269a9f9f2",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   },
+   "us-west-2": {
+    "BigIP": "ami-0f0f99f3ad7f0a55e",
+    "LAMP": "Please enter valid custom AMI ID for the region",
+    "Windows": "Please enter valid custom AMI ID for the region"
+   }
+  },
+
+    "IPAddressConfig": {
+      "BigIPInstance": {
+        "Management": "10.1.1.241",
+        "External": "10.1.10.241",
+        "Internal": "10.1.20.241",
+        "Control": "10.1.2.241"
+      }
+    }
+  },
+  "Conditions": {
+   "DownLoadImage": { "Fn::Equals" : [ { "Ref": "UpgradeBigIP" }, "No" ] },
+   "UseTMSHCommandsFile": { "Fn::Or": [ { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "TMSH" ] }, { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3 and TMSH" ] } ] },
+   "UseAS3File": { "Fn::Or": [ { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3" ] }, { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3 and TMSH" ] } ] },
+   "DefaultBigIPImageID": { "Fn::Equals" : [ { "Ref": "BigIPImageID" }, "Default" ] },
+   "DefaultLAMPImageID": { "Fn::Equals" : [ { "Ref": "LAMPServerImageID" }, "Default" ] },
+   "DefaultWindowsImageID": { "Fn::Equals" : [ { "Ref": "WindowsServerImageID" }, "Default" ] }
+  },
+
+
+
+  "Parameters" : {
+    "TagPreFix" : {
+      "Type": "String",
+      "Default": "CF",
+      "Description": "Prefix to be given to all possible resources created by this stack-template."
+    },
+    "BigIPImageID" : {
+      "Type": "String",
+      "Default": "Default",
+      "AllowedPattern": "^([aA][mM][iI]\\-)([0-9a-zA-Z]{8}|[0-9a-zA-Z]{17})$|^Default$",
+      "Description": "Provide a Valid Custom AMI ID of Big-IP in the Region, In Case a Custom Big-IP Image is Required."
+    },
+    "BigIPInstanceType" : {
+      "Type": "String",
+      "Default": "m5.xlarge",
+      "Description": "Provide a valid Instance Type for the Big-IP."
+    },
+    "LAMPServerImageID" : {
+      "Type": "String",
+      "Default": "Default",
+      "AllowedPattern": "^([aA][mM][iI]\\-)([0-9a-zA-Z]{8}|[0-9a-zA-Z]{17})$|^Default$",
+      "Description": "Outside AWS Regions of Tokyo, Seoul and Singapore, a Valid Custom AMI ID of LAMP Server in the Region MUST be Provided. Default Value Will NOT Work."
+    },
+    "LAMPServerInstanceType" : {
+      "Type": "String",
+      "Default": "t2.medium",
+      "Description": "Provide a valid Instance Type for the LAMP Server."
+    },
+    "WindowsServerImageID" : {
+      "Type": "String",
+      "Default": "Default",
+      "AllowedPattern": "^([aA][mM][iI]\\-)([0-9a-zA-Z]{8}|[0-9a-zA-Z]{17})$|^Default$",
+      "Description": "Outside AWS Regions of Tokyo, Seoul and Singapore, a Valid Custom AMI ID of Windows Server in the Region MUST be Provided. Default Value Will NOT Work."
+    },
+    "WindowsServerInstanceType" : {
+      "Type": "String",
+      "Default": "t2.medium",
+      "Description": "Provide a valid Instance Type for the Windows Server."
+    },
+    "EC2SSHKeyPair": {
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "Description": "EC2 KeyPair to enable SSH access to the EC2 instances, including the Big-IP. Select the SSH KeyPair you have access to."
+    },
+    "NTPServer": {
+      "Default": "0.pool.ntp.org",
+      "Description": "NTP server for this implementation",
+      "Type": "String"
+    },
+    "TimeZone": {
+      "Default": "Asia/Singapore",
+      "AllowedValues": [ "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul" ],
+      "Description": "Enter the Olson timezone string from /usr/share/zoneinfo. The default is 'UTC'. See the TZ column here (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for valid optional values. For example, 'US/Eastern'.",
+      "Type": "String"
+    },
+    "BigIPRegistrationKeyLicense" : {
+      "Type": "String",
+      "NoEcho": "true",
+      "MinLength": "1",
+      "MaxLength": "255",
+      "AllowedPattern": "^([A-Z][0-9A-Z]{4}\\-)([0-9A-Z]{5}\\-){3}([0-9A-Z]{7})( \\-\\-add\\-on ([0-9A-Z]{7}\\-[0-9A-Z]{7}))*$",
+      "ConstraintDescription": "Must be a valid Big-IP Registration Key License.",
+      "Description": "Big-IP Registration Key License. Format : AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE --add-on FFFFFFF-GGGGGGG --add-on HHHHHHH-IIIIIII ; or simply : AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE if there is no Add-On module."
+    },
+    "BigIPModules" : {
+      "Type": "String",
+      "Default": "ltm:nominal,avr:nominal,gtm:nominal,afm:nominal,asm:nominal,fps:nominal,apm:nominal",
+      "Description": "Comma separated list of modules and levels to provision, for example: ltm:nominal,avr:nominal,asm:nominal,apm:nominal . Provisionable modules are: afm, am, apm, asm, avr, cgnat, dos, fps, gtm, ilx, lc, ltm, pem, sslo, swg, urldb ."
+    },
+    "BigIPTrafficTLSKey" : {
+      "Type": "String",
+      "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Certificates/aadc.link.rsa.key",
+      "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+      "Description": "URL of the Private Key used to create the below TLS Certificate. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+    },
+    "BigIPTrafficTLSCertificate" : {
+      "Type": "String",
+      "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Certificates/aadc.link.rsa.crt",
+      "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+      "Description": "URL of the TLS Certificate which Big-IP will use to encrypt or decrypt the requests and responses between users and servers. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+    },
+    "BigIPAdminPassword" : {
+      "Type": "String",
+      "NoEcho": "true",
+      "Description": "Password for the Admin User of Big-IP."
+    },
+    "ConfigurationMethod": {
+     "AllowedValues": [
+      "None", "AS3", "TMSH", "AS3 and TMSH"
+     ],
+     "Default": "None",
+     "Description": "Select the method to configure the Big-IP. Note that between AS3 and TMSH there are possibilities for conflicts, and therefore both AS3 File and TMSH Commands File need to be sync-ed between each other.",
+     "Type": "String"
+    },
+    "AS3URL" : {
+      "Type": "String",
+      "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3_LTM_SSLoL_AVR_NOutB.json",
+      "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+      "Description": "URL for the AS3 declaration JSON file to be deployed. Input *none* (without the *) to deploy without a service configuration."
+    },
+    "BigIPTMSHConfiguration" : {
+      "Type": "String",
+      "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/F5_Configurations.sh",
+      "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+      "Description": "URL of the TMSH Commands File which Big-IP will execute. If the TMSH Commands File is located at AWS S3, ensure that this CloudFormation template can read the file. If the TMSH Commands File is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+    },
+    "SSMTPConfiguration" : {
+      "Type": "String",
+      "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/GMailSSMTP.conf",
+      "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+      "Description": "URL of the SSMTP configuration. This CloudFormation template requires a SSMTP configuration (i.e. Mandatory Input). If the SSMTP configuration is located at AWS S3, ensure that this CloudFormation template can read the file. If the SSMTP configuration is located at GitHub, ensure that this CloudFormation template can read the RAW SSMTP configuration file (i.e. NOT a web page containing the SSMTP configuration file)."
+    },
+    "SMTPUserID" : {
+      "Type": "String",
+      "Description": "User ID used to access to the SMTP Server, for sending the notification. Big-IP uses this account to send notification to the recipient."
+    },
+    "SMTPUserPassword" : {
+      "Type": "String",
+      "NoEcho": "true",
+      "Description": "Password for the User ID to access the SMTP Server."
+    },
+    "eMailNotificationRecipient" : {
+      "Type": "String",
+      "AllowedPattern": "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$",
+      "Description": "The Recipient's eMail Address of the Big-IP Notification messages."
+    },
+    "UserAlertConfiguration" : {
+      "Type": "String",
+      "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/user_alert.archive",
+      "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+      "Description": "URL of the additional user_alert configuration."
+    },
+    "UpgradeBigIP": {
+     "AllowedValues": [
+      "Yes",
+      "No"
+     ],
+     "Default": "No",
+     "Description": "Whether the Big-IP should be Upgraded automatically. If you select **Yes** the Big-IP will be Upgraded, and therefore the corresponding new image URL Path and File Name should be provided. Additional time is also needed for the Upgrade process.",
+     "Type": "String"
+    },
+    "UpgradeImageURLPath" : {
+      "Type": "String",
+      "Default": "https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/Big-IP/16.0.1/",
+      "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+      "Description": "URL Path of the upgrade .iso image. Keep the last / character."
+    },
+    "UpgradeImageFileName" : {
+      "Type": "String",
+      "Default": "BIGIP-16.0.1.1-0.0.6.iso",
+      "AllowedPattern": "^(BIGIP\\-)((([0-9]+)\\.)+)([0-9]+)\\-((([0-9]+)\\.)+)([0-9]+)\\.iso$|^none$",
+      "Description": "File Name of the upgrade .iso image."
+    },
+    "AllowPhoneHome": {
+     "AllowedValues": [
+      "Yes",
+      "No"
+     ],
+     "Default": "No",
+     "Description": "This deployment can send anonymous device statistics to F5 to help us determine how to improve our solutions. If you select **No** statistics are not sent.",
+     "Type": "String"
+    },
+    "Lidsa" : {
+      "Type": "String",
+      "NoEcho": "true",
+      "Default": "none",
+      "AllowedPattern": "^(([A-Z][0-9A-Z]{4}\\-)([0-9A-Z]{5}\\-){3}([0-9A-Z]{7})( \\-\\-add\\-on ([0-9A-Z]{7}\\-[0-9A-Z]{7}))*)(\\\\n(([A-Z][0-9A-Z]{4}\\-)([0-9A-Z]{5}\\-){3}([0-9A-Z]{7})( \\-\\-add\\-on ([0-9A-Z]{7}\\-[0-9A-Z]{7}))*))*$|^none$",
+      "Description": "Lorem Ipsum Dolor Sit Amet string. Proposed format are Lorem\\nIpsum\\nDolor\\nSit\\nAmet. Leave the field as it is for default."
+    }
+  },
+
+
+
+  "Metadata": {
+   "AWS::CloudFormation::Interface": {
+    "ParameterGroups": [
+     {
+      "Label": {
+       "default": "Name Tags Parameters"
+      },
+      "Parameters": [
+       "TagPreFix"
+      ]
+     },
+     {},
+     {
+      "Label": {
+       "default": "Common CloudFormation Parameters"
+      },
+      "Parameters": [
+       "BigIPImageID",
+       "BigIPInstanceType",
+       "LAMPServerImageID",
+       "LAMPServerInstanceType",
+       "WindowsServerImageID",
+       "WindowsServerInstanceType",
+       "EC2SSHKeyPair",
+       "NTPServer",
+       "TimeZone"
+      ]
+     },
+     {},
+     {
+      "Label": {
+       "default": "Big-IP Specific Parameters"
+      },
+      "Parameters": [
+       "BigIPRegistrationKeyLicense",
+       "BigIPModules",
+       "BigIPAdminPassword",
+       "BigIPTrafficTLSKey",
+       "BigIPTrafficTLSCertificate"
+      ]
+     },
+     {},
+     {
+      "Label": {
+       "default": "Big-IP Configuration Method/File"
+      },
+      "Parameters": [
+       "ConfigurationMethod",
+       "AS3URL",
+       "BigIPTMSHConfiguration"
+      ]
+     },
+     {},
+     {
+      "Label": {
+       "default": "Big-IP Notification Parameters"
+      },
+      "Parameters": [
+       "SSMTPConfiguration",
+       "SMTPUserID",
+       "SMTPUserPassword",
+       "eMailNotificationRecipient",
+       "UserAlertConfiguration"
+      ]
+     },
+     {},
+     {
+      "Label": {
+       "default": "Big-IP Upgrade Parameters"
+      },
+      "Parameters": [
+       "UpgradeBigIP",
+       "UpgradeImageURLPath",
+       "UpgradeImageFileName"
+      ]
+     },
+     {},
+     {
+      "Label": {
+       "default": "F5 Big-IP Statistics Collection Parameters"
+      },
+      "Parameters": [
+       "AllowPhoneHome"
+      ]
+     },
+     {},
+     {
+      "Label": {
+       "default": "Lorem Ipsum Dolor Sit Amet"
+      },
+      "Parameters": [
+       "Lidsa"
+      ]
+     },
+     {}
+    ],
+    "ParameterLabels": {
+     "TagPreFix": {
+      "default": "PreFix for Name Tags"
+     },
+ 
+     "BigIPImageID": {
+      "default": "Big-IP Image ID"
+     },
+     "BigIPInstanceType": {
+      "default": "Big-IP Instance Type"
+     },
+     "LAMPServerImageID": {
+      "default": "LAMP Server Image ID"
+     },
+     "LAMPServerInstanceType": {
+      "default": "LAMP Server Instance Type"
+     },
+     "WindowsServerImageID": {
+      "default": "Windows Server Image ID"
+     },
+     "WindowsServerInstanceType": {
+      "default": "Windows Server Instance Type"
+     },
+     "EC2SSHKeyPair": {
+      "default": "EC2 SSH Key-Pair"
+     },
+     "NTPServer": {
+      "default": "NTP Server used by Big-IP"
+     },
+     "TimeZone": {
+      "default": "Time Zone setting used by Big-IP"
+     },
+
+     "BigIPRegistrationKeyLicense": {
+      "default": "Big-IP Registration Key License"
+     },
+     "BigIPModules": {
+      "default": "Big-IP Modules to be Provisioned"
+     },
+     "BigIPAdminPassword": {
+      "default": "Big-IP's Admin Password"
+     },
+     "BigIPTrafficTLSKey": {
+      "default": "URL of the Private Key (of the SSL/TLS Certificate)"
+     },
+     "BigIPTrafficTLSCertificate": {
+      "default": "URL of the SSL/TLS Certificate"
+     },
+     "ConfigurationMethod": {
+      "default": "Select the Method to Configure Big-IP"
+     },
+     "AS3URL": {
+      "default": "AS3 Declaration URL"
+     },
+     "BigIPTMSHConfiguration": {
+      "default": "URL of the Big-IP TMSH Commands File"
+     },
+
+     "SSMTPConfiguration": {
+      "default": "URL of the SSMTP Configuration File"
+     },
+     "SMTPUserID": {
+      "default": "User ID to access the SMTP Server"
+     },
+     "SMTPUserPassword": {
+      "default": "Password of the User ID"
+     },
+     "eMailNotificationRecipient": {
+      "default": "Big-IP Notification Recipient's eMail Address"
+     },
+     "UserAlertConfiguration": {
+      "default": "URL of the additional user_alert configuration"
+     },
+
+     "UpgradeBigIP": {
+      "default": "Upgrade Big-IP ?"
+     },
+     "UpgradeImageURLPath": {
+      "default": "Upgrade Image's URL Path, of the .iso file used to upgrade the Big-IP image"
+     },
+     "UpgradeImageFileName": {
+      "default": "Upgrade Image's File Name, of the .iso file used to upgrade the Big-IP image"
+     },
+
+     "AllowPhoneHome": {
+      "default": "Send Anonymous Device Statistics to F5"
+     },
+
+     "Lidsa": {
+      "default": "Lorem Ipsum Dolor Sit Amet"
+     }
+
+    }
+   }
+  },
+
+
+
+  "Resources": {
+    "VPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "CidrBlock": {
+          "Fn::FindInMap": [
+            "SubnetConfig",
+            "VPC",
+            "CIDR"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "VPC" ] ] }
+          }
+        ]
+      }
+    },
+    "PublicManagementSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": { "Ref" : "AWS::Region" }
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": "true",
+        "CidrBlock": {
+          "Fn::FindInMap": [
+            "SubnetConfig",
+            "PublicManagement",
+            "CIDR"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PublicManagementSubnet" ] ] }
+          }
+        ]
+      }
+    },
+    "PublicTrafficSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": { "Ref" : "AWS::Region" }
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": "true",
+        "CidrBlock": {
+          "Fn::FindInMap": [
+            "SubnetConfig",
+            "PublicTraffic",
+            "CIDR"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PublicTrafficSubnet" ] ] }
+          }
+        ]
+      }
+    },
+    "PrivateControlSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": { "Ref" : "AWS::Region" }
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": "false",
+        "CidrBlock": {
+          "Fn::FindInMap": [
+            "SubnetConfig",
+            "PrivateControl",
+            "CIDR"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PrivateControlSubnet" ] ] }
+          }
+        ]
+      }
+    },
+    "PrivateTrafficSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": { "Ref" : "AWS::Region" }
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": "false",
+        "CidrBlock": {
+          "Fn::FindInMap": [
+            "SubnetConfig",
+            "PrivateTraffic",
+            "CIDR"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PrivateTrafficSubnet" ] ] }
+          }
+        ]
+      }
+    },
+    "InternetGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "InternetGateway" ] ] }
+          }
+        ]
+      }
+    },
+    "VPCGatewayAttachment": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        }
+      }
+    },
+    "PublicManagementRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PublicManagementRouteTable" ] ] }
+          }
+        ]
+      }
+    },
+    "PublicManagementRoute": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": "VPCGatewayAttachment",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "PublicManagementRouteTable"
+        },
+        "DestinationCidrBlock": "0.0.0.0\/0",
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        }
+      }
+    },
+    "PublicTrafficRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PublicTrafficRouteTable" ] ] }
+          }
+        ]
+      }
+    },
+    "PublicTrafficRoute": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": "VPCGatewayAttachment",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "PublicTrafficRouteTable"
+        },
+        "DestinationCidrBlock": "0.0.0.0\/0",
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        }
+      }
+    },
+    "PrivateControlRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PrivateControlRouteTable" ] ] }
+          }
+        ]
+      }
+    },
+    "PrivateTrafficRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PrivateTrafficRouteTable" ] ] }
+          }
+        ]
+      }
+    },
+    "PublicManagementSubnetRouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PublicManagementSubnet"
+        },
+        "RouteTableId": {
+          "Ref": "PublicManagementRouteTable"
+        }
+      }
+    },
+    "PublicTrafficSubnetRouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PublicTrafficSubnet"
+        },
+        "RouteTableId": {
+          "Ref": "PublicTrafficRouteTable"
+        }
+      }
+    },
+    "PrivateControlSubnetRouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PrivateControlSubnet"
+        },
+        "RouteTableId": {
+          "Ref": "PrivateControlRouteTable"
+        }
+      }
+    },
+    "PrivateTrafficSubnetRouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PrivateTrafficSubnet"
+        },
+        "RouteTableId": {
+          "Ref": "PrivateTrafficRouteTable"
+        }
+      }
+    },
+
+    "PublicManagementNetworkAcL": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PublicManagementNetworkAcL" ] ] }
+          }
+        ]
+      }
+    },
+    "InboundTCPPublicManagementNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicManagementNetworkAcL"
+        },
+        "RuleNumber": "101",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "OutboundTCPPublicManagementNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicManagementNetworkAcL"
+        },
+        "RuleNumber": "101",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "PublicManagementSubnetNetworkAcLAssociation": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PublicManagementSubnet"
+        },
+        "NetworkAclId": {
+          "Ref": "PublicManagementNetworkAcL"
+        }
+      }
+    },
+
+    "PublicTrafficNetworkAcL": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PublicTrafficNetworkAcL" ] ] }
+          }
+        ]
+      }
+    },
+    "InboundICMPPublicTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicTrafficNetworkAcL"
+        },
+        "RuleNumber": "300",
+        "Protocol": "1",
+        "Icmp" : {
+          "Code" : "-1",
+          "Type" : "-1"
+        },
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0"
+      }
+    },
+    "InboundUDPPublicTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicTrafficNetworkAcL"
+        },
+        "RuleNumber": "200",
+        "Protocol": "17",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "InboundTCPPublicTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicTrafficNetworkAcL"
+        },
+        "RuleNumber": "100",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "OutboundICMPPublicTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicTrafficNetworkAcL"
+        },
+        "RuleNumber": "300",
+        "Protocol": "1",
+        "Icmp" : {
+          "Code" : "-1",
+          "Type" : "-1"
+        },
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0"
+      }
+    },
+    "OutboundUDPPublicTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicTrafficNetworkAcL"
+        },
+        "RuleNumber": "200",
+        "Protocol": "17",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "OutboundTCPPublicTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PublicTrafficNetworkAcL"
+        },
+        "RuleNumber": "100",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "PublicTrafficSubnetNetworkAcLAssociation": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PublicTrafficSubnet"
+        },
+        "NetworkAclId": {
+          "Ref": "PublicTrafficNetworkAcL"
+        }
+      }
+    },
+
+    "PrivateControlNetworkAcL": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PrivateControlNetworkAcL" ] ] }
+          }
+        ]
+      }
+    },
+    "InboundICMPPrivateControlNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateControlNetworkAcL"
+        },
+        "RuleNumber": "300",
+        "Protocol": "1",
+        "Icmp" : {
+          "Code" : "-1",
+          "Type" : "-1"
+        },
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0"
+      }
+    },
+    "InboundUDPPrivateControlNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateControlNetworkAcL"
+        },
+        "RuleNumber": "200",
+        "Protocol": "17",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "InboundTCPPrivateControlNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateControlNetworkAcL"
+        },
+        "RuleNumber": "100",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "OutboundICMPPrivateControlNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateControlNetworkAcL"
+        },
+        "RuleNumber": "300",
+        "Protocol": "1",
+        "Icmp" : {
+          "Code" : "-1",
+          "Type" : "-1"
+        },
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0"
+      }
+    },
+    "OutboundUDPPrivateControlNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateControlNetworkAcL"
+        },
+        "RuleNumber": "200",
+        "Protocol": "17",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "OutboundTCPPrivateControlNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateControlNetworkAcL"
+        },
+        "RuleNumber": "100",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "PrivateControlSubnetNetworkAcLAssociation": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PrivateControlSubnet"
+        },
+        "NetworkAclId": {
+          "Ref": "PrivateControlNetworkAcL"
+        }
+      }
+    },
+
+    "PrivateTrafficNetworkAcL": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "PrivateTrafficNetworkAcL" ] ] }
+          }
+        ]
+      }
+    },
+    "InboundICMPPrivateTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateTrafficNetworkAcL"
+        },
+        "RuleNumber": "300",
+        "Protocol": "1",
+        "Icmp" : {
+          "Code" : "-1",
+          "Type" : "-1"
+        },
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0"
+      }
+    },
+    "InboundUDPPrivateTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateTrafficNetworkAcL"
+        },
+        "RuleNumber": "200",
+        "Protocol": "17",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "InboundTCPPrivateTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateTrafficNetworkAcL"
+        },
+        "RuleNumber": "100",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "OutboundICMPPrivateTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateTrafficNetworkAcL"
+        },
+        "RuleNumber": "300",
+        "Protocol": "1",
+        "Icmp" : {
+          "Code" : "-1",
+          "Type" : "-1"
+        },
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0"
+      }
+    },
+    "OutboundUDPPrivateTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateTrafficNetworkAcL"
+        },
+        "RuleNumber": "200",
+        "Protocol": "17",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "OutboundTCPPrivateTrafficNetworkAcLEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "PrivateTrafficNetworkAcL"
+        },
+        "RuleNumber": "100",
+        "Protocol": "6",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0\/0",
+        "PortRange": {
+          "From": "0",
+          "To": "65535"
+        }
+      }
+    },
+    "PrivateTrafficSubnetNetworkAcLAssociation": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PrivateTrafficSubnet"
+        },
+        "NetworkAclId": {
+          "Ref": "PrivateTrafficNetworkAcL"
+        }
+      }
+    },
+
+    "ServerTrafficSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Traffic Security Group for Server",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "22",
+            "ToPort": "22"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "80",
+            "ToPort": "80"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "443",
+            "ToPort": "443"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "5900",
+            "ToPort": "5900"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "ServerTrafficSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+    "ServerManagementSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Management Security Group for Server",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "5900",
+            "ToPort": "5900"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "80",
+            "ToPort": "80"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "443",
+            "ToPort": "443"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "22",
+            "ToPort": "22"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "ServerManagementSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPManagementSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Management Security Group for Big-IP",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "8443",
+            "ToPort": "8443"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "443",
+            "ToPort": "443"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "22",
+            "ToPort": "22"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPManagementSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPTrafficExternalSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Traffic Security Group for Big-IP External Interface",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "22",
+            "ToPort": "22"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "80",
+            "ToPort": "80"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "443",
+            "ToPort": "443"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "5900",
+            "ToPort": "5900"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPTrafficExternalSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPTrafficInternalSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Traffic Security Group for Big-IP Internal Interface",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "80",
+            "ToPort": "80"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "443",
+            "ToPort": "443"
+          },
+          {
+            "IpProtocol": "icmp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "-1",
+            "ToPort": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPTrafficInternalSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPControlSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Control and Signaling Security Group for Big-IP",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "4353",
+            "ToPort": "4353"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "4353",
+            "ToPort": "4353"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "443",
+            "ToPort": "443"
+          },
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "161",
+            "ToPort": "161"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "161",
+            "ToPort": "161"
+          },
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "53",
+            "ToPort": "53"
+          },
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "520",
+            "ToPort": "520"
+          },
+          {
+            "IpProtocol": "udp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "1026",
+            "ToPort": "1026"
+          },
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "22",
+            "ToPort": "22"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPControlSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+
+    "WindowsServerTrafficSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Traffic Security Group for Windows Server",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "WindowsServerTrafficSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+    "WindowsServerManagementSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Management Security Group for Windows Server",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol": "tcp",
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "3389",
+            "ToPort": "3389"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "WindowsServerManagementSecurityGroup" ] ] }
+          }
+        ]
+      }
+    },
+
+
+
+    "SelfEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "SelfEIP" ] ] }
+          }
+        ]
+      }
+    },
+    "StaticWebServerEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "StaticWebServerEIP" ] ] }
+          }
+        ]
+      }
+    },
+    "DVWAEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "DVWAEIP" ] ] }
+          }
+        ]
+      }
+    },
+    "HackazonEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "HackazonEIP" ] ] }
+          }
+        ]
+      }
+    },
+
+    "ServerEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "ServerEIP" ] ] }
+          }
+        ]
+      }
+    },
+    "WindowsServerEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "WindowsServerEIP" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPExternalNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Big-IP External VLAN",
+        "GroupSet" : [ {"Ref" : "BigIPTrafficExternalSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PublicTrafficSubnet" },
+        "PrivateIpAddress" : "10.1.10.241",
+        "PrivateIpAddresses" : [
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.10.240"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.10.242"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.10.243"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPExternalNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPInternalNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Big-IP Internal VLAN",
+        "GroupSet" : [ {"Ref" : "BigIPTrafficInternalSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PrivateTrafficSubnet" },
+        "PrivateIpAddress" : "10.1.20.241",
+        "PrivateIpAddresses" : [
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.240"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInternalNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPManagementNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Big-IP Management VLAN",
+        "GroupSet" : [ {"Ref" : "BigIPManagementSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PublicManagementSubnet" },
+        "PrivateIpAddress" : "10.1.1.241",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPManagementNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+    "BigIPControlNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Big-IP Control and Signaling VLAN",
+        "GroupSet" : [ {"Ref" : "BigIPControlSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PrivateControlSubnet" },
+        "PrivateIpAddress" : "10.1.2.241",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPControlNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+    "ServerManagementNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Server Management VLAN",
+        "GroupSet" : [ {"Ref" : "ServerManagementSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PublicManagementSubnet" },
+        "PrivateIpAddress" : "10.1.1.252",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "ServerManagementNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+    "ServerTrafficNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Server Traffic VLAN",
+        "GroupSet" : [ {"Ref" : "ServerTrafficSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PrivateTrafficSubnet" },
+        "PrivateIpAddresses" : [
+          {
+            "Primary" : "true",
+            "PrivateIpAddress" : "10.1.20.252"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.11"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.12"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.13"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.17"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.20"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "ServerTrafficNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+
+    "WindowsServerTrafficNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Windows Server Traffic VLAN",
+        "GroupSet" : [ {"Ref" : "WindowsServerTrafficSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PrivateTrafficSubnet" },
+        "PrivateIpAddresses" : [
+          {
+            "Primary" : "true",
+            "PrivateIpAddress" : "10.1.20.251"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.32"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.41"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.42"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.43"
+          },
+          {
+            "Primary" : "false",
+            "PrivateIpAddress" : "10.1.20.44"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "WindowsServerTrafficNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+    "WindowsServerManagementNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "Description" : "Network Interface for Windows Server Management VLAN",
+        "GroupSet" : [ {"Ref" : "WindowsServerManagementSecurityGroup"} ],
+        "SourceDestCheck" : "false",
+        "SubnetId" : { "Ref" : "PublicManagementSubnet" },
+        "PrivateIpAddress" : "10.1.1.251",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "WindowsServerManagementNetworkInterface" ] ] }
+          }
+        ]
+      }
+    },
+
+
+
+    "StaticWebServerEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "StaticWebServerEIP", "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "BigIPExternalNetworkInterface" },
+        "PrivateIpAddress" : "10.1.10.240"
+      }
+    },
+    "SelfEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "SelfEIP", "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "BigIPExternalNetworkInterface" },
+        "PrivateIpAddress" : "10.1.10.241"
+      }
+    },
+    "DVWAEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "DVWAEIP", "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "BigIPExternalNetworkInterface" },
+        "PrivateIpAddress" : "10.1.10.242"
+      }
+    },
+    "HackazonEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "HackazonEIP", "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "BigIPExternalNetworkInterface" },
+        "PrivateIpAddress" : "10.1.10.243"
+      }
+    },
+
+    "BigIPEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "BigIPEIP", "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "BigIPManagementNetworkInterface" }
+      }
+    },
+    "ServerEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "ServerEIP", "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "ServerManagementNetworkInterface" }
+      }
+    },
+    "WindowsServerEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "WindowsServerEIP", "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "WindowsServerManagementNetworkInterface" }
+      }
+    },
+
+
+
+    "LAMPServer" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "ImageId" : { "Fn::If": [ "DefaultLAMPImageID", { "Fn::FindInMap": [ "RegionAMIMap", { "Ref": "AWS::Region" }, "LAMP" ] }, { "Ref": "LAMPServerImageID" } ] },
+        "InstanceType" : { "Ref": "LAMPServerInstanceType" },
+        "NetworkInterfaces" : [ { "NetworkInterfaceId" : {"Ref" : "ServerManagementNetworkInterface"}, "DeviceIndex" : "0" },
+                                { "NetworkInterfaceId" : {"Ref" : "ServerTrafficNetworkInterface"}, "DeviceIndex" : "1" } ],
+        "KeyName" : { "Ref": "EC2SSHKeyPair" },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "LAMPServer" ] ] }
+          }
+        ],
+        "UserData" : { "Fn::Base64" : { "Fn::Join" : [ "", [
+          "#!/bin/bash", "\n",
+          "\n",
+          "sudo mv /etc/network/interfaces /etc/network/interfaces.vmimport", "\n",
+          "sudo mv /etc/network/vmimport.interfaces /etc/network/interfaces", "\n",
+          "sudo touch /etc/network/UserData`date +%Y%m%d%H%M%S`.Access", "\n"
+        ]]}}
+      }
+    },
+
+
+
+    "WindowsServer" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "ImageId" : { "Fn::If": [ "DefaultWindowsImageID", { "Fn::FindInMap": [ "RegionAMIMap", { "Ref": "AWS::Region" }, "Windows" ] }, { "Ref": "WindowsServerImageID" } ] },
+        "InstanceType" : { "Ref": "WindowsServerInstanceType" },
+        "NetworkInterfaces" : [ { "NetworkInterfaceId" : {"Ref" : "WindowsServerTrafficNetworkInterface"}, "DeviceIndex" : "0" },
+                                { "NetworkInterfaceId" : {"Ref" : "WindowsServerManagementNetworkInterface"}, "DeviceIndex" : "1" } ],
+        "KeyName" : { "Ref": "EC2SSHKeyPair" },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "WindowsServer" ] ] }
+          }
+        ]
+      }
+    },
+
+
+
+
+
+
+
+
+
+  "BigIPInstance": {
+   "Metadata": {
+    "AWS::CloudFormation::Init": {
+     "config": {
+      "commands": {
+       "000-disable-1nicautoconfig": {
+        "command": "/usr/bin/setdb provision.1nicautoconfig disable"
+       },
+       "010-install-libs": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          [
+           "mkdir -p /var/log/cloud/aws;",
+           "nohup /config/installCloudLibs.sh",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
+       "020-generate-password": {
+        "command": {
+         "Fn::Join": [
+          "",
+          [
+           "nohup /config/waitThenRun.sh",
+           " f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           " --signal PASSWORD_CREATED",
+           " --file f5-rest-node",
+           " --cl-args '/config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/generatePassword --file /config/cloud/aws/.adminPassword --encrypt'",
+           " --log-level silly",
+           " -o /var/log/cloud/aws/generatePassword.log",
+           " &>> /var/log/cloud/aws/install.log < /dev/null",
+           " &"
+          ]
+         ]
+        }
+       },
+       "030-create-admin-user": {
+        "command": {
+         "Fn::Join": [
+          "",
+          [
+           "nohup /config/waitThenRun.sh",
+           " f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           " --wait-for PASSWORD_CREATED",
+           " --signal ADMIN_CREATED",
+           " --file /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/createUser.sh",
+           " --cl-args '--user admin",
+           " --password-file /config/cloud/aws/.adminPassword",
+           " --password-encrypted",
+           "'",
+           " --log-level silly",
+           " -o /var/log/cloud/aws/createUser.log",
+           " &>> /var/log/cloud/aws/install.log < /dev/null",
+           " &"
+          ]
+         ]
+        }
+       },
+       "040-network-config": {
+        "command": {
+         "Fn::Join": [
+          "",
+          [
+           "ifconfig; ",
+           "GATEWAY_MAC_0=`ifconfig eth0 | egrep ether | awk '{print tolower($2)}'`; ",
+           "GATEWAY_CIDR_BLOCK_0=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_0}/subnet-ipv4-cidr-block`; ",
+           "GATEWAY_NET_0=${GATEWAY_CIDR_BLOCK_0%/*}; ",
+           "GATEWAY_PREFIX_0=${GATEWAY_CIDR_BLOCK_0#*/}; ",
+           "GATEWAY_0=`echo ${GATEWAY_NET_0} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
+           "echo \"GATEWAY 0 : ${GATEWAY_0}\"; ",
+           "echo \"GATEWAY MAC 0 : ${GATEWAY_MAC_0}\"; ",
+           "echo \"GATEWAY NET 0 : ${GATEWAY_NET_0}\"; ",
+           "echo \"GATEWAY PREFIX 0 : ${GATEWAY_PREFIX_0}\"; ",
+           "echo \"GATEWAY CIDR BLOCK 0 : ${GATEWAY_CIDR_BLOCK_0}\"; ",
+
+           "ifconfig; ",
+           "GATEWAY_MAC_1=`ifconfig eth1 | egrep ether | awk '{print tolower($2)}'`; ",
+           "GATEWAY_CIDR_BLOCK_1=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_1}/subnet-ipv4-cidr-block`; ",
+           "GATEWAY_NET_1=${GATEWAY_CIDR_BLOCK_1%/*}; ",
+           "GATEWAY_PREFIX_1=${GATEWAY_CIDR_BLOCK_1#*/}; ",
+           "GATEWAY_1=`echo ${GATEWAY_NET_1} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
+           "echo \"GATEWAY 1 : ${GATEWAY_1}\"; ",
+           "echo \"GATEWAY MAC 1 : ${GATEWAY_MAC_1}\"; ",
+           "echo \"GATEWAY NET 1 : ${GATEWAY_NET_1}\"; ",
+           "echo \"GATEWAY PREFIX 1 : ${GATEWAY_PREFIX_1}\"; ",
+           "echo \"GATEWAY CIDR BLOCK 1 : ${GATEWAY_CIDR_BLOCK_1}\"; ",
+
+           "ifconfig; ",
+           "GATEWAY_MAC_2=`ifconfig eth2 | egrep ether | awk '{print tolower($2)}'`; ",
+           "GATEWAY_CIDR_BLOCK_2=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_2}/subnet-ipv4-cidr-block`; ",
+           "GATEWAY_NET_2=${GATEWAY_CIDR_BLOCK_2%/*}; ",
+           "GATEWAY_PREFIX_2=${GATEWAY_CIDR_BLOCK_2#*/}; ",
+           "GATEWAY_2=`echo ${GATEWAY_NET_2} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
+           "echo \"GATEWAY 2 : ${GATEWAY_2}\"; ",
+           "echo \"GATEWAY MAC 2 : ${GATEWAY_MAC_2}\"; ",
+           "echo \"GATEWAY NET 2 : ${GATEWAY_NET_2}\"; ",
+           "echo \"GATEWAY PREFIX 2 : ${GATEWAY_PREFIX_2}\"; ",
+           "echo \"GATEWAY CIDR BLOCK 2 : ${GATEWAY_CIDR_BLOCK_2}\"; ",
+
+           "ifconfig; ",
+           "GATEWAY_MAC_3=`ifconfig eth3 | egrep ether | awk '{print tolower($2)}'`; ",
+           "GATEWAY_CIDR_BLOCK_3=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_3}/subnet-ipv4-cidr-block`; ",
+           "GATEWAY_NET_3=${GATEWAY_CIDR_BLOCK_3%/*}; ",
+           "GATEWAY_PREFIX_3=${GATEWAY_CIDR_BLOCK_3#*/}; ",
+           "GATEWAY_3=`echo ${GATEWAY_NET_3} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
+           "echo \"GATEWAY 3 : ${GATEWAY_3}\"; ",
+           "echo \"GATEWAY MAC 3 : ${GATEWAY_MAC_3}\"; ",
+           "echo \"GATEWAY NET 3 : ${GATEWAY_NET_3}\"; ",
+           "echo \"GATEWAY PREFIX 3 : ${GATEWAY_PREFIX_3}\"; ",
+           "echo \"GATEWAY CIDR BLOCK 3 : ${GATEWAY_CIDR_BLOCK_3}\"; ",
+
+           "nohup /config/waitThenRun.sh ",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/network.js ",
+           "--host localhost ",
+           "--user admin ",
+           "--password-url file:///config/cloud/aws/.adminPassword ",
+           "--password-encrypted ",
+           "-o /var/log/cloud/aws/network.log ",
+           "--log-level silly ",
+           "--wait-for ADMIN_CREATED ",
+           "--signal NETWORK_CONFIG_DONE ",
+
+           "--vlan name:external,nic:1.1 ",
+           "--self-ip name:external-self,address:",
+           {
+            "Fn::GetAtt": [
+             "BigIPExternalNetworkInterface",
+             "PrimaryPrivateIpAddress"
+            ]
+           },
+           "/${GATEWAY_PREFIX_1},vlan:external ",
+
+           "--vlan name:internal,nic:1.2 ",
+           "--self-ip name:internal-self,address:",
+           {
+            "Fn::GetAtt": [
+             "BigIPInternalNetworkInterface",
+             "PrimaryPrivateIpAddress"
+            ]
+           },
+           "/${GATEWAY_PREFIX_2},vlan:internal ",
+
+           "--vlan name:control,nic:1.3 ",
+           "--self-ip name:control-self,address:",
+           {
+            "Fn::GetAtt": [
+             "BigIPControlNetworkInterface",
+             "PrimaryPrivateIpAddress"
+            ]
+           },
+           "/${GATEWAY_PREFIX_3},vlan:control ",
+
+           "--default-gw ${GATEWAY_1} ",
+
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
+       "050-onboard-BIG-IP": {
+        "command": {
+
+         "Fn::Join": [
+          " ",
+          [
+           "NAME_SERVER=`/config/cloud/aws/getNameServer.sh eth1`;",
+           "nohup /config/waitThenRun.sh",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/onboard.js",
+           "--install-ilx-package file:///var/config/rest/downloads/f5-appsvcs-3.25.0-3.noarch.rpm",
+           "--wait-for NETWORK_CONFIG_DONE",
+           "--signal ONBOARD_DONE",
+           "-o /var/log/cloud/aws/onboard.log",
+           "--log-level silly",
+           "--no-reboot",
+           "--host localhost",
+           "--user admin",
+           "--password-url file:///config/cloud/aws/.adminPassword",
+           "--password-encrypted",
+           "--hostname `/usr/bin/curl -s -f --retry 22 --interface ", { "Fn::FindInMap": [ "IPAddressConfig", "BigIPInstance", "Management" ] }, " http://169.254.169.254/latest/meta-data/hostname`",
+           "--ntp ", { "Ref": "NTPServer" },
+           "--tz ", { "Ref": "TimeZone" },
+           "--dns ${NAME_SERVER}",
+           "--modules ", { "Ref": "BigIPModules" },
+           "--license ", { "Ref": "BigIPRegistrationKeyLicense" },
+           "-d tm.tcpudptxchecksum:software-only ",
+           "--ping",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+
+        }
+       },
+       "055-custom-config": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          [
+           "nohup /config/waitThenRun.sh",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           "--file /config/cloud/aws/custom-config.sh",
+           "--cwd /config/cloud/aws",
+           "-o /var/log/cloud/aws/custom-config.log",
+           "--log-level silly",
+           "--wait-for ONBOARD_DONE",
+           "--signal CUSTOM_CONFIG_DONE",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
+       "060-cluster": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          []
+         ]
+        }
+       },
+       "065-cfe": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          []
+         ]
+        }
+       },
+       "070-rm-password": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          [
+           "nohup /config/waitThenRun.sh",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           "--file /config/cloud/aws/rm-password.sh",
+           "-o /var/log/cloud/aws/rm-password.log",
+           "--log-level silly",
+           "--wait-for CUSTOM_CONFIG_DONE",
+           "--signal PASSWORD_REMOVED",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       }
+      },
+      "files": {
+       "/config/cloud/aws/custom-config.sh": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "#!/bin/bash\n",
+           "PROGNAME=$(basename $0)\n",
+           "function error_exit {\n",
+           "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",
+           "exit 1\n",
+           "}\n",
+           "declare -a tmsh=()\n",
+           "echo 'starting custom-config.sh'\n",
+           "source /config/cloud/aws/onboard_config_vars\n",
+           "if [[ $AllowPhoneHome == \"No\" ]]; then\n",
+           "  tmsh+=(\n",
+           "  \"tmsh show sys software\"\n",
+           "  \"tmsh modify sys software update auto-phonehome disabled\"\n",
+           "  \"tmsh show sys software\")\n",
+           "else\n",
+           "  tmsh+=(\n",
+           "  \"tmsh show sys software\"\n",
+           "  \"tmsh modify sys software update auto-phonehome enabled\"\n",
+           "  \"tmsh show sys software\")\n",
+           "fi\n",
+           "echo \"HC's Mark --------->>>>>>>>> Adding Certificate Installation Command.\"\n",
+           "tmsh+=(\n",
+           "\"tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\"\n",
+           "\"tmsh load sys application template /config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\"\n",
+           "\"tmsh install /sys crypto cert HC-Imported-SSL-Certificate from-local-file /config/cloud/domain.name.rsa.crt\"\n",
+           "\"tmsh install /sys crypto key HC-Imported-SSL-Key from-local-file /config/cloud/domain.name.rsa.key\"\n",
+           "\"tmsh save /sys config\")\n",
+           "for CMD in \"${tmsh[@]}\"\n",
+           "do\n",
+           "  \"/config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/waitForMcp.sh\"\n",
+           "    if $CMD;then\n",
+           "      echo \"command $CMD successfully executed.\"\n",
+           "    else\n",
+           "      error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
+           "    fi\n",
+           "done\n",
+           "date\n",
+           "echo \"HC's Mark --------->>>>>>>>> After initialization, before AS3 execution.\"\n",
+           "### START CUSTOM CONFIGURATION\n",
+           "deployed=\"no\"\n",
+           "url_regex=\"(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$\"\n",
+           "file_loc=\"/config/cloud/custom_config\"\n",
+           "if [[ $declarationUrl =~ $url_regex ]]; then\n",
+           "  response_code=$(/usr/bin/curl -sk -w \"%{http_code}\" $declarationUrl -o $file_loc)\n",
+           "  if [[ $response_code == 200 ]]; then\n",
+           "    echo \"Custom config download complete; checking for valid JSON.\"\n",
+           "    cat $file_loc | jq .class\n",
+           "    if [[ $? == 0 ]]; then\n",
+           "      response_code=$(/usr/bin/curl -skvvu ${adminUsername}:$passwd -w \"%{http_code}\" -X POST -H \"Content-Type: application/json\" -H \"Expect:\" https://localhost:${managementGuiPort}/mgmt/shared/appsvcs/declare -d @$file_loc -o /dev/null)\n",
+           "      if [[ $response_code == 200 || $response_code == 502 ]]; then\n",
+           "        echo \"Deployment of custom application succeeded.\"\n",
+           "        deployed=\"yes\"\n",
+           "      else\n",
+           "        echo \"Failed to deploy custom application; continuing...\"\n",
+           "      fi\n",
+           "    else\n",
+           "      echo \"Custom config was not valid JSON, continuing...\"\n",
+           "    fi\n",
+           "  else\n",
+           "    echo \"Failed to download custom config; continuing...\"\n",
+           "  fi\n",
+           "else\n",
+           "  echo \"Custom config was not a URL, continuing...\"\n",
+           "fi\n",
+           "### END CUSTOM CONFIGURATION\n",
+
+           "echo \"HC's Mark --------->>>>>>>>> After AS3 execution, before Authentication removed.\"\n",
+
+           "\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/cloud/aws/getNameServer.sh": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "INTERFACE=$1",
+           "INTERFACE_MAC=`ifconfig ${INTERFACE} | egrep ether | awk '{print tolower($2)}'`",
+           "VPC_CIDR_BLOCK=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${INTERFACE_MAC}/vpc-ipv4-cidr-block`",
+           "VPC_NET=${VPC_CIDR_BLOCK%/*}",
+           "NAME_SERVER=`echo ${VPC_NET} | awk -F. '{ printf \"%d.%d.%d.%d\", $1, $2, $3, $4+2 }'`",
+           "echo $NAME_SERVER"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/cloud/aws/onboard_config_vars": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "",
+           "#!/bin/bash\n",
+           "#\n",
+           "hostname=`/usr/bin/curl http://169.254.169.254/latest/meta-data/hostname`\n",
+           "region='", { "Ref": "AWS::Region" }, "'\n",
+           "adminUsername='admin'\n",
+           "timezone='", { "Ref": "TimeZone" }, "'\n",
+           "ntpServer='", { "Ref": "NTPServer" }, "'\n",
+           "declarationUrl='", { "Fn::If": [ "DownLoadImage", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] }, "none" ] }, "'\n",
+           "AllowPhoneHome='", { "Ref": "AllowPhoneHome" }, "'\n",
+           "passwd=$(f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/decryptDataFromFile.js --data-file /config/cloud/aws/.adminPassword)\n",
+           "managementGuiPort='443'\n",
+
+           "UpGradeVolume_File='/config/UpgradeVolume'\n",
+           "UpGradeVolume_Value='HD1.9'\n",
+           "UpgradeBigIP='", { "Ref": "UpgradeBigIP" }, "'\n",
+           "DeclarationURLPost='", { "Fn::If": [ "DownLoadImage", "none", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] } ] }, "'\n",
+
+           "#\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/cloud/aws/rm-password.sh": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "#!/bin/bash\n",
+           "PROGNAME=$(basename $0)\n",
+           "function error_exit {\n",
+           "echo \"${PROGNAME}: ${1:-\"Unknown Error\"}\" 1>&2\n",
+           "exit 1\n",
+           "}\n",
+           "date\n",
+           "echo 'starting rm-password.sh'\n",
+           "declare -a tmsh=()\n",
+           "tmsh+=(\"rm /config/cloud/aws/.adminPassword\")\n",
+           "for CMD in \"${tmsh[@]}\"\n",
+           "do\n",
+           "  if $CMD;then\n",
+           "    echo \"command $CMD successfully executed.\"\n",
+           "  else\n",
+           "    error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
+           "  fi\n",
+           "done\n",
+           "date\n",
+
+           "echo \"HC's Mark --------->>>>>>>>> After Authentication Removed ; Additional Custom Configuration can be Applied.\"\n",
+
+           "declare -a file_url\n",
+           "declare -a file_name\n",
+           "declare -a file_acl\n",
+           "declare -a file_result\n",
+
+           "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/BigIPSendMail\"\n",
+           "file_name[0]=\"/config/BigIPSendMail\"\n",
+           "file_acl[0]=\"777\"\n",
+
+           "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/ClearFlags\"\n",
+           "file_name[1]=\"/config/ClearFlags\"\n",
+           "file_acl[1]=\"777\"\n",
+
+           "file_url[2]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/RotateLog\"\n",
+           "file_name[2]=\"/config/RotateLog\"\n",
+           "file_acl[2]=\"777\"\n",
+
+           "file_url[3]=\"", { "Ref": "SSMTPConfiguration" }, "\"\n",
+           "file_name[3]=\"/config/ssmtp/ArchiveSSMTPConfiguration\"\n",
+           "file_acl[3]=\"666\"\n",
+
+           "file_url[4]=\"", { "Ref": "UserAlertConfiguration" }, "\"\n",
+           "file_name[4]=\"/config/user_alert.archive\"\n",
+           "file_acl[4]=\"666\"\n",
+
+           "file_url[5]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPLidsa\"\n",
+           "file_name[5]=\"/config/lidsa/BigIPLidsa\"\n",
+           "file_acl[5]=\"777\"\n",
+
+           "file_url[6]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPSendMailLidsa\"\n",
+           "file_name[6]=\"/config/lidsa/BigIPSendMailLidsa\"\n",
+           "file_acl[6]=\"777\"\n",
+
+           "file_url[7]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+           "file_name[7]=\"/config/lidsa/ClearLidsaFlags\"\n",
+           "file_acl[7]=\"777\"\n",
+
+           "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+           "file_name[8]=\"/config/lidsa/ClearLidsaFlags\"\n",
+           "file_acl[8]=\"777\"\n",
+
+           "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/anacrontab\"\n",
+           "file_name[9]=\"/config/anacrontab\"\n",
+           "file_acl[9]=\"666\"\n",
+
+           "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/crontab\"\n",
+           "file_name[10]=\"/config/crontab\"\n",
+           "file_acl[10]=\"666\"\n",
+
+           "file_url[11]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
+           "file_name[11]=\"/config/AS3Configuration.sh\"\n",
+           "file_acl[11]=\"777\"\n",
+
+           "file_url[12]=\"", { "Fn::If": [ "DownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
+           "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
+           "file_acl[12]=\"777\"\n",
+
+           "file_url[13]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
+           "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
+           "file_acl[13]=\"777\"\n",
+
+           "file_url[14]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
+           "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
+           "file_acl[14]=\"666\"\n",
+
+           "file_url[15]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
+           "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
+           "file_acl[15]=\"666\"\n",
+
+           "max_counter=15\n",
+
+           "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+           "for counter in $(seq 0 $max_counter); do\n",
+           " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+           "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+           "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+           "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+           "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+           "  else\n",
+           "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+           "  fi\n",
+           " else\n",
+           "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+           " fi\n",
+           "done\n",
+
+           "\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/installCloudLibs.sh": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "#!/bin/bash",
+           "echo about to execute",
+           "checks=0",
+           "while [ $checks -lt 120 ]; do echo checking mcpd",
+           "  tmsh -a show sys mcp-state field-fmt | grep -q running",
+           "  if [ $? == 0 ]; then",
+           "    echo mcpd ready",
+           "    break",
+           "  fi",
+           "  echo mcpd not ready yet",
+           "  let checks=checks+1",
+           "  sleep 10",
+           "done",
+           "echo loading verifyHash script",
+           "if ! tmsh load sys config merge file /config/verifyHash; then",
+           "  echo cannot validate signature of /config/verifyHash",
+           "  exit",
+           "fi",
+           "echo loaded verifyHash",
+           "declare -a filesToVerify=(\"/config/cloud/f5-cloud-libs.tar.gz\" \"/config/cloud/f5-cloud-libs-aws.tar.gz\" \"/var/config/rest/downloads/f5-appsvcs-3.25.0-3.noarch.rpm\" \"/config/cloud/aws/f5.service_discovery.tmpl\" \"/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\")",
+           "for fileToVerify in \"${filesToVerify[@]}\"",
+           "do",
+           "  echo verifying \"$fileToVerify\"",
+           "  if ! tmsh run cli script verifyHash \"$fileToVerify\"; then",
+           "    echo \"$fileToVerify\" is not valid",
+           "    exit 1",
+           "  fi",
+           "  echo verified \"$fileToVerify\"",
+           "done",
+           "mkdir -p /config/cloud/aws/node_modules/@f5devcentral",
+           "echo expanding f5-cloud-libs.tar.gz",
+           "tar xvfz /config/cloud/f5-cloud-libs.tar.gz -C /config/cloud/aws/node_modules/@f5devcentral",
+           "echo installing dependencies",
+           "tar xvfz /config/cloud/f5-cloud-libs-aws.tar.gz -C /config/cloud/aws/node_modules/@f5devcentral",
+           "echo cloud libs install complete",
+           "touch /config/cloud/cloudLibsReady"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/verifyHash": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "cli script /Common/verifyHash {",
+           "  proc script::run {} {",
+           "    if {[catch {",
+           "      set hashes(f5-cloud-libs.tar.gz) de6195a0a7fa18eec5c930ca123fcf3ccdbc380fba8999350dad8de0499c3d5b42c2b9d90a5d4d19734467fd9c02c0b747db08aa41d9a9336d9d63508efde9df",
+           "      set hashes(f5-cloud-libs-aws.tar.gz) 24d0dbc3a2ec6a420da341998dae4cf64f9ba86ec8afded7da67031aa897b2a28ef1c77a2ab1ad270527bd6a15aad19642b0c97ccb9a48e58e7b35a1e920ca54",
+           "      set hashes(f5-cloud-libs-azure.tar.gz) 6db2878a2c10d98550eded6b66f0474516c1952d3605217164e3b5261c771419201d94c7cdb07744c9d5db894334f93380963217b670d87d3151bfcdb301c295",
+           "      set hashes(f5-cloud-libs-gce.tar.gz) a5cfaed1fe33da677b3f10dc1a7ca82f5739ff24e45e91b3a8f7b06d6b2e280e5f1eaf5fe2d33009b2cc67c10f2d906aab26f942d591b68fa8a7fddfd54a0efe",
+           "      set hashes(f5-cloud-libs-openstack.tar.gz) 5c83fe6a93a6fceb5a2e8437b5ed8cc9faf4c1621bfc9e6a0779f6c2137b45eab8ae0e7ed745c8cf821b9371245ca29749ca0b7e5663949d77496b8728f4b0f9",
+           "      set hashes(f5-cloud-libs-consul.tar.gz) a32aab397073df92cbbba5067e5823e9b5fafca862a258b60b6b40aa0975c3989d1e110f706177b2ffbe4dde65305a260a5856594ce7ad4ef0c47b694ae4a513",
+           "      set hashes(asm-policy-linux.tar.gz) 63b5c2a51ca09c43bd89af3773bbab87c71a6e7f6ad9410b229b4e0a1c483d46f1a9fff39d9944041b02ee9260724027414de592e99f4c2475415323e18a72e0",
+           "      set hashes(f5.http.v1.2.0rc4.tmpl) 47c19a83ebfc7bd1e9e9c35f3424945ef8694aa437eedd17b6a387788d4db1396fefe445199b497064d76967b0d50238154190ca0bd73941298fc257df4dc034",
+           "      set hashes(f5.http.v1.2.0rc6.tmpl) 811b14bffaab5ed0365f0106bb5ce5e4ec22385655ea3ac04de2a39bd9944f51e3714619dae7ca43662c956b5212228858f0592672a2579d4a87769186e2cbfe",
+           "      set hashes(f5.http.v1.2.0rc7.tmpl) 21f413342e9a7a281a0f0e1301e745aa86af21a697d2e6fdc21dd279734936631e92f34bf1c2d2504c201f56ccd75c5c13baa2fe7653213689ec3c9e27dff77d",
+           "      set hashes(f5.aws_advanced_ha.v1.3.0rc1.tmpl) 9e55149c010c1d395abdae3c3d2cb83ec13d31ed39424695e88680cf3ed5a013d626b326711d3d40ef2df46b72d414b4cb8e4f445ea0738dcbd25c4c843ac39d",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc1.tmpl) de068455257412a949f1eadccaee8506347e04fd69bfb645001b76f200127668e4a06be2bbb94e10fefc215cfc3665b07945e6d733cbe1a4fa1b88e881590396",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc2.tmpl) 6ab0bffc426df7d31913f9a474b1a07860435e366b07d77b32064acfb2952c1f207beaed77013a15e44d80d74f3253e7cf9fbbe12a90ec7128de6facd097d68f",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc3.tmpl) 2f2339b4bc3a23c9cfd42aae2a6de39ba0658366f25985de2ea53410a745f0f18eedc491b20f4a8dba8db48970096e2efdca7b8efffa1a83a78e5aadf218b134",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc4.tmpl) 2418ac8b1f1884c5c096cbac6a94d4059aaaf05927a6a4508fd1f25b8cc6077498839fbdda8176d2cf2d274a27e6a1dae2a1e3a0a9991bc65fc74fc0d02ce963",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc5.tmpl) 5e582187ae1a6323e095d41eddd41151d6bd38eb83c634410d4527a3d0e246a8fc62685ab0849de2ade62b0275f51264d2deaccbc16b773417f847a4a1ea9bc4",
+           "      set hashes(asm-policy.tar.gz) 2d39ec60d006d05d8a1567a1d8aae722419e8b062ad77d6d9a31652971e5e67bc4043d81671ba2a8b12dd229ea46d205144f75374ed4cae58cefa8f9ab6533e6",
+           "      set hashes(deploy_waf.sh) 1a3a3c6274ab08a7dc2cb73aedc8d2b2a23cd9e0eb06a2e1534b3632f250f1d897056f219d5b35d3eed1207026e89989f754840fd92969c515ae4d829214fb74",
+           "      set hashes(f5.policy_creator.tmpl) 06539e08d115efafe55aa507ecb4e443e83bdb1f5825a9514954ef6ca56d240ed00c7b5d67bd8f67b815ee9dd46451984701d058c89dae2434c89715d375a620",
+           "      set hashes(f5.service_discovery.tmpl) 4811a95372d1dbdbb4f62f8bcc48d4bc919fa492cda012c81e3a2fe63d7966cc36ba8677ed049a814a930473234f300d3f8bced2b0db63176d52ac99640ce81b",
+           "      set hashes(f5.cloud_logger.v1.0.0.tmpl) 64a0ed3b5e32a037ba4e71d460385fe8b5e1aecc27dc0e8514b511863952e419a89f4a2a43326abb543bba9bc34376afa114ceda950d2c3bd08dab735ff5ad20",
+           "      set hashes(f5-appsvcs-3.25.0-3.noarch.rpm) 26f19bdaaa81cbe0421b3e08c09987f9dd0c54b05a626d6a21a836b34248d2d9d83095f0daad8e7a4a068e9ef99b89fbcd246ae8b617ac2b2456599157d0e8b3",
+           "      set hashes(f5-cloud-failover-1.1.0-0.noarch.rpm) 15a440c299f9e4af86a3d0f5b0d75b0054385b95e47c3ef116d2e0bfb0041a26dcbf549028e2a26d2c718ec61446bd657be38fbbcd9db781efe5414c174ac68c",
+           "      set file_path [lindex $tmsh::argv 1]",
+           "      set file_name [file tail $file_path]",
+           "      if {![info exists hashes($file_name)]} {",
+           "        tmsh::log err \"No hash found for $file_name\"",
+           "        exit 1",
+           "      }",
+           "      set expected_hash $hashes($file_name)",
+           "      set computed_hash [lindex [exec /usr/bin/openssl dgst -r -sha512 $file_path] 0]",
+           "      if { $expected_hash eq $computed_hash } {",
+           "        exit 0",
+           "      }",
+           "      tmsh::log err \"Hash does not match for $file_path\"",
+           "      exit 1",
+           "    }]} {",
+           "      tmsh::log err {Unexpected error in verifyHash}",
+           "      exit 1",
+           "    }",
+           "  }",
+           "}"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/waitThenRun.sh": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "#!/bin/bash",
+           "while true; do echo \"waiting for cloud libs install to complete\"",
+           "  if [ -f /config/cloud/cloudLibsReady ]; then",
+           "    break",
+           "  else",
+           "    sleep 10",
+           "  fi",
+           "done",
+           "\"$@\""
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+
+       "/config/cloud/f5-cloud-libs.tar.gz": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs/v4.24.0/f5-cloud-libs.tar.gz"
+       },
+       "/config/cloud/f5-cloud-libs-aws.tar.gz": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs-aws/v2.9.1/f5-cloud-libs-aws.tar.gz"
+       },
+       "/var/config/rest/downloads/f5-appsvcs-3.25.0-3.noarch.rpm": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-appsvcs-extension/v3.25.0/f5-appsvcs-3.25.0-3.noarch.rpm"
+       },
+       "/config/cloud/aws/f5.service_discovery.tmpl": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-service-discovery/v2.3.2/f5.service_discovery.tmpl"
+       },
+       "/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-cloud-logger/v1.0.0/f5.cloud_logger.v1.0.0.tmpl"
+       },
+       "/config/UpGrade": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpGrade.sh"
+       },
+       "/config/ssmtp/SMTPUserID": {
+        "content": { "Ref": "SMTPUserID" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/ssmtp/SMTPUserPassword": {
+        "content":{ "Ref": "SMTPUserPassword" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/BigIPUnitID": {
+        "content": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInstance" ] ] },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/ssmtp/eMailNotificationRecipient": {
+        "content": { "Ref": "eMailNotificationRecipient" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/BigIPModules": {
+        "content": { "Ref": "BigIPModules" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/TimeZone": {
+        "content": { "Ref": "TimeZone" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/NTPServer": {
+        "content": { "Ref": "NTPServer" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/TemporaryLidsa": {
+        "content": { "Ref": "Lidsa" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/IPToAWSInstanceMetaData": {
+        "content": { "Fn::FindInMap": [ "IPAddressConfig", "BigIPInstance", "External" ] },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/BigIPAdminPassword": {
+        "content": { "Ref": "BigIPAdminPassword" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/UpgradeImageFileName": {
+        "content": { "Fn::If": [ "DownLoadImage", "BIGIP-12.3.4.5-6.7.89.iso", { "Ref": "UpgradeImageFileName" } ] },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/cloud/domain.name.rsa.key": {
+        "group": "root",
+        "mode": "000666",
+        "owner": "root",
+        "source": { "Ref": "BigIPTrafficTLSKey" }
+       },
+       "/config/cloud/domain.name.rsa.crt": {
+        "group": "root",
+        "mode": "000666",
+        "owner": "root",
+        "source": { "Ref": "BigIPTrafficTLSCertificate" }
+       }
+      }
+     }
+    }
+   },
+   "Properties": {
+    "BlockDeviceMappings": [
+     {
+      "DeviceName": "/dev/xvda",
+      "Ebs": {
+       "DeleteOnTermination": "true",
+       "VolumeSize": "100",
+       "VolumeType": "gp2"
+      }
+     },
+     {
+      "DeviceName": "/dev/xvdb",
+      "NoDevice": {}
+     }
+    ],
+    "IamInstanceProfile": { "Ref": "BigIPServiceDiscoveryProfile" },
+    "ImageId": { "Fn::If": [ "DefaultBigIPImageID", { "Fn::FindInMap": [ "RegionAMIMap", { "Ref": "AWS::Region" }, "BigIP" ] }, { "Ref": "BigIPImageID" } ] },
+    "InstanceType": { "Ref": "BigIPInstanceType" },
+    "KeyName": { "Ref": "EC2SSHKeyPair" },
+
+    "NetworkInterfaces": [
+     {
+      "Description": "BigIP Management Interface",
+      "DeviceIndex": "0",
+      "NetworkInterfaceId": {
+       "Ref": "BigIPManagementNetworkInterface"
+      }
+     },
+     {
+      "Description": "BigIP External Interface",
+      "DeviceIndex": "1",
+      "NetworkInterfaceId": {
+       "Ref": "BigIPExternalNetworkInterface"
+      }
+     },
+     {
+      "Description": "BigIP Internal Interface",
+      "DeviceIndex": "2",
+      "NetworkInterfaceId": {
+       "Ref": "BigIPInternalNetworkInterface"
+      }
+     },
+     {
+      "Description": "BigIP Control and Signaling Interface",
+      "DeviceIndex": "3",
+      "NetworkInterfaceId": {
+       "Ref": "BigIPControlNetworkInterface"
+      }
+     }
+    ],
+
+    "Tags": [
+      {
+        "Key": "Name",
+        "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInstance" ] ] }
+      }
+    ],
+
+    "UserData": {
+     "Fn::Base64": {
+      "Fn::Join": [
+       "",
+       [
+        "#!/bin/bash\n",
+
+        "Wait_Period=\"3m 33s\"\n",
+        "Log_File=/var/log/cloud/aws/install.log\n",
+
+        "if [ -f /config/UpgradeImageFileName ]; then\n",
+        "  echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /config/UpgradeImageFileName   found.\"\n",
+        "  if [ -f \"/shared/images/`cat /config/UpgradeImageFileName`\" ] && [ -f \"/shared/images/`cat /config/UpgradeImageFileName`.md5\" ]; then\n",
+        "    echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /shared/images/`cat /config/UpgradeImageFileName`   and   /shared/images/`cat /config/UpgradeImageFileName`.md5   found. UpGrade had been executed.\"\n",
+        "    /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
+        "  else\n",
+        "    echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /shared/images/`cat /config/UpgradeImageFileName`   and/or   /shared/images/`cat /config/UpgradeImageFileName`.md5   NOT found. UpGrade has NOT been executed or NOT requested.\"\n",
+        "    /opt/aws/apitools/cfn-init/bin/cfn-init -v -s ", { "Ref": "AWS::StackId" }, " -r ", "BigIPInstance", " --region ", { "Ref": "AWS::Region" }, "\n",
+        "    sleep $Wait_Period\n",
+        "    /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
+        "  fi\n",
+        "else\n",
+        "  echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /config/UpgradeImageFileName   NOT found. UpGrade has NOT been executed or NOT requested.\"\n",
+        "  /opt/aws/apitools/cfn-init/bin/cfn-init -v -s ", { "Ref": "AWS::StackId" }, " -r ", "BigIPInstance", " --region ", { "Ref": "AWS::Region" }, "\n",
+        "  sleep $Wait_Period\n",
+        "  /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
+        "fi\n",
+
+        "\n"
+       ]
+      ]
+     }
+    }
+   },
+   "Type": "AWS::EC2::Instance"
+  },
+
+  "BigIPServiceDiscoveryAccessRole": {
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sts:AssumeRole"
+       ],
+       "Effect": "Allow",
+       "Principal": { "Service": [ "ec2.amazonaws.com" ] }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Path": "/",
+    "Policies": [
+     {
+      "PolicyDocument": {
+       "Statement": [
+        {
+         "Action": [
+          "ec2:DescribeInstances",
+          "ec2:DescribeInstanceStatus",
+          "ec2:DescribeAddresses",
+          "ec2:AssociateAddress",
+          "ec2:DisassociateAddress",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DescribeNetworkInterfaceAttribute",
+          "ec2:DescribeRouteTables",
+          "ec2:ReplaceRoute",
+          "ec2:assignprivateipaddresses",
+          "sts:AssumeRole"
+         ],
+         "Effect": "Allow",
+         "Resource": [
+          "*"
+         ]
+        }
+       ],
+       "Version": "2012-10-17"
+      },
+      "PolicyName": "BigipServiceDiscoveryPolicy"
+     }
+    ]
+   },
+   "Type": "AWS::IAM::Role"
+  },
+  "BigIPServiceDiscoveryProfile": {
+   "Properties": {
+    "Path": "/",
+    "Roles": [
+     {
+      "Ref": "BigIPServiceDiscoveryAccessRole"
+     }
+    ]
+   },
+   "Type": "AWS::IAM::InstanceProfile"
+  }
+
+
+
+  },
+  "Outputs" : {
+    "LAMPServerManagementIPAddress" : {
+      "Description" : "LAMP Server's Management IP Address",
+      "Value" : { "Ref" : "ServerEIP" }
+    },
+    "WindowsServerManagementIPAddress" : {
+      "Description" : "Windows Server's Management IP Address",
+      "Value" : { "Ref" : "WindowsServerEIP" }
+    },
+    "BigIPManagementIPAddress" : {
+      "Description" : "Big-IP's Management IP Address",
+      "Value" : { "Ref" : "BigIPEIP" }
+    },
+    "BigIPManagementUserInterface" : {
+      "Description" : "Big-IP's Management User Interface URL/IP Address",
+      "Value" : { "Fn::Join" : [ "", [ "https://", { "Ref" : "BigIPEIP" } ] ] }
+    },
+
+    "SelfIPAddress" : {
+      "Description" : "Big-IP External Interface's Self IP Address",
+      "Value" : { "Ref" : "SelfEIP" }
+    },
+    "StaticWebServerIPAddress" : {
+      "Description" : "Static Web Server's URL/IP Address",
+      "Value" : { "Fn::Join" : [ "", [ "http://", { "Ref" : "StaticWebServerEIP" } ] ] }
+    },
+    "DVWAIPAddress" : {
+      "Description" : "DVWA's URL/IP Address",
+      "Value" : { "Fn::Join" : [ "", [ "http://", { "Ref" : "DVWAEIP" } ] ] }
+    },
+    "HackazonIPAddress" : {
+      "Description" : "Hackazon's URL/IP Address",
+      "Value" : { "Fn::Join" : [ "", [ "http://", { "Ref" : "HackazonEIP" } ] ] }
+    }
+
+
+
+  }
+
+
+
+}
