@@ -234,7 +234,7 @@
   "K8sNodeInstanceType": {
    "Type": "String",
    "Default": "t3a.medium",
-   "AllowedPattern": "^[0-9a-zA-Z]{8}\\.[0-9a-zA-Z]{22}$",
+   "AllowedPattern": "^[0-9a-zA-Z]{1,8}\\.[0-9a-zA-Z]{1,22}$",
    "Description": "Provide a valid Instance Type for the K8s Nodes."
   },
   "NumberOfK8sWorkerNode": {
