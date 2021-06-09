@@ -229,7 +229,7 @@
    "Type": "String",
    "Default": "ubuntu2004amd64",
    "AllowedValues": [ "ubuntu1804amd64", "ubuntu1804arm64", "ubuntu2004amd64", "ubuntu2004arm64" ],
-   "Description": "Select an AMI Type of Ubuntu Server for the K8s Nodes, i.e. Version and Architecture of the Ubuntu Server."
+   "Description": "Select an AMI Type of Ubuntu Server for the K8s Nodes, i.e. Version and Architecture of the Ubuntu Server. This parameter does NOT matter if you provide/use NON-Default AMI ID."
   },
   "K8sNodeInstanceType": {
    "Type": "String",
