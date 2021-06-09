@@ -776,73 +776,20 @@
      "declare -a file_url\n",
      "declare -a file_name\n",
      "declare -a file_acl\n",
+     "declare -a file_owner\n",
      "declare -a file_result\n",
 
-     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/BigIPSendMail\"\n",
-     "file_name[0]=\"/config/BigIPSendMail\"\n",
-     "file_acl[0]=\"777\"\n",
+     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa\"\n",
+     "file_name[0]=\"/home/ubuntu/.ssh/id_rsa\"\n",
+     "file_acl[0]=\"600\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
 
-     "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/ClearFlags\"\n",
-     "file_name[1]=\"/config/ClearFlags\"\n",
-     "file_acl[1]=\"777\"\n",
+     "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa.pub\"\n",
+     "file_name[1]=\"/home/ubuntu/.ssh/id_rsa.pub\"\n",
+     "file_acl[1]=\"600\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
 
-     "file_url[2]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/RotateLog\"\n",
-     "file_name[2]=\"/config/RotateLog\"\n",
-     "file_acl[2]=\"777\"\n",
-
-     "file_url[3]=\"", { "Ref": "SSMTPConfiguration" }, "\"\n",
-     "file_name[3]=\"/config/ssmtp/ArchiveSSMTPConfiguration\"\n",
-     "file_acl[3]=\"666\"\n",
-
-     "file_url[4]=\"", { "Ref": "UserAlertConfiguration" }, "\"\n",
-     "file_name[4]=\"/config/user_alert.archive\"\n",
-     "file_acl[4]=\"666\"\n",
-
-     "file_url[5]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPLidsa\"\n",
-     "file_name[5]=\"/config/lidsa/BigIPLidsa\"\n",
-     "file_acl[5]=\"777\"\n",
-
-     "file_url[6]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPSendMailLidsa\"\n",
-     "file_name[6]=\"/config/lidsa/BigIPSendMailLidsa\"\n",
-     "file_acl[6]=\"777\"\n",
-
-     "file_url[7]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
-     "file_name[7]=\"/config/lidsa/ClearLidsaFlags\"\n",
-     "file_acl[7]=\"777\"\n",
-
-     "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
-     "file_name[8]=\"/config/lidsa/ClearLidsaFlags\"\n",
-     "file_acl[8]=\"777\"\n",
-
-     "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/anacrontab\"\n",
-     "file_name[9]=\"/config/anacrontab\"\n",
-     "file_acl[9]=\"666\"\n",
-
-     "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/crontab\"\n",
-     "file_name[10]=\"/config/crontab\"\n",
-     "file_acl[10]=\"666\"\n",
-
-     "file_url[11]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
-     "file_name[11]=\"/config/AS3Configuration.sh\"\n",
-     "file_acl[11]=\"777\"\n",
-
-     "file_url[12]=\"", { "Fn::If": [ "DownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
-     "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
-     "file_acl[12]=\"777\"\n",
-
-     "file_url[13]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
-     "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
-     "file_acl[13]=\"777\"\n",
-
-     "file_url[14]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
-     "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
-     "file_acl[14]=\"666\"\n",
-
-     "file_url[15]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
-     "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
-     "file_acl[15]=\"666\"\n",
-
-     "max_counter=15\n",
+     "max_counter=1\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
@@ -852,6 +799,7 @@
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
      "  else\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
      "  fi\n",
@@ -860,7 +808,16 @@
      " fi\n",
      "done\n",
 
-     "\n"
+     "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n",
+     { "Fn::If": [ "CreateWorkerNode2", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+     { "Fn::If": [ "CreateWorkerNode3", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker3", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+     { "Fn::If": [ "CreateWorkerNode4", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker4", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+     { "Fn::If": [ "CreateWorkerNode5", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker5", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+     { "Fn::If": [ "CreateWorkerNode6", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker6", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+     { "Fn::If": [ "CreateWorkerNode7", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+     { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+     { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+
      "\n"
     ]]}}
    }
@@ -874,9 +831,44 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker1Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
+     "#!/bin/bash -xe", "\n",
      "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access", "\n",
+     "\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/authorized_keys\"\n",
+     "file_name[0]=\"/home/ubuntu/.ssh/imported_authorized_keys\"\n",
+     "file_acl[0]=\"600\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=0\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo cat /home/ubuntu/.ssh/imported_authorized_keys >> /home/ubuntu/.ssh/authorized_keys\n",
+     "sudo rm /home/ubuntu/.ssh/imported_authorized_keys\n",
+
      "\n"
     ]]}}
    }
@@ -891,9 +883,44 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker2Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
+     "#!/bin/bash -xe", "\n",
      "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access", "\n",
+     "\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/authorized_keys\"\n",
+     "file_name[0]=\"/home/ubuntu/.ssh/imported_authorized_keys\"\n",
+     "file_acl[0]=\"600\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=0\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo cat /home/ubuntu/.ssh/imported_authorized_keys >> /home/ubuntu/.ssh/authorized_keys\n",
+     "sudo rm /home/ubuntu/.ssh/imported_authorized_keys\n",
+
      "\n"
     ]]}}
    }
