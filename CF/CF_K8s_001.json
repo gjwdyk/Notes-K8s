@@ -761,33 +761,6 @@
   },
   "K8sMaster1Instance": {
    "Type": "AWS::EC2::Instance",
-   "Metadata": {
-    "AWS::CloudFormation::Init": {
-     "config": {
-      "commands": {
-       "000-test-command": {
-        "command": "/usr/bin/sudo /usr/bin/touch ~/CFInitConfigCommands`date +%Y%m%d%H%M%S`.Access"
-       }
-      },
-      "files": {
-       "/root/custom-config.sh": {
-        "content": {
-         "Fn::Join": [
-          "",
-          [
-           "#!/bin/bash\n",
-           "\n"
-          ]
-         ]
-        },
-        "group": "root",
-        "mode": "000777",
-        "owner": "root"
-       }
-      }
-     }
-    }
-   },
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
@@ -799,10 +772,95 @@
      "\n",
      "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access", "\n",
      "\n",
-     "/opt/aws/bin/cfn-init -v",
-     " --stack ", { "Ref" : "AWS::StackName" },
-     " --resource K8sMaster1Instance",
-     " --region ", { "Ref" : "AWS::Region" }, "\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/BigIPSendMail\"\n",
+     "file_name[0]=\"/config/BigIPSendMail\"\n",
+     "file_acl[0]=\"777\"\n",
+
+     "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/ClearFlags\"\n",
+     "file_name[1]=\"/config/ClearFlags\"\n",
+     "file_acl[1]=\"777\"\n",
+
+     "file_url[2]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/RotateLog\"\n",
+     "file_name[2]=\"/config/RotateLog\"\n",
+     "file_acl[2]=\"777\"\n",
+
+     "file_url[3]=\"", { "Ref": "SSMTPConfiguration" }, "\"\n",
+     "file_name[3]=\"/config/ssmtp/ArchiveSSMTPConfiguration\"\n",
+     "file_acl[3]=\"666\"\n",
+
+     "file_url[4]=\"", { "Ref": "UserAlertConfiguration" }, "\"\n",
+     "file_name[4]=\"/config/user_alert.archive\"\n",
+     "file_acl[4]=\"666\"\n",
+
+     "file_url[5]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPLidsa\"\n",
+     "file_name[5]=\"/config/lidsa/BigIPLidsa\"\n",
+     "file_acl[5]=\"777\"\n",
+
+     "file_url[6]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPSendMailLidsa\"\n",
+     "file_name[6]=\"/config/lidsa/BigIPSendMailLidsa\"\n",
+     "file_acl[6]=\"777\"\n",
+
+     "file_url[7]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+     "file_name[7]=\"/config/lidsa/ClearLidsaFlags\"\n",
+     "file_acl[7]=\"777\"\n",
+
+     "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+     "file_name[8]=\"/config/lidsa/ClearLidsaFlags\"\n",
+     "file_acl[8]=\"777\"\n",
+
+     "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/anacrontab\"\n",
+     "file_name[9]=\"/config/anacrontab\"\n",
+     "file_acl[9]=\"666\"\n",
+
+     "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/crontab\"\n",
+     "file_name[10]=\"/config/crontab\"\n",
+     "file_acl[10]=\"666\"\n",
+
+     "file_url[11]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
+     "file_name[11]=\"/config/AS3Configuration.sh\"\n",
+     "file_acl[11]=\"777\"\n",
+
+     "file_url[12]=\"", { "Fn::If": [ "DownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
+     "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
+     "file_acl[12]=\"777\"\n",
+
+     "file_url[13]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
+     "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
+     "file_acl[13]=\"777\"\n",
+
+     "file_url[14]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
+     "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
+     "file_acl[14]=\"666\"\n",
+
+     "file_url[15]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
+     "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
+     "file_acl[15]=\"666\"\n",
+
+     "max_counter=15\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "\n"
      "\n"
     ]]}}
    }
