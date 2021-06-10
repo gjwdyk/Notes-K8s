@@ -258,7 +258,20 @@
    "AllowedValues": [ "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul" ],
    "Description": "Enter the Olson timezone string from /usr/share/zoneinfo. The default is 'UTC'. See the TZ column here (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for valid optional values. For example, 'US/Eastern'.",
    "Type": "String"
+  },
+  "K8sSSHPrivateKey" : {
+   "Type": "String",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "Description": "URL of the SSH Private Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup. It is STRONGLY RECOMMENDED that you create and use your own KeyPair for security purposes. If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+  },
+  "K8sSSHPublicKey" : {
+   "Type": "String",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa.pub",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "Description": "URL of the SSH Public Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup. If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   }
+
  },
 
  "Metadata": {
@@ -779,12 +792,12 @@
      "declare -a file_owner\n",
      "declare -a file_result\n",
 
-     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa\"\n",
+     "file_url[0]=\"", { "Ref": "K8sSSHPrivateKey" }, "\"\n",
      "file_name[0]=\"/home/ubuntu/.ssh/id_rsa\"\n",
      "file_acl[0]=\"600\"\n",
      "file_owner[0]=\"ubuntu:ubuntu\"\n",
 
-     "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa.pub\"\n",
+     "file_url[1]=\"", { "Ref": "K8sSSHPublicKey" }, "\"\n",
      "file_name[1]=\"/home/ubuntu/.ssh/id_rsa.pub\"\n",
      "file_acl[1]=\"600\"\n",
      "file_owner[1]=\"ubuntu:ubuntu\"\n",
@@ -842,7 +855,7 @@
      "declare -a file_owner\n",
      "declare -a file_result\n",
 
-     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/authorized_keys\"\n",
+     "file_url[0]=\"", { "Ref": "K8sSSHPublicKey" }, "\"\n",
      "file_name[0]=\"/home/ubuntu/.ssh/imported_authorized_keys\"\n",
      "file_acl[0]=\"600\"\n",
      "file_owner[0]=\"ubuntu:ubuntu\"\n",
@@ -894,7 +907,7 @@
      "declare -a file_owner\n",
      "declare -a file_result\n",
 
-     "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/authorized_keys\"\n",
+     "file_url[0]=\"", { "Ref": "K8sSSHPublicKey" }, "\"\n",
      "file_name[0]=\"/home/ubuntu/.ssh/imported_authorized_keys\"\n",
      "file_acl[0]=\"600\"\n",
      "file_owner[0]=\"ubuntu:ubuntu\"\n",
