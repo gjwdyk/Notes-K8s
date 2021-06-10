@@ -248,6 +248,20 @@
    "Type": "AWS::EC2::KeyPair::KeyName",
    "Description": "EC2 KeyPair to enable SSH access to the EC2 instances. Select the SSH KeyPair you have access to."
   },
+
+
+
+  "K8sSSHPrivateKey" : {
+   "Type": "String",
+   "Description": "Paste the text content of a SSH Private Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup. It is STRONGLY RECOMMENDED that you create and use your own KeyPair for security purposes."
+  },
+  "K8sSSHPublicKey" : {
+   "Type": "String",
+   "Description": "Paste the text content of a SSH Public Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup."
+  },
+
+
+
   "NTPServer": {
    "Default": "0.pool.ntp.org",
    "Description": "NTP server for this implementation",
@@ -258,20 +272,7 @@
    "AllowedValues": [ "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul" ],
    "Description": "Enter the Olson timezone string from /usr/share/zoneinfo. The default is 'UTC'. See the TZ column here (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for valid optional values. For example, 'US/Eastern'.",
    "Type": "String"
-  },
-  "K8sSSHPrivateKey" : {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "Description": "URL of the SSH Private Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup. It is STRONGLY RECOMMENDED that you create and use your own KeyPair for security purposes. If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "K8sSSHPublicKey" : {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSH/id_rsa.pub",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "Description": "URL of the SSH Public Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup. If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   }
-
  },
 
  "Metadata": {
@@ -302,6 +303,8 @@
       "default": "Common Operating System Parameters"
      },
      "Parameters": [
+      "K8sSSHPrivateKey",
+      "K8sSSHPublicKey",
       "NTPServer",
       "TimeZone"
      ]
@@ -325,6 +328,12 @@
     },
     "EC2SSHKeyPair": {
      "default": "EC2 SSH Key-Pair"
+    },
+    "K8sSSHPrivateKey": {
+     "default": "K8s Nodes SSH Private Key"
+    },
+    "K8sSSHPublicKey": {
+     "default": "K8s Nodes SSH Public Key"
     },
     "NTPServer": {
      "default": "NTP Server used by Big-IP"
@@ -782,9 +791,14 @@
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sMaster1Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
      "#!/bin/bash -xe", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access", "\n",
-     "\n",
+     "sudo touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPrivateKey" }, "\" >> /home/ubuntu/.ssh/id_rsa\n",
+     "chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa\n",
+     "chmod 600 /home/ubuntu/.ssh/id_rsa\n",
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/id_rsa.pub\n",
+     "chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa.pub\n",
+     "chmod 600 /home/ubuntu/.ssh/id_rsa.pub\n",
 
      "declare -a file_url\n",
      "declare -a file_name\n",
@@ -845,9 +859,9 @@
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker1Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
      "#!/bin/bash -xe", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access", "\n",
-     "\n",
+     "sudo touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
 
      "declare -a file_url\n",
      "declare -a file_name\n",
@@ -878,9 +892,6 @@
      "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
      " fi\n",
      "done\n",
-
-     "sudo cat /home/ubuntu/.ssh/imported_authorized_keys >> /home/ubuntu/.ssh/authorized_keys\n",
-     "sudo rm /home/ubuntu/.ssh/imported_authorized_keys\n",
 
      "\n"
     ]]}}
@@ -897,9 +908,9 @@
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker2Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
      "#!/bin/bash -xe", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access", "\n",
-     "\n",
+     "sudo touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
 
      "declare -a file_url\n",
      "declare -a file_name\n",
@@ -930,9 +941,6 @@
      "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
      " fi\n",
      "done\n",
-
-     "sudo cat /home/ubuntu/.ssh/imported_authorized_keys >> /home/ubuntu/.ssh/authorized_keys\n",
-     "sudo rm /home/ubuntu/.ssh/imported_authorized_keys\n",
 
      "\n"
     ]]}}
