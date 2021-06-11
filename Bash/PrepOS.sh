@@ -2,6 +2,8 @@
 
 sudo su
 
+apt install -y apt-transport-https curl
+
 echo "@reboot   root   swapoff -a" >> /etc/crontab
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 swapoff -a
@@ -15,4 +17,7 @@ echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
 sysctl --system
 sysctl --load
 
-apt update -y
+cat /etc/fstab
+cat /etc/crontab
+cat /etc/sysctl.conf
+cat /proc/sys/net/bridge/bridge-nf-call-iptables
