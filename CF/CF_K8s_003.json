@@ -285,12 +285,12 @@
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepDocker.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "ConstraintDescription": "Kindly check the DockerPreparationScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to prepare the containerization platform for Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+   "Description": "URL of a bash script used to prepare the containerization platform for Kubernetes implementation (e.g. Docker). If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "DockerVersion": {
    "Type": "String",
    "Default": "20.10.2-0ubuntu1~20.04.2",
-   "Description": "Paste the version of Docker Containerization Platform to be installed."
+   "Description": "Paste the version of (Docker) Containerization Platform to be installed."
   },
   "CommonK8sPreparationScript": {
    "Type": "String",
@@ -326,10 +326,12 @@
    "ConstraintDescription": "Kindly check the K8sMasterPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the Kubernetes' master node implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
-  "ClusterNetworkVersion": {
+  "ClusterNetworkConfiguration": {
    "Type": "String",
-   "Default": "",
-   "Description": "Paste the version of Cluster Networking to be installed (i.e. flannel or other CNI, based on the bash script)."
+   "Default": "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "ConstraintDescription": "Kindly check the ClusterNetworkConfiguration parameter input. Ensure it follows common URL pattern.",
+   "Description": "URL of a YAML file to be used to implement a Cluster Networking within the Kubernetes Cluster (e.g. flannel). If the YAML file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "K8sWorkerPreparationScript": {
    "Type": "String",
@@ -394,7 +396,7 @@
       "kubeletVersion",
       "kubernetescniVersion",
       "K8sMasterPreparationScript",
-      "ClusterNetworkVersion",
+      "ClusterNetworkConfiguration",
       "K8sWorkerPreparationScript",
       "K8sServiceDeploymentScript"
      ]
@@ -456,8 +458,8 @@
     "K8sMasterPreparationScript": {
      "default": "URL of K8s Master Preparation Script"
     },
-    "ClusterNetworkVersion": {
-     "default": "Cluster Networking (flannel) Version"
+    "ClusterNetworkConfiguration": {
+     "default": "URL of Cluster Networking (flannel) YAML File"
     },
     "K8sWorkerPreparationScript": {
      "default": "URL of K8s Worker Preparation Script"
@@ -973,7 +975,7 @@
      "sudo bash /home/ubuntu/OSPreparationScript\n",
      "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
      "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
-     "sudo bash /home/ubuntu/K8sMasterPreparationScript ", { "Fn::FindInMap": [ "IPAddress", "K8sPod", "CIDR" ] }, " ", { "Fn::FindInMap": [ "IPAddress", "K8sService", "CIDR" ] }, "\n",
+     "sudo bash /home/ubuntu/K8sMasterPreparationScript ", { "Fn::FindInMap": [ "IPAddress", "K8sPod", "CIDR" ] }, " ", { "Fn::FindInMap": [ "IPAddress", "K8sService", "CIDR" ] }, " ", { "Ref": "ClusterNetworkConfiguration" }, "\n",
 
      "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n",
      { "Fn::If": [ "CreateWorkerNode2", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
@@ -984,6 +986,8 @@
      { "Fn::If": [ "CreateWorkerNode7", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
      { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
      { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
+
+
 
      "\n"
     ]]}}
@@ -1028,7 +1032,12 @@
      "file_acl[1]=\"777\"\n",
      "file_owner[1]=\"ubuntu:ubuntu\"\n",
 
-     "max_counter=1\n",
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
@@ -1095,7 +1104,12 @@
      "file_acl[1]=\"777\"\n",
      "file_owner[1]=\"ubuntu:ubuntu\"\n",
 
-     "max_counter=1\n",
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
