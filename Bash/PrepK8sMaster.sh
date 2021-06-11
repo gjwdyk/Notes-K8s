@@ -12,10 +12,10 @@ sleep 1m
 
 kubectl completion bash > /etc/bash_completion.d/kubectl
 
-kubectl apply -f $3
+runuser -l ubuntu -c 'kubectl apply -f $3'
 
 sleep 1m
 
-kubectl get nodes --all-namespaces -o wide --show-labels
-kubectl get pods --all-namespaces -o wide --show-labels
-kubectl get services --all-namespaces -o wide --show-labels
+runuser -l ubuntu -c 'kubectl get nodes --all-namespaces -o wide --show-labels'
+runuser -l ubuntu -c 'kubectl get pods --all-namespaces -o wide --show-labels'
+runuser -l ubuntu -c 'kubectl get services --all-namespaces -o wide --show-labels'
