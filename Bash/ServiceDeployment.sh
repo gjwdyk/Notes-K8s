@@ -4,7 +4,7 @@ sudo su
 
 runuser -u ubuntu -- kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
 
-runuser -u ubuntu -- cat <<EOF | kubectl apply -f -
+runuser -u ubuntu -- cat <<EOF | runuser -u ubuntu -- kubectl apply -f -
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -12,7 +12,7 @@ metadata:
   namespace: kubernetes-dashboard
 EOF
 
-runuser -u ubuntu -- cat <<EOF | kubectl apply -f -
+runuser -u ubuntu -- cat <<EOF | runuser -u ubuntu -- kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
