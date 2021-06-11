@@ -255,14 +255,14 @@
   "K8sSSHPrivateKey": {
    "Type": "String",
    "NoEcho": "true",
-   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]*)\\\\n([0-9a-zA-Z\\-\\ ]+)$",
+   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$",
    "ConstraintDescription": "Kindly check the K8sSSHPrivateKey parameter input.",
    "Description": "Paste the text content of a SSH Private Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup. It is STRONGLY RECOMMENDED that you create and use your own KeyPair for security purposes."
   },
   "K8sSSHPublicKey": {
    "Type": "String",
    "NoEcho": "true",
-   "AllowedPattern": "^([0-9a-zA-Z\\-]+) ([0-9a-zA-Z\\/\\+\\\\]+)([\\=]*) ([0-9a-zA-Z\\-]+)@([0-9a-zA-Z\\-]+)$",
+   "AllowedPattern": "^([0-9a-zA-Z\\-]+) ([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2}) ([0-9a-zA-Z\\-]+)@([0-9a-zA-Z\\-]+)$",
    "ConstraintDescription": "Kindly check the K8sSSHPublicKey parameter input.",
    "Description": "Paste the text content of a SSH Public Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup."
   },
