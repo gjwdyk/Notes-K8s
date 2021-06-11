@@ -987,8 +987,6 @@
      { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
      { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
 
-
-
      "\n"
     ]]}}
    }
