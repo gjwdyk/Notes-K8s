@@ -335,7 +335,7 @@
   },
   "K8sWorkerPreparationScript": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/BlahBlahBlah.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sWorker.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "ConstraintDescription": "Kindly check the K8sWorkerPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the Kubernetes' worker nodes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
@@ -953,7 +953,12 @@
      "file_acl[3]=\"777\"\n",
      "file_owner[3]=\"ubuntu:ubuntu\"\n",
 
-     "max_counter=3\n",
+     "file_url[4]=\"", { "Ref": "K8sWorkerPreparationScript" }, "\"\n",
+     "file_name[4]=\"/home/ubuntu/K8sWorkerPreparationScript\"\n",
+     "file_acl[4]=\"777\"\n",
+     "file_owner[4]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=4\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
@@ -987,6 +992,18 @@
      { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
      { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ "for i in {0..9}; do runuser -l ubuntu -c 'ssh -o StrictHostKeyChecking=no ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, " exit' && break || sleep 1m; done\n" ] ] }, "" ] },
 
+     "sudo bash /home/ubuntu/K8sWorkerPreparationScript ",
+      { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] },
+      { "Fn::If": [ "CreateWorkerNode2", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode3", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker3", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode4", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker4", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode5", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker5", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode6", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker6", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode7", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] } ] ] }, "" ] },
+     "\n",
+
      "\n"
     ]]}}
    }
@@ -1005,14 +1022,6 @@
 
      "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
-
-     "echo \"@reboot   root   swapoff -a\" >> /etc/crontab\n",
-     "swapoff -a\n",
-     "echo \"net.ipv4.ip_forward=1\" | tee -a /etc/sysctl.conf\n",
-     "echo \"net.bridge.bridge-nf-call-iptables=1\" | tee -a /etc/sysctl.conf\n",
-     "modprobe br_netfilter\n",
-     "echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables\n",
-     "sysctl -p\n",
 
      "declare -a file_url\n",
      "declare -a file_name\n",
@@ -1078,14 +1087,6 @@
      "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
 
-     "echo \"@reboot   root   swapoff -a\" >> /etc/crontab\n",
-     "swapoff -a\n",
-     "echo \"net.ipv4.ip_forward=1\" | tee -a /etc/sysctl.conf\n",
-     "echo \"net.bridge.bridge-nf-call-iptables=1\" | tee -a /etc/sysctl.conf\n",
-     "modprobe br_netfilter\n",
-     "echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables\n",
-     "sysctl -p\n",
-
      "declare -a file_url\n",
      "declare -a file_name\n",
      "declare -a file_acl\n",
@@ -1144,9 +1145,56 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker3Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "#!/bin/bash -xe", "\n",
+     "touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
+     "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"", { "Ref": "OSPreparationScript" }, "\"\n",
+     "file_name[0]=\"/home/ubuntu/OSPreparationScript\"\n",
+     "file_acl[0]=\"777\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[1]=\"", { "Ref": "DockerPreparationScript" }, "\"\n",
+     "file_name[1]=\"/home/ubuntu/DockerPreparationScript\"\n",
+     "file_acl[1]=\"777\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo bash /home/ubuntu/OSPreparationScript\n",
+     "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
+     "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
+
      "\n"
     ]]}}
    }
@@ -1161,9 +1209,56 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker4Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "#!/bin/bash -xe", "\n",
+     "touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
+     "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"", { "Ref": "OSPreparationScript" }, "\"\n",
+     "file_name[0]=\"/home/ubuntu/OSPreparationScript\"\n",
+     "file_acl[0]=\"777\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[1]=\"", { "Ref": "DockerPreparationScript" }, "\"\n",
+     "file_name[1]=\"/home/ubuntu/DockerPreparationScript\"\n",
+     "file_acl[1]=\"777\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo bash /home/ubuntu/OSPreparationScript\n",
+     "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
+     "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
+
      "\n"
     ]]}}
    }
@@ -1178,9 +1273,56 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker5Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "#!/bin/bash -xe", "\n",
+     "touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
+     "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"", { "Ref": "OSPreparationScript" }, "\"\n",
+     "file_name[0]=\"/home/ubuntu/OSPreparationScript\"\n",
+     "file_acl[0]=\"777\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[1]=\"", { "Ref": "DockerPreparationScript" }, "\"\n",
+     "file_name[1]=\"/home/ubuntu/DockerPreparationScript\"\n",
+     "file_acl[1]=\"777\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo bash /home/ubuntu/OSPreparationScript\n",
+     "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
+     "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
+
      "\n"
     ]]}}
    }
@@ -1195,9 +1337,56 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker6Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "#!/bin/bash -xe", "\n",
+     "touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
+     "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"", { "Ref": "OSPreparationScript" }, "\"\n",
+     "file_name[0]=\"/home/ubuntu/OSPreparationScript\"\n",
+     "file_acl[0]=\"777\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[1]=\"", { "Ref": "DockerPreparationScript" }, "\"\n",
+     "file_name[1]=\"/home/ubuntu/DockerPreparationScript\"\n",
+     "file_acl[1]=\"777\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo bash /home/ubuntu/OSPreparationScript\n",
+     "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
+     "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
+
      "\n"
     ]]}}
    }
@@ -1212,9 +1401,56 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker7Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "#!/bin/bash -xe", "\n",
+     "touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
+     "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"", { "Ref": "OSPreparationScript" }, "\"\n",
+     "file_name[0]=\"/home/ubuntu/OSPreparationScript\"\n",
+     "file_acl[0]=\"777\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[1]=\"", { "Ref": "DockerPreparationScript" }, "\"\n",
+     "file_name[1]=\"/home/ubuntu/DockerPreparationScript\"\n",
+     "file_acl[1]=\"777\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo bash /home/ubuntu/OSPreparationScript\n",
+     "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
+     "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
+
      "\n"
     ]]}}
    }
@@ -1229,9 +1465,56 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker8Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "#!/bin/bash -xe", "\n",
+     "touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
+     "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"", { "Ref": "OSPreparationScript" }, "\"\n",
+     "file_name[0]=\"/home/ubuntu/OSPreparationScript\"\n",
+     "file_acl[0]=\"777\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[1]=\"", { "Ref": "DockerPreparationScript" }, "\"\n",
+     "file_name[1]=\"/home/ubuntu/DockerPreparationScript\"\n",
+     "file_acl[1]=\"777\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo bash /home/ubuntu/OSPreparationScript\n",
+     "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
+     "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
+
      "\n"
     ]]}}
    }
@@ -1246,9 +1529,56 @@
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker9Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
-     "#!/bin/bash", "\n",
-     "\n",
-     "sudo touch ~/UserData`date +%Y%m%d%H%M%S`.Access",
+     "#!/bin/bash -xe", "\n",
+     "touch /home/ubuntu/UserData`date +%Y%m%d%H%M%S`.Access\n",
+
+     "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/ubuntu/.ssh/authorized_keys\n",
+     "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "declare -a file_url\n",
+     "declare -a file_name\n",
+     "declare -a file_acl\n",
+     "declare -a file_owner\n",
+     "declare -a file_result\n",
+
+     "file_url[0]=\"", { "Ref": "OSPreparationScript" }, "\"\n",
+     "file_name[0]=\"/home/ubuntu/OSPreparationScript\"\n",
+     "file_acl[0]=\"777\"\n",
+     "file_owner[0]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[1]=\"", { "Ref": "DockerPreparationScript" }, "\"\n",
+     "file_name[1]=\"/home/ubuntu/DockerPreparationScript\"\n",
+     "file_acl[1]=\"777\"\n",
+     "file_owner[1]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[2]=\"", { "Ref": "CommonK8sPreparationScript" }, "\"\n",
+     "file_name[2]=\"/home/ubuntu/CommonK8sPreparationScript\"\n",
+     "file_acl[2]=\"777\"\n",
+     "file_owner[2]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=2\n",
+
+     "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+     "for counter in $(seq 0 $max_counter); do\n",
+     " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+     "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+     "   chown ${file_owner[$counter]} ${file_name[$counter]}\n",
+     "  else\n",
+     "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+     "  fi\n",
+     " else\n",
+     "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+     " fi\n",
+     "done\n",
+
+     "sudo bash /home/ubuntu/OSPreparationScript\n",
+     "sudo bash /home/ubuntu/DockerPreparationScript ", { "Ref": "DockerVersion" }, "\n",
+     "sudo bash /home/ubuntu/CommonK8sPreparationScript ", { "Ref": "kubeadmVersion" }, " ", { "Ref": "kubectlVersion" }, " ", { "Ref": "kubeletVersion" }, " ", { "Ref": "kubernetescniVersion" }, "\n",
+
      "\n"
     ]]}}
    }
