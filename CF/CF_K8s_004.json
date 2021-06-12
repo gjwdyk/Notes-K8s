@@ -382,6 +382,11 @@
    "Type": "String",
    "NoEcho": "true",
    "Description": "Password for the User ID to access the (Docker Hub) Repository."
+  },
+  "DockerHubRepositoryName" : {
+   "Type": "String",
+   "Default": "gjwdyk/nginx-ingress",
+   "Description": "The (Docker Hub) Repository's Name, for uploading to and downloading from the compiled NGINX+ container. In case of Docker Hub, use format UserID/RepositoryName ."
   }
 
  },
@@ -1000,7 +1005,12 @@
      "file_acl[5]=\"777\"\n",
      "file_owner[5]=\"ubuntu:ubuntu\"\n",
 
-     "max_counter=5\n",
+     "file_url[6]=\"", { "Ref": "CompileNGINXPlusScript" }, "\"\n",
+     "file_name[6]=\"/home/ubuntu/CompileNGINXPlusScript\"\n",
+     "file_acl[6]=\"777\"\n",
+     "file_owner[6]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=6\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
@@ -1037,6 +1047,15 @@
      "\n",
 
      "sudo bash /home/ubuntu/K8sServicePreparationScript\n",
+
+     "sudo printf \"", { "Ref": "NGINXRepositoryCertificate" }, "\" >> /home/ubuntu/nginx-repo.crt\n",
+     "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.crt\n",
+     "chmod 600 /home/ubuntu/nginx-repo.crt\n",
+     "sudo printf \"", { "Ref": "NGINXRepositoryPrivateKey" }, "\" >> /home/ubuntu/nginx-repo.key\n",
+     "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.key\n",
+     "chmod 600 /home/ubuntu/nginx-repo.key\n",
+
+     "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, "\n",
 
      "\n"
     ]]}}
