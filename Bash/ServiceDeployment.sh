@@ -27,4 +27,7 @@ subjects:
   namespace: kubernetes-dashboard
 EOF
 
-runuser -u ubuntu -- kubectl patch service kubernetes-dashboard --namespace=kubernetes-dashboard --patch '{"spec": { "type": "NodePort", "ports": [ { "nodePort": 30443, "port": 443 } ] } }'
+runuser -u ubuntu -- kubectl patch service kubernetes-dashboard --namespace=kubernetes-dashboard --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 443, "nodePort": 30443 } ] } }'
+runuser -u ubuntu -- kubectl patch deployment kubernetes-dashboard --namespace=kubernetes-dashboard --patch '{"spec": {"template": {"spec": {"containers": [ {"name": "kubernetes-dashboard", "args": [ "--auto-generate-certificates", "--namespace=kubernetes-dashboard", "--token-ttl=7777777" ] } ] } } } }'
+
+runuser -u ubuntu -- kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
