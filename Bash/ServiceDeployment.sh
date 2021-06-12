@@ -38,8 +38,6 @@ EOF
 runuser -u ubuntu -- kubectl patch service kubernetes-dashboard --namespace=kubernetes-dashboard --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 443, "nodePort": 30443 } ] } }'
 runuser -u ubuntu -- kubectl patch deployment kubernetes-dashboard --namespace=kubernetes-dashboard --patch '{"spec": {"template": {"spec": {"containers": [ {"name": "kubernetes-dashboard", "args": [ "--auto-generate-certificates", "--namespace=kubernetes-dashboard", "--token-ttl=7777777" ] } ] } } } }'
 
-
-
 #╔═╦════════════════════════╦═╗
 #║ ║                        ║ ║
 #╠═╬════════════════════════╬═╣
@@ -47,6 +45,10 @@ runuser -u ubuntu -- kubectl patch deployment kubernetes-dashboard --namespace=k
 #╠═╬════════════════════════╬═╣
 #║ ║                        ║ ║
 #╚═╩════════════════════════╩═╝
+
+#╔══════════╗
+#║   Helm   ║
+#╚══════════╝
 
 curl https://baltocdn.com/helm/signing.asc | apt-key add -
 apt-get install apt-transport-https --yes
@@ -56,7 +58,14 @@ apt-get install helm
 
 helm version
 
+#╔════════════════════════════╗
+#║   Prometheus and Grafana   ║
+#╚════════════════════════════╝
+
 runuser -u ubuntu -- helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 runuser -u ubuntu -- helm install prometheus prometheus-community/kube-prometheus-stack --create-namespace --namespace prometheus --version 13.13.1
+
+runuser -u ubuntu -- kubectl patch service prometheus-kube-prometheus-prometheus --namespace=prometheus --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 9090, "nodePort": 30081 } ] } }'
+runuser -u ubuntu -- kubectl patch service prometheus-grafana --namespace=prometheus --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 80, "nodePort": 30082 } ] } }'
 
 
