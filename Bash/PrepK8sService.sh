@@ -74,7 +74,7 @@ runuser -u ubuntu -- kubectl patch service prometheus-grafana --namespace=promet
 
 sleep 1m
 
-runuser -l ubuntu -c 'kubectl get node --all-namespaces -o wide --show-labels'
-runuser -l ubuntu -c 'kubectl get deployment --all-namespaces -o wide --show-labels'
-runuser -l ubuntu -c 'kubectl get pod --all-namespaces -o wide --show-labels'
-runuser -l ubuntu -c 'kubectl get service --all-namespaces -o wide --show-labels'
+runuser -l ubuntu -c 'kubectl get node --all-namespaces -o wide'
+runuser -l ubuntu -c 'kubectl get deployment --all-namespaces -o wide'
+runuser -l ubuntu -c 'kubectl get pod --all-namespaces -o wide'
+runuser -l ubuntu -c 'kubectl get service --all-namespaces -o wide'
