@@ -345,8 +345,45 @@
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sService.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "ConstraintDescription": "Kindly check the K8sServicePreparationScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to deploy the services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+   "Description": "URL of a bash script used to deploy fundamental K8s services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+  },
+
+  "CompileNGINXPlusScript": {
+   "Type": "String",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/CompileNGINXPlus.sh",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "ConstraintDescription": "Kindly check the CompileNGINXPlusScript parameter input. Ensure it follows common URL pattern.",
+   "Description": "URL of a bash script to compile NGINX+ . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+  },
+  "NGINXPlusVersion": {
+   "Type": "String",
+   "Default": "v1.11.3",
+   "Description": "Paste the version of NGINX+ to be implemented."
+  },
+  "NGINXRepositoryCertificate": {
+   "Type": "String",
+   "NoEcho": "true",
+   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$",
+   "ConstraintDescription": "Kindly check the NGINXRepositoryCertificate parameter input.",
+   "Description": "Paste the text content of a NGINX+ Repository Certificate (i.e. nginx-repo.crt file)."
+  },
+  "NGINXRepositoryPrivateKey": {
+   "Type": "String",
+   "NoEcho": "true",
+   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$",
+   "ConstraintDescription": "Kindly check the NGINXRepositoryPrivateKey parameter input.",
+   "Description": "Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file)."
+  },
+  "DockerHubUserID" : {
+   "Type": "String",
+   "Description": "User ID used to access to the (Docker Hub) Repository, for uploading to and downloading from the compiled NGINX+ container."
+  },
+  "DockerHubPassword" : {
+   "Type": "String",
+   "NoEcho": "true",
+   "Description": "Password for the User ID to access the (Docker Hub) Repository."
   }
+
  },
 
  "Metadata": {
