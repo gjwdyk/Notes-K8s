@@ -340,11 +340,11 @@
    "ConstraintDescription": "Kindly check the K8sWorkerPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the Kubernetes' worker nodes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
-  "K8sServiceDeploymentScript": {
+  "K8sServicePreparationScript": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/ServiceDeployment.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sService.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the K8sServiceDeploymentScript parameter input. Ensure it follows common URL pattern.",
+   "ConstraintDescription": "Kindly check the K8sServicePreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to deploy the services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   }
  },
@@ -398,7 +398,7 @@
       "K8sMasterPreparationScript",
       "ClusterNetworkConfiguration",
       "K8sWorkerPreparationScript",
-      "K8sServiceDeploymentScript"
+      "K8sServicePreparationScript"
      ]
     }
    ],
@@ -464,8 +464,8 @@
     "K8sWorkerPreparationScript": {
      "default": "URL of K8s Worker Preparation Script"
     },
-    "K8sServiceDeploymentScript": {
-     "default": "URL of K8s Service Deployment Script"
+    "K8sServicePreparationScript": {
+     "default": "URL of K8s Fundamental Services Script"
     }
    }
   }
@@ -958,8 +958,8 @@
      "file_acl[4]=\"777\"\n",
      "file_owner[4]=\"ubuntu:ubuntu\"\n",
 
-     "file_url[5]=\"", { "Ref": "K8sServiceDeploymentScript" }, "\"\n",
-     "file_name[5]=\"/home/ubuntu/K8sServiceDeploymentScript\"\n",
+     "file_url[5]=\"", { "Ref": "K8sServicePreparationScript" }, "\"\n",
+     "file_name[5]=\"/home/ubuntu/K8sServicePreparationScript\"\n",
      "file_acl[5]=\"777\"\n",
      "file_owner[5]=\"ubuntu:ubuntu\"\n",
 
@@ -999,7 +999,7 @@
       { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] } ] ] }, "" ] },
      "\n",
 
-     "sudo bash /home/ubuntu/K8sServiceDeploymentScript\n",
+     "sudo bash /home/ubuntu/K8sServicePreparationScript\n",
 
      "\n"
     ]]}}

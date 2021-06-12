@@ -9,6 +9,6 @@ done
 
 sleep 1m
 
-runuser -l ubuntu -c 'kubectl get nodes --all-namespaces -o wide --show-labels'
-runuser -l ubuntu -c 'kubectl get pods --all-namespaces -o wide --show-labels'
-runuser -l ubuntu -c 'kubectl get services --all-namespaces -o wide --show-labels'
+runuser -l ubuntu -c 'kubectl get node --all-namespaces -o wide --show-labels'
+runuser -l ubuntu -c 'kubectl get pod --all-namespaces -o wide --show-labels'
+runuser -l ubuntu -c 'kubectl get service --all-namespaces -o wide --show-labels'
