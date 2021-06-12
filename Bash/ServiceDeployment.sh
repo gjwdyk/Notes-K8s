@@ -56,7 +56,7 @@ apt-get install helm
 
 helm version
 
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install prometheus prometheus-community/kube-prometheus-stack --create-namespace --namespace prometheus --version 13.13.1
+runuser -u ubuntu -- helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+runuser -u ubuntu -- helm install prometheus prometheus-community/kube-prometheus-stack --create-namespace --namespace prometheus --version 13.13.1
 
 
