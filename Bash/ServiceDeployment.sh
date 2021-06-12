@@ -26,3 +26,5 @@ subjects:
   name: admin-user
   namespace: kubernetes-dashboard
 EOF
+
+runuser -u ubuntu -- kubectl patch service kubernetes-dashboard --namespace=kubernetes-dashboard --patch '{"spec": { "type": "NodePort", "ports": [ { "nodePort": 30443, "port": 443 } ] } }'
