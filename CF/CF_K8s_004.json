@@ -210,7 +210,7 @@
   "CreateWorkerNode7": { "Fn::Or": [ { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "7" ] }, { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "8" ] }, { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] } ] },
   "CreateWorkerNode8": { "Fn::Or": [ { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "8" ] }, { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] } ] },
   "CreateWorkerNode9": { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] },
-  "DefaultK8sNodeImageID": { "Fn::Equals" : [ { "Ref": "K8sNodeImageID" }, "Default" ] }
+  "DefaultK8sNodeImageID": { "Fn::Equals": [ { "Ref": "K8sNodeImageID" }, "Default" ] }
  },
 
  "Parameters": {
@@ -374,16 +374,16 @@
    "ConstraintDescription": "Kindly check the NGINXRepositoryPrivateKey parameter input.",
    "Description": "Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file)."
   },
-  "DockerHubUserID" : {
+  "DockerHubUserID": {
    "Type": "String",
    "Description": "User ID used to access to the (Docker Hub) Repository, for uploading to and downloading from the compiled NGINX+ container."
   },
-  "DockerHubPassword" : {
+  "DockerHubPassword": {
    "Type": "String",
    "NoEcho": "true",
    "Description": "Password for the User ID to access the (Docker Hub) Repository."
   },
-  "DockerHubRepositoryName" : {
+  "DockerHubRepositoryName": {
    "Type": "String",
    "Default": "gjwdyk/nginx-ingress",
    "Description": "The (Docker Hub) Repository's Name, for uploading to and downloading from the compiled NGINX+ container. In case of Docker Hub, use format UserID/RepositoryName ."
@@ -551,17 +551,21 @@
     "NGINXRepositoryPrivateKey": {
      "default": "NGINX+ Repository Private Key"
     },
-
-
-      ,
-      "DockerHubUserID",
-      "DockerHubPassword",
-      "DockerHubRepositoryName",
-      "SkipNGINXPlusCompilation",
-      "NGINXPlusIngressScript"
-
-
-
+    "DockerHubUserID": {
+     "default": "Repository (Docker Hub) User ID"
+    },
+    "DockerHubPassword": {
+     "default": "Repository (Docker Hub) Password"
+    },
+    "DockerHubRepositoryName": {
+     "default": "NGINX+'s Repository (Docker Hub) Name"
+    },
+    "SkipNGINXPlusCompilation": {
+     "default": "Skip NGINX+ Compilation ?"
+    },
+    "NGINXPlusIngressScript": {
+     "default": "URL of NGINX+ KIC Script"
+    }
    }
   }
  },
