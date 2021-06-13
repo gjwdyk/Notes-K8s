@@ -15,6 +15,8 @@ runuser -u ubuntu -- kubectl apply -f common/crds/k8s.nginx.org_policies.yaml
 runuser -u ubuntu -- kubectl apply -f common/crds/k8s.nginx.org_globalconfigurations.yaml
 runuser -u ubuntu -- kubectl apply -f common/global-configuration.yaml
 
+printenv
+
 runuser -u ubuntu -- cat <<EOF | runuser -u ubuntu -- kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -115,3 +117,5 @@ runuser -l ubuntu -c 'kubectl get node --all-namespaces -o wide'
 runuser -l ubuntu -c 'kubectl get deployment --all-namespaces -o wide'
 runuser -l ubuntu -c 'kubectl get pod --all-namespaces -o wide'
 runuser -l ubuntu -c 'kubectl get service --all-namespaces -o wide'
+
+printenv
