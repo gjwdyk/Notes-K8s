@@ -210,7 +210,8 @@
   "CreateWorkerNode7": { "Fn::Or": [ { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "7" ] }, { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "8" ] }, { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] } ] },
   "CreateWorkerNode8": { "Fn::Or": [ { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "8" ] }, { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] } ] },
   "CreateWorkerNode9": { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] },
-  "DefaultK8sNodeImageID": { "Fn::Equals": [ { "Ref": "K8sNodeImageID" }, "Default" ] }
+  "DefaultK8sNodeImageID": { "Fn::Equals": [ { "Ref": "K8sNodeImageID" }, "Default" ] },
+  "SkipNGINXCompilation": { "Fn::Equals": [ { "Ref": "SkipNGINXPlusCompilation" }, "Yes" ] }
  },
 
  "Parameters": {
@@ -276,14 +277,14 @@
   "OSPreparationScript": {
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepOS.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the OSPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the ubuntu OS for Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "DockerPreparationScript": {
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepDocker.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the DockerPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the containerization platform for Kubernetes implementation (e.g. Docker). If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
@@ -295,7 +296,7 @@
   "CommonK8sPreparationScript": {
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepCommonK8s.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the CommonK8sPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the common factors of Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
@@ -322,21 +323,21 @@
   "K8sMasterPreparationScript": {
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sMaster.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the K8sMasterPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the Kubernetes' master node implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "ClusterNetworkConfiguration": {
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the ClusterNetworkConfiguration parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a YAML file to be used to implement a Cluster Networking within the Kubernetes Cluster (e.g. flannel). If the YAML file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "K8sWorkerPreparationScript": {
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sWorker.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the K8sWorkerPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the Kubernetes' worker nodes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
@@ -363,14 +364,14 @@
   "NGINXRepositoryCertificate": {
    "Type": "String",
    "NoEcho": "true",
-   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$",
+   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$|^$",
    "ConstraintDescription": "Kindly check the NGINXRepositoryCertificate parameter input.",
    "Description": "Paste the text content of a NGINX+ Repository Certificate (i.e. nginx-repo.crt file)."
   },
   "NGINXRepositoryPrivateKey": {
    "Type": "String",
    "NoEcho": "true",
-   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$",
+   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$|^$",
    "ConstraintDescription": "Kindly check the NGINXRepositoryPrivateKey parameter input.",
    "Description": "Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file)."
   },
@@ -1067,7 +1068,12 @@
      "file_acl[6]=\"777\"\n",
      "file_owner[6]=\"ubuntu:ubuntu\"\n",
 
-     "max_counter=6\n",
+     "file_url[7]=\"", { "Ref": "NGINXPlusIngressScript" }, "\"\n",
+     "file_name[7]=\"/home/ubuntu/NGINXPlusIngressScript\"\n",
+     "file_acl[7]=\"777\"\n",
+     "file_owner[7]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=7\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
@@ -1105,14 +1111,17 @@
 
      "sudo bash /home/ubuntu/K8sServicePreparationScript\n",
 
-     "sudo printf \"", { "Ref": "NGINXRepositoryCertificate" }, "\" >> /home/ubuntu/nginx-repo.crt\n",
-     "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.crt\n",
-     "chmod 600 /home/ubuntu/nginx-repo.crt\n",
-     "sudo printf \"", { "Ref": "NGINXRepositoryPrivateKey" }, "\" >> /home/ubuntu/nginx-repo.key\n",
-     "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.key\n",
-     "chmod 600 /home/ubuntu/nginx-repo.key\n",
+     { "Fn::If": [ "SkipNGINXCompilation", "", { "Fn::Join": [ "",
+      "sudo printf \"", { "Ref": "NGINXRepositoryCertificate" }, "\" >> /home/ubuntu/nginx-repo.crt\n",
+      "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.crt\n",
+      "chmod 600 /home/ubuntu/nginx-repo.crt\n",
+      "sudo printf \"", { "Ref": "NGINXRepositoryPrivateKey" }, "\" >> /home/ubuntu/nginx-repo.key\n",
+      "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.key\n",
+      "chmod 600 /home/ubuntu/nginx-repo.key\n",
+     ] } ] },
+     "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, "\n",
 
-     "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, "\n",
+     "sudo bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
      "\n"
     ]]}}
