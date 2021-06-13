@@ -68,9 +68,9 @@ runuser -u ubuntu -- helm install prometheus prometheus-community/kube-prometheu
 runuser -u ubuntu -- kubectl patch service prometheus-kube-prometheus-prometheus --namespace=prometheus --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 9090, "nodePort": 30081 } ] } }'
 runuser -u ubuntu -- kubectl patch service prometheus-grafana --namespace=prometheus --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 80, "nodePort": 30082 } ] } }'
 
-#╔════════════════════════╗
-#║   Review Final State   ║
-#╚════════════════════════╝
+#╔═══════════════════╗
+#║   Review Status   ║
+#╚═══════════════════╝
 
 sleep 1m
 

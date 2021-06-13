@@ -1111,14 +1111,14 @@
 
      "sudo bash /home/ubuntu/K8sServicePreparationScript\n",
 
-     { "Fn::If": [ "SkipNGINXCompilation", "", { "Fn::Join": [ "",
+     { "Fn::If": [ "SkipNGINXCompilation", "", { "Fn::Join": [ "", [
       "sudo printf \"", { "Ref": "NGINXRepositoryCertificate" }, "\" >> /home/ubuntu/nginx-repo.crt\n",
       "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.crt\n",
       "chmod 600 /home/ubuntu/nginx-repo.crt\n",
       "sudo printf \"", { "Ref": "NGINXRepositoryPrivateKey" }, "\" >> /home/ubuntu/nginx-repo.key\n",
       "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.key\n",
-      "chmod 600 /home/ubuntu/nginx-repo.key\n",
-     ] } ] },
+      "chmod 600 /home/ubuntu/nginx-repo.key\n"
+     ] ] } ] },
      "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, "\n",
 
      "sudo bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
