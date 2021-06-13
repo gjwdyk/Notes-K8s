@@ -387,8 +387,21 @@
    "Type": "String",
    "Default": "gjwdyk/nginx-ingress",
    "Description": "The (Docker Hub) Repository's Name, for uploading to and downloading from the compiled NGINX+ container. In case of Docker Hub, use format UserID/RepositoryName ."
+  },
+  "SkipNGINXPlusCompilation": {
+   "Type": "String",
+   "Default": "Yes",
+   "AllowedValues": [ "Yes", "No" ],
+   "AllowedPattern": "^Yes|No$",
+   "Description": "Whether to Skip Compilation of NGINX+ ; example: if you have done this before."
+  },
+  "NGINXPlusIngressScript": {
+   "Type": "String",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepNGINXPlusKIC.sh",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "ConstraintDescription": "Kindly check the NGINXPlusIngressScript parameter input. Ensure it follows common URL pattern.",
+   "Description": "URL of a bash script to implement NGINX+ as K8s Ingress Controller . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   }
-
  },
 
  "Metadata": {
@@ -441,6 +454,22 @@
       "ClusterNetworkConfiguration",
       "K8sWorkerPreparationScript",
       "K8sServicePreparationScript"
+     ]
+    },
+    {
+     "Label": {
+      "default": "NGINX+ Parameters"
+     },
+     "Parameters": [
+      "CompileNGINXPlusScript",
+      "NGINXPlusVersion",
+      "NGINXRepositoryCertificate",
+      "NGINXRepositoryPrivateKey",
+      "DockerHubUserID",
+      "DockerHubPassword",
+      "DockerHubRepositoryName",
+      "SkipNGINXPlusCompilation",
+      "NGINXPlusIngressScript"
      ]
     }
    ],
@@ -508,7 +537,31 @@
     },
     "K8sServicePreparationScript": {
      "default": "URL of K8s Fundamental Services Script"
-    }
+    },
+
+    "CompileNGINXPlusScript": {
+     "default": "URL of NGINX+ Compilation Script"
+    },
+    "NGINXPlusVersion": {
+     "default": "NGINX+ Version"
+    },
+    "NGINXRepositoryCertificate": {
+     "default": "NGINX+ Repository Certificate"
+    },
+    "NGINXRepositoryPrivateKey": {
+     "default": "NGINX+ Repository Private Key"
+    },
+
+
+      ,
+      "DockerHubUserID",
+      "DockerHubPassword",
+      "DockerHubRepositoryName",
+      "SkipNGINXPlusCompilation",
+      "NGINXPlusIngressScript"
+
+
+
    }
   }
  },
