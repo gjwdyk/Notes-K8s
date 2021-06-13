@@ -19,6 +19,6 @@ fi
 docker login -u $2 -p $3
 
 if [[ $5 != "Yes" ]]; then
- make debian-image-plus PREFIX=$4 TAG=$1 TARGET=container
- make push PREFIX=$4 TAG=$1
+ make debian-image-plus PREFIX=$4 TARGET=container
+ make push PREFIX=$4
 fi

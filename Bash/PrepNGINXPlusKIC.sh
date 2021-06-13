@@ -36,7 +36,7 @@ spec:
     spec:
       serviceAccountName: nginx-ingress
       containers:
-      - image: $3:$4
+      - image: $3:1.11.3
         imagePullPolicy: IfNotPresent
         name: nginx-plus-ingress
         ports:
