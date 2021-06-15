@@ -8,7 +8,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 apt update -y
 apt install -y containerd.io docker-ce docker-ce-cli
 
-sed -i '/^ExecStart/ s/$/ --exec-opt native.cgroupdriver=systemd/' /usr/lib/systemd/system/docker.service
+# sed -i '/^ExecStart/ s/$/ --exec-opt native.cgroupdriver=systemd/' /usr/lib/systemd/system/docker.service
 mkdir -p /etc/systemd/system/docker.service.d
 tee /etc/docker/daemon.json <<EOF
 {
