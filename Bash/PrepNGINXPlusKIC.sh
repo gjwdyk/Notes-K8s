@@ -17,8 +17,7 @@ kubectl apply -f deployment/nginx-plus-ingress.yaml
 kubectl patch deployment nginx-ingress --namespace=nginx-ingress --patch '{"spec": {"template": {"spec": {"containers": [ {"name": "nginx-plus-ingress", "image": "'$1':'$2'" } ] } } } }'
 
 kubectl create -f service/nodeport.yaml
-kubectl patch service nginx-ingress --namespace=nginx-ingress --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 80, "nodePort": 31080 } ] } }'
-kubectl patch service nginx-ingress --namespace=nginx-ingress --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 443, "nodePort": 31443 } ] } }'
+kubectl patch service nginx-ingress --namespace=nginx-ingress --patch '{"spec": { "type": "NodePort", "ports": [ { "port": 80, "nodePort": 31080 }, { "port": 443, "nodePort": 31443 } ] } }'
 
 #╔═══════════════════╗
 #║   Review Status   ║
