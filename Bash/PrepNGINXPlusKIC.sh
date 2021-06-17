@@ -12,96 +12,13 @@ kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml
 kubectl apply -f common/crds/k8s.nginx.org_policies.yaml
 kubectl apply -f common/crds/k8s.nginx.org_globalconfigurations.yaml
 kubectl apply -f common/global-configuration.yaml
+kubectl apply -f deployment/nginx-plus-ingress.yaml
 
-cat <<EOF | kubectl apply -f -
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-ingress
-  namespace: nginx-ingress
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: nginx-ingress
-  template:
-    metadata:
-      labels:
-        app: nginx-ingress
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9113"
-    spec:
-      serviceAccountName: nginx-ingress
-      containers:
-      - image: $3:$4
-        imagePullPolicy: IfNotPresent
-        name: nginx-ingress
-        ports:
-        - name: http
-          containerPort: 80
-        - name: https
-          containerPort: 443
-        - name: readiness-port
-          containerPort: 8081
-        - name: prometheus
-          containerPort: 9113
-        readinessProbe:
-          httpGet:
-            path: /nginx-ready
-            port: readiness-port
-          periodSeconds: 1
-        securityContext:
-          allowPrivilegeEscalation: true
-          runAsUser: 101 #nginx
-          capabilities:
-            drop:
-            - ALL
-            add:
-            - NET_BIND_SERVICE
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        args:
-          - -nginx-plus
-          - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
-          - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
-         #- -enable-app-protect
-          - -v=3 # Enables extensive logging. Useful for troubleshooting.
-          - -report-ingress-status
-          - -external-service=nginx-ingress
-          - -enable-prometheus-metrics
-          - -global-configuration=$(POD_NAMESPACE)/nginx-configuration
-EOF
+kubectl patch deployment nginx-ingress --namespace=nginx-ingress --patch '{"spec": {"template": {"spec": {"containers": [ {"name": "nginx-ingress", "image": "$3:$4" } ] } } } }'
 
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-ingress
-  namespace: nginx-ingress
-spec:
-  type: NodePort 
-  ports:
-  - name: http
-    port: 80
-    targetPort: 80
-    nodePort: 31080
-    protocol: TCP
-  - name: https
-    port: 443
-    targetPort: 443
-    nodePort: 31443
-    protocol: TCP
-  selector:
-    app: nginx-ingress
-EOF
+kubectl create -f service/nodeport.yaml
+
+
 
 #╔═══════════════════╗
 #║   Review Status   ║
