@@ -1,7 +1,5 @@
 #!/bin/bash -xe
 
-sudo su
-
 cd /home/ubuntu/kubernetes-ingress/deployments
 kubectl apply -f common/ns-and-sa.yaml
 kubectl apply -f rbac/rbac.yaml
