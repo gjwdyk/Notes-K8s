@@ -3,21 +3,19 @@
 sudo su
 
 cd /home/ubuntu/kubernetes-ingress/deployments
-runuser -u ubuntu -- kubectl apply -f common/ns-and-sa.yaml
-runuser -u ubuntu -- kubectl apply -f rbac/rbac.yaml
-runuser -u ubuntu -- kubectl apply -f common/default-server-secret.yaml
-runuser -u ubuntu -- kubectl apply -f common/nginx-config.yaml
-runuser -u ubuntu -- kubectl apply -f common/ingress-class.yaml
-runuser -u ubuntu -- kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml
-runuser -u ubuntu -- kubectl apply -f common/crds/k8s.nginx.org_virtualserverroutes.yaml
-runuser -u ubuntu -- kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml
-runuser -u ubuntu -- kubectl apply -f common/crds/k8s.nginx.org_policies.yaml
-runuser -u ubuntu -- kubectl apply -f common/crds/k8s.nginx.org_globalconfigurations.yaml
-runuser -u ubuntu -- kubectl apply -f common/global-configuration.yaml
+kubectl apply -f common/ns-and-sa.yaml
+kubectl apply -f rbac/rbac.yaml
+kubectl apply -f common/default-server-secret.yaml
+kubectl apply -f common/nginx-config.yaml
+kubectl apply -f common/ingress-class.yaml
+kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml
+kubectl apply -f common/crds/k8s.nginx.org_virtualserverroutes.yaml
+kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml
+kubectl apply -f common/crds/k8s.nginx.org_policies.yaml
+kubectl apply -f common/crds/k8s.nginx.org_globalconfigurations.yaml
+kubectl apply -f common/global-configuration.yaml
 
-#printenv
-
-runuser -u ubuntu -- cat <<EOF | runuser -u ubuntu -- kubectl apply -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -38,7 +36,7 @@ spec:
     spec:
       serviceAccountName: nginx-ingress
       containers:
-      - image: $3:1.11.3
+      - image: $3:$4
         imagePullPolicy: IfNotPresent
         name: nginx-ingress
         ports:
@@ -84,7 +82,7 @@ spec:
           - -global-configuration=$(POD_NAMESPACE)/nginx-configuration
 EOF
 
-runuser -u ubuntu -- cat <<EOF | runuser -u ubuntu -- kubectl apply -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -113,9 +111,7 @@ EOF
 
 sleep 1m
 
-runuser -l ubuntu -c 'kubectl get node --all-namespaces -o wide'
-runuser -l ubuntu -c 'kubectl get deployment --all-namespaces -o wide'
-runuser -l ubuntu -c 'kubectl get pod --all-namespaces -o wide'
-runuser -l ubuntu -c 'kubectl get service --all-namespaces -o wide'
-
-#printenv
+kubectl get node -o wide -A
+kubectl get deployment -o wide -A
+kubectl get pod -o wide -A
+kubectl get service -o wide -A

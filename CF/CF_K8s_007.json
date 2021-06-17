@@ -1076,7 +1076,7 @@
      ] ] } ] },
      "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, "\n",
 
-     "sudo bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, " ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
      "\n"
     ]]}}
