@@ -1747,7 +1747,7 @@
   },
 
   "K8sDashboardURL": {
-   "Description": "URL of K8s Dashboard. Run this command to obtain a token: kubectl -n kubernetes-dashboard get secret \$(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath=\"{.secrets[0].name}\") -o go-template=\"{{.data.token | base64decode}}\"",
+   "Description": "URL of K8s Dashboard. Run this command to obtain a token: kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath=\"{.secrets[0].name}\") -o go-template=\"{{.data.token | base64decode}}\"",
    "Value": { "Fn::Join" : [ "", [ "https://", { "Ref": "K8sMaster1EIP" }, ":30443/" ] ] }
   },
   "PrometheusURL": {
