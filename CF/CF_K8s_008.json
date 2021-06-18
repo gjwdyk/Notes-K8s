@@ -1744,7 +1744,37 @@
    "Condition": "CreateWorkerNode9",
    "Description": "IP Address of K8s Worker 9",
    "Value": { "Ref": "K8sWorker9EIP" }
+  },
+
+  "K8sDashboardURL": {
+   "Description": "URL of K8s Dashboard",
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Ref": "K8sMaster1EIP" }, ":30443/" ] ] }
+  },
+  "PrometheusURL": {
+   "Description": "URL of Prometheus",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":30081/" ] ] }
+  },
+  "GrafanaURL": {
+   "Description": "URL of Grafana",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":30082/" ] ] }
+  },
+  "CafeWaterURL": {
+   "Description": "URL of Cafe's Water API/Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/water" ] ] }
+  },
+  "CafeTeaURL": {
+   "Description": "URL of Cafe's Tea API/Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/tea" ] ] }
+  },
+  "CafeCoffeeURL": {
+   "Description": "URL of Cafe's Coffee API/Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/coffee" ] ] }
+  },
+  "CafeMilkURL": {
+   "Description": "URL of Cafe's Milk API/Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/milk" ] ] }
   }
+
  }
 
 }
