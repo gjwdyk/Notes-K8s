@@ -15,6 +15,21 @@ Diagram below depicts the logical diagram of nodes within AWS VPC.
 
 ***
 
+## PreRequisites
+
+Before you start, you need to prepare the followings:
+
+SSH Private and Public Keys
+
+Docker Hub Account
+![DockerHub Default Repository Privacy](Figures/DockerHubDefaultRepositoryPrivacy.png)
+
+NGINX Repository Certificate and Private Key
+
+
+
+***
+
 ## Template Parameters
 
 | CFT Label | Parameter Name | Required | Description |
