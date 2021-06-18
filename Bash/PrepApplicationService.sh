@@ -417,6 +417,192 @@ EOF
 
 
 
+kubectl create -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: f5-demo-httpd
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: f5-demo-httpd-orange
+  namespace: f5-demo-httpd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: f5-demo-httpd-orange
+  template:
+    metadata:
+      labels:
+        app: f5-demo-httpd-orange
+    spec:
+      containers:
+      - name: f5-demo-httpd-orange
+        image: f5devcentral/f5-demo-httpd:nginx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        env:
+        - name: F5DEMO_APP
+          value: website
+        - name: F5DEMO_NODENAME
+          value: "The Orange F5 Demo Application"
+        - name: F5DEMO_COLOR
+          value: ed7b0c
+        - name: F5DEMO_NODENAME_SSL
+          value: "The Orange SSL F5 Demo Application (SSL)"
+        - name: F5DEMO_COLOR_SSL
+          value: ed7b0c
+        - name: F5DEMO_BACKEND_URL
+          value: "http://f5-demo-httpd-green.f5-demo-httpd.svc.cluster.local/"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: f5-demo-httpd-orange
+  name: f5-demo-httpd-orange
+  namespace: f5-demo-httpd
+spec:
+  ports:
+  - nodePort: 31085
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    name: http
+  selector:
+    app: f5-demo-httpd-orange
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: f5-demo-httpd-green
+  namespace: f5-demo-httpd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: f5-demo-httpd-green
+  template:
+    metadata:
+      labels:
+        app: f5-demo-httpd-green
+    spec:
+      containers:
+      - name: f5-demo-httpd-green
+        image: f5devcentral/f5-demo-httpd:nginx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        env:
+        - name: F5DEMO_APP
+          value: website
+        - name: F5DEMO_NODENAME
+          value: "The Green F5 Demo Application"
+        - name: F5DEMO_COLOR
+          value: a0bf37
+        - name: F5DEMO_NODENAME_SSL
+          value: "The Green SSL F5 Demo Application (SSL)"
+        - name: F5DEMO_COLOR_SSL
+          value: a0bf37
+        - name: F5DEMO_BACKEND_URL
+          value: "http://f5-demo-httpd-blue.f5-demo-httpd.svc.cluster.local/"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: f5-demo-httpd-green
+  name: f5-demo-httpd-green
+  namespace: f5-demo-httpd
+spec:
+  ports:
+  - nodePort: 31086
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    name: http
+  selector:
+    app: f5-demo-httpd-green
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: f5-demo-httpd-blue
+  namespace: f5-demo-httpd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: f5-demo-httpd-blue
+  template:
+    metadata:
+      labels:
+        app: f5-demo-httpd-blue
+    spec:
+      containers:
+      - name: f5-demo-httpd-blue
+        image: f5devcentral/f5-demo-httpd:nginx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        env:
+        - name: F5DEMO_APP
+          value: website
+        - name: F5DEMO_NODENAME
+          value: "The Blue F5 Demo Application"
+        - name: F5DEMO_COLOR
+          value: 0194d2
+        - name: F5DEMO_NODENAME_SSL
+          value: "The Blue SSL F5 Demo Application (SSL)"
+        - name: F5DEMO_COLOR_SSL
+          value: 0194d2
+        - name: F5DEMO_BACKEND_URL
+          value: "http://f5-demo-httpd-orange.f5-demo-httpd.svc.cluster.local/"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: f5-demo-httpd-blue
+  name: f5-demo-httpd-blue
+  namespace: f5-demo-httpd
+spec:
+  ports:
+  - nodePort: 31087
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    name: http
+  selector:
+    app: f5-demo-httpd-blue
+  type: NodePort
+EOF
+
+
+
 #╔═══════════════════╗
 #║   Review Status   ║
 #╚═══════════════════╝
