@@ -253,6 +253,12 @@
    "Type": "AWS::EC2::KeyPair::KeyName",
    "Description": "EC2 KeyPair to enable SSH access to the EC2 instances. Select the SSH KeyPair you have access to."
   },
+  "ParentDomainName": {
+   "Type": "String",
+   "Default": "aadc.link.",
+   "Description": "Existing registered Domain Name in AWS Route53 which you have access to add, modify and delete. Include the root's dot i.e. at the end of the Domain Name."
+  },
+
   "K8sSSHPrivateKey": {
    "Type": "String",
    "NoEcho": "true",
@@ -409,7 +415,8 @@
       "K8sNodeImageType",
       "K8sNodeInstanceType",
       "NumberOfK8sWorkerNode",
-      "EC2SSHKeyPair"
+      "EC2SSHKeyPair",
+      "ParentDomainName"
      ]
     },
     {
@@ -472,6 +479,10 @@
     "EC2SSHKeyPair": {
      "default": "EC2 SSH Key-Pair"
     },
+    "ParentDomainName": {
+     "default": "Existing Registered Domain Name in AWS Route53"
+    },
+
     "K8sSSHPrivateKey": {
      "default": "K8s Nodes SSH Private Key"
     },
@@ -971,6 +982,18 @@
     "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }
    }
   },
+
+  "CafeDNSRecord": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneName": { "Ref": "ParentDomainName" },
+    "Name": { "Fn::Join": [ ".", [ "cafe", { "Ref": "ParentDomainName" } ] ] },
+    "Type": "A",
+    "TTL": "22",
+    "ResourceRecords": [ { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] } ]
+   }
+  },
+
   "K8sMaster1Instance": {
    "Type": "AWS::EC2::Instance",
    "Properties": {
@@ -1089,7 +1112,7 @@
      "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, "\n",
      "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
-     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] }, "\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ ".", [ "cafe", { "Ref": "ParentDomainName" } ] ] }, "\n",
 
      "\n"
     ]]}}
