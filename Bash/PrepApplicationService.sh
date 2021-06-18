@@ -362,6 +362,61 @@ EOF
 
 
 
+kubectl create -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: f5-demo-app
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: f5-demo-app
+  namespace: f5-demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: f5-demo-app
+  template:
+    metadata:
+      labels:
+        app: f5-demo-app
+    spec:
+      containers:
+      - name: f5-demo-app
+        image: f5devcentral/f5-demo-app
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: f5-demo-app
+  name: f5-demo-app
+  namespace: f5-demo-app
+spec:
+  ports:
+  - nodePort: 31084
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    name: http
+  selector:
+    app: f5-demo-app
+  type: NodePort
+EOF
+
+
+
 #╔═══════════════════╗
 #║   Review Status   ║
 #╚═══════════════════╝

@@ -1785,6 +1785,10 @@
   "JuiceShopURL": {
    "Description": "URL of Juice-Shop Application",
    "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31083/" ] ] }
+  },
+  "F5DemoApplicationURL": {
+   "Description": "URL of F5-Demo API/Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31084/" ] ] }
   }
 
  }
