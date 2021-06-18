@@ -13,6 +13,9 @@ Diagram below depicts the logical diagram of nodes within AWS VPC.
 
 
 
+
+## Next
+
 - [ ] ![K8s Cluster Logical Diagram - with Public IP only for Master Node](Figures/K8sClusterLogicalDiagramMasterIP.png)
 Public IP Address is needed for each node to install softwares and/or get containers.
 
