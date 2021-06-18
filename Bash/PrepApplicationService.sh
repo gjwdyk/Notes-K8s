@@ -199,6 +199,169 @@ spec:
           servicePort: 80
 EOF
 
+
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dvwa
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dvwa
+  namespace: dvwa
+spec:
+  selector:
+    matchLabels:
+      app: dvwa
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dvwa
+    spec:
+      containers:
+      - name: dvwa
+        image: vulnerables/web-dvwa
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dvwa
+  name: dvwa
+  namespace: dvwa
+spec:
+  ports:
+  - nodePort: 31081
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    name: http
+  selector:
+    app: dvwa
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hackazon
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hackazon
+  namespace: hackazon
+spec:
+  selector:
+    matchLabels:
+      app: hackazon
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hackazon
+    spec:
+      containers:
+      - name: hackazon
+        image: bepsoccer/all-in-one-hackazon
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hackazon
+  name: hackazon
+  namespace: hackazon
+spec:
+  ports:
+  - nodePort: 31082
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    name: http
+  selector:
+    app: hackazon
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: juice-shop
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: juice-shop
+  namespace: juice-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: juice-shop
+  template:
+    metadata:
+      labels:
+        app: juice-shop
+    spec:
+      containers:
+      - name: juice-shop
+        image: bkimminich/juice-shop:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: juice-shop
+  name: juice-shop
+  namespace: juice-shop
+spec:
+  ports:
+  - nodePort: 31083
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+    name: http
+  selector:
+    app: juice-shop
+  type: NodePort
+EOF
+
+
+
 #╔═══════════════════╗
 #║   Review Status   ║
 #╚═══════════════════╝

@@ -1773,6 +1773,18 @@
   "CafeMilkURL": {
    "Description": "URL of Cafe's Milk API/Application",
    "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/milk" ] ] }
+  },
+  "DVWAURL": {
+   "Description": "URL of DVWA Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31081/" ] ] }
+  },
+  "HackazonURL": {
+   "Description": "URL of Hackazon Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31082/" ] ] }
+  },
+  "JuiceShopURL": {
+   "Description": "URL of Juice-Shop Application",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31083/" ] ] }
   }
 
  }
