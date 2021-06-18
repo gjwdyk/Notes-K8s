@@ -1,7 +1,9 @@
 # Notes-K8s
-Notes and Tests on K8s
 
+This repository builds a Kubernetes Cluster within a AWS VPC using CloudFormation template as well as bash scripting language. The Kubernetes Cluster is built from N units of EC2 Ubuntu servers (where N can be between 1 to 9 worker nodes).
+There is only one K8s Master Node built on this repository.
 
+Why not use AWS EKS instead? To have the exposure provisioning and/or managing the K8s master instances.
 
 - [x] ![K8s Cluster Logical Diagram - with Public IP for each Node](Figures/K8sClusterLogicalDiagramAllIP.png)
 
