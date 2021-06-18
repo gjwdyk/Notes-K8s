@@ -255,8 +255,8 @@
   },
   "ParentDomainName": {
    "Type": "String",
-   "Default": "aadc.link.",
-   "Description": "Existing registered Domain Name in AWS Route53 which you have access to add, modify and delete. Include the root's dot i.e. at the end of the Domain Name."
+   "Default": "aadc.link",
+   "Description": "Existing registered Domain Name in AWS Route53 which you have access to add, modify and delete."
   },
 
   "K8sSSHPrivateKey": {
@@ -986,11 +986,11 @@
   "CafeDNSRecord": {
    "Type": "AWS::Route53::RecordSet",
    "Properties": {
-    "HostedZoneName": { "Ref": "ParentDomainName" },
-    "Name": { "Fn::Join": [ ".", [ "cafe", { "Ref": "ParentDomainName" } ] ] },
+    "HostedZoneName": { "Fn::Join": [ "", [ { "Ref": "ParentDomainName" }, "." ] ] },
+    "Name": { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" }, "." ] ] },
     "Type": "A",
     "TTL": "22",
-    "ResourceRecords": [ { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] } ]
+    "ResourceRecords": [ { "Ref": "K8sMaster1EIP" } ]
    }
   },
 
@@ -1112,7 +1112,7 @@
      "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, "\n",
      "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
-     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ ".", [ "cafe", { "Ref": "ParentDomainName" } ] ] }, "\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, "\n",
 
      "\n"
     ]]}}
