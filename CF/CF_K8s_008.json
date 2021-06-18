@@ -1790,15 +1790,15 @@
    "Description": "URL of F5-Demo API/Application",
    "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31084/" ] ] }
   },
-  "OrangeF5DemoHTTPURL": {
+  "F5DemoHTTPOrangeURL": {
    "Description": "URL of F5-Demo HTTP API/Application in Orange Color",
    "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31085/" ] ] }
   },
-  "GreenF5DemoHTTPURL": {
+  "F5DemoHTTPGreenURL": {
    "Description": "URL of F5-Demo HTTP API/Application in Green Color",
    "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31086/" ] ] }
   },
-  "BlueF5DemoHTTPURL": {
+  "F5DemoHTTPBlueURL": {
    "Description": "URL of F5-Demo HTTP API/Application in Blue Color",
    "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "K8sMaster1EIP" }, ":31087/" ] ] }
   }
