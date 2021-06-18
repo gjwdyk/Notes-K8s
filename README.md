@@ -13,6 +13,10 @@ Diagram below depicts the logical diagram of nodes within AWS VPC.
 
 
 
+***
+
+## Template Parameters
+
 | CFT Label | Parameter Name | Required | Description |
 | --- | --- | --- | --- |
 | Stack Name | Stack Name | Mandatory and Unique Across Account | Give a unique name to the CloudFormation stack. Stack name will be used to prefix all resources created by this CloudFormation template. Stack name can include letters (A-Z and a-z), numbers (0-9), and dashes (-). |
