@@ -1,106 +1,202 @@
 #!/bin/bash -xe
 
-cd /home/ubuntu/kubernetes-ingress/deployments
-kubectl apply -f common/ns-and-sa.yaml
-kubectl apply -f rbac/rbac.yaml
-kubectl apply -f common/default-server-secret.yaml
-kubectl apply -f common/nginx-config.yaml
-kubectl apply -f common/ingress-class.yaml
-kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml
-kubectl apply -f common/crds/k8s.nginx.org_virtualserverroutes.yaml
-kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml
-kubectl apply -f common/crds/k8s.nginx.org_policies.yaml
-kubectl apply -f common/crds/k8s.nginx.org_globalconfigurations.yaml
-kubectl apply -f common/global-configuration.yaml
+cd /home/ubuntu
 
-cat <<EOF | kubectl apply -f -
+kubectl create -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cafe
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-ingress
-  namespace: nginx-ingress
+  name: coffee
+  namespace: cafe
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: nginx-ingress
+      app: coffee
   template:
     metadata:
       labels:
-        app: nginx-ingress
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9113"
+        app: coffee
     spec:
-      serviceAccountName: nginx-ingress
       containers:
-      - image: $3:$4
+      - name: coffee
+        image: nginxdemos/nginx-hello:latest
         imagePullPolicy: IfNotPresent
-        name: nginx-ingress
         ports:
-        - name: http
-          containerPort: 80
-        - name: https
-          containerPort: 443
-        - name: readiness-port
-          containerPort: 8081
-        - name: prometheus
-          containerPort: 9113
-        readinessProbe:
-          httpGet:
-            path: /nginx-ready
-            port: readiness-port
-          periodSeconds: 1
-        securityContext:
-          allowPrivilegeEscalation: true
-          runAsUser: 101 #nginx
-          capabilities:
-            drop:
-            - ALL
-            add:
-            - NET_BIND_SERVICE
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        args:
-          - -nginx-plus
-          - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
-          - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
-         #- -enable-app-protect
-          - -v=3 # Enables extensive logging. Useful for troubleshooting.
-          - -report-ingress-status
-          - -external-service=nginx-ingress
-          - -enable-prometheus-metrics
-          - -global-configuration=$(POD_NAMESPACE)/nginx-configuration
-EOF
+        - containerPort: 8080
 
-cat <<EOF | kubectl apply -f -
+---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-ingress
-  namespace: nginx-ingress
+  name: coffee
+  namespace: cafe
 spec:
-  type: NodePort 
   ports:
-  - name: http
-    port: 80
-    targetPort: 80
-    nodePort: 31080
+  - port: 80
+    targetPort: 8080
     protocol: TCP
-  - name: https
-    port: 443
-    targetPort: 443
-    nodePort: 31443
-    protocol: TCP
+    name: http
   selector:
-    app: nginx-ingress
+    app: coffee
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: milk
+  namespace: cafe
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: milk
+  template:
+    metadata:
+      labels:
+        app: milk
+    spec:
+      containers:
+      - name: milk
+        image: nginxdemos/nginx-hello:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: milk
+  namespace: cafe
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: milk
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tea
+  namespace: cafe
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tea
+  template:
+    metadata:
+      labels:
+        app: tea
+    spec:
+      containers:
+      - name: tea
+        image: nginxdemos/nginx-hello:plain-text
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tea
+  namespace: cafe
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: tea
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: water
+  namespace: cafe
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: water
+  template:
+    metadata:
+      labels:
+        app: water
+    spec:
+      containers:
+      - name: water
+        image: nginxdemos/nginx-hello:plain-text
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: water
+  namespace: cafe
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: water
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: cafe
+  namespace: cafe
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: $1
+    http:
+      paths:
+      - path: /milk
+        backend:
+          serviceName: milk
+          servicePort: 80
+      - path: /coffee
+        backend:
+          serviceName: coffee
+          servicePort: 80
+      - path: /tea
+        backend:
+          serviceName: tea
+          servicePort: 80
+      - path: /water
+        backend:
+          serviceName: water
+          servicePort: 80
 EOF
 
 #╔═══════════════════╗

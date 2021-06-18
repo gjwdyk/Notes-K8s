@@ -1089,7 +1089,7 @@
      "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, "\n",
      "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
-     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] }, "\n",
 
      "\n"
     ]]}}
