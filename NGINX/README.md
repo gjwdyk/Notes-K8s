@@ -5,7 +5,7 @@
 
 | CFT Label (Parameter Name) | When Build/Compile NGINX+ KIC | SKIP Build/Compile NGINX+ KIC |
 | --- | --- | --- |
-| URL of NGINX+ Compilation Script (CompileNGINXPlusScript) | Mandatory | Not Needed |
+| URL of NGINX+ Compilation Script (CompileNGINXPlusScript) | Mandatory | Mandatory |
 | NGINX+ Repository Certificate (NGINXRepositoryCertificate) | Mandatory | Not Needed |
 | NGINX+ Repository Private Key (NGINXRepositoryPrivateKey) | Mandatory | Not Needed |
 | Repository (Docker Hub) User ID (DockerHubUserID) | Mandatory | Not Needed |
