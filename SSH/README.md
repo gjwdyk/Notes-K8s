@@ -8,7 +8,11 @@ It is recommended that you generate a new SSH Key-Pair specific for this CloudFo
 On the other hand, do not use the SSH Key-Pair you generate for this CloudFormation template for other purposes.
 These restrictions improve your security posture, since separate SSH Key-Pair isolates the damage only to systems which use the leaked SSH Key-Pair only.
 
-Why not use URL to pick up the SSH Key-Pair files? Because URL can (and needs to be) be accessed by the public Internet. Which means the SSH Key-Pair is 
+Why not use URL to pick up the SSH Key-Pair files? Because URL can be (and needs to be) accessed by the public Internet. Which means the SSH Key-Pair are already exposed to public Internet.
+Using a masked text input (on the CloudFormation template) means you are the only one who is able to provide the SSH Key-Pair, and the SSH Key-Pair do not need to be exposed to public Internet.
+Due to this security measure, the SSH Key-Pair need to be formatted to fit into AWS CloudFormation template's masked text input parameter.
+
+In summary, the Key-Pair files content which can contain multiple lines, need to be formatted into a single line; with the `new-line` character substituted with escaped sequence `\n`.
 
 
 ```
