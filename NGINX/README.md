@@ -25,7 +25,8 @@ When you select to SKIP building/compiling the NGINX+ KIC container image, you d
 - [ ] Repository (Docker Hub) User ID (DockerHubUserID)
 - [ ] Repository (Docker Hub) Password (DockerHubPassword)
 
-This also means you are using NGINX+ KIC container image which has been built/compiled and stored in some repository somewhere which is ***public***ly accessible. For example as depicted below:
+This also means you are using NGINX+ KIC container image which has been built/compiled and stored in some repository somewhere which is ***public***ly accessible.
+For example as depicted below:
 
 ![gjwdyk/nginx-ingress](../Figures/gjwdyknginxingress.png)
 
@@ -47,12 +48,15 @@ When you select to Build/Compile the NGINX+ KIC container image, that means you 
 
 When you choose to build/compile the NGINX+ KIC container image, choose the tag/version from the [NGINX+ KIC source repository](https://github.com/nginxinc/kubernetes-ingress/).
 As depicted on the below capture, the "branches/tags" drop-down selection lists the available tags/versions.
-
-
+The "Releases" section on the right side of the page also states the latest tag/version available.
+Note that the exact same tag/version string will be used to push the built/compiled NGINX+ KIC container image into your Repository (Docker Hub) Account.
 
 ![nginxinc/kubernetes-ingress](../Figures/NGINXKICGitHub.png)
 
 
+
+Push needs credentials (you do not want just anyone can upload trash to your docker hub account).
+Pull does not need credentials, since the requirement is that the uploaded container image is for public access.
 
 
 
