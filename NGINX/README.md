@@ -47,6 +47,9 @@ When you choose to build/compile the NGINX+ KIC container image, it is assume th
 
 
 
+![nginxinc/kubernetes-ingress](../Figures/NGINXKICGitHub.png)
+
+
 
 
 
