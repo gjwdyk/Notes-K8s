@@ -58,10 +58,7 @@ drwxr-xr-x 4 ubuntu ubuntu 4096 Jun 19 05:31 ../
 ubuntu@ubuntu:~$
 ```
 
-
-
-
-
+Below is a ***SAMPLE*** of SSH Private Key file's content.
 
 ```
 ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa
@@ -80,7 +77,7 @@ abcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==
 ubuntu@ubuntu:~$
 ```
 
-
+Replace every `new-line` character with escape sequence `\n`, so the end result of re-formatted SSH Private Key becomes like below.
 
 ```
 ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa
@@ -88,10 +85,7 @@ ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa
 ubuntu@ubuntu:~$
 ```
 
-
-
-
-
+Below is a ***SAMPLE*** of SSH Public Key file's content, which usually already formatted in one line. No changes needed.
 
 ```
 ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa.pub
