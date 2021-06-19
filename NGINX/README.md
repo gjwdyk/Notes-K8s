@@ -1,4 +1,4 @@
-# NGINX+ KIC Part, Explanation
+# NGINX+ KIC Container Image in More Details
 
 Table below describes parameters requirement depending on whether you are building/compiling the NGINX+ KIC container image or not; while launching/deploying the CloudFormation template.
 
@@ -16,6 +16,8 @@ Table below describes parameters requirement depending on whether you are buildi
 On both cases, the scripts are all mandatory, and there are no differences in usage or treatment between both cases.
 
 <br><br><br>
+
+
 
 ## When SKIPPING Building/Compiling NGINX+ KIC Container Image
 
@@ -36,9 +38,9 @@ Following the example above, the:
 
 This step/procedure also applies when you want to deploy any other service container image where you do not have the source and/or you do not want the hassle to build/compile it, and the service container image is available/publicly accessible on some repository.
 
-
-
 <br><br><br>
+
+
 
 ## When Building/Compiling NGINX+ KIC Container Image
 
@@ -61,6 +63,9 @@ Pull does not need credentials, since the requirement is that the uploaded conta
 
 
 <br><br><br>
+
+
+
 ***
 
 <br><br><br>
