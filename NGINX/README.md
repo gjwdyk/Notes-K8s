@@ -10,7 +10,7 @@
 | NGINX+ Repository Private Key (NGINXRepositoryPrivateKey) | Mandatory | Not Needed |
 | Repository (Docker Hub) User ID (DockerHubUserID) | Mandatory | Not Needed |
 | Repository (Docker Hub) Password (DockerHubPassword) | Mandatory | Not Needed |
-| NGINX+'s Repository (Docker Hub) Name (DockerHubRepositoryName) | Mandatory | Mandatory |
+| NGINX+'s Repository (Docker Hub) Name (DockerHubRepositoryName) | Mandatory, need to be sync with "Repository (Docker Hub) User ID" (DockerHubUserID) parameter | Mandatory |
 | NGINX+ Version (NGINXPlusVersion) | Mandatory | Mandatory |
 | URL of NGINX+ KIC Script (NGINXPlusIngressScript) | Mandatory | Mandatory |
 
