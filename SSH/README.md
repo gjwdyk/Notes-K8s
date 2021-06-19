@@ -18,6 +18,7 @@ Below a guidance to generate a new SSH Key-Pair and to properly format the SSH K
 
 
 
+<br><br><br>
 ***
 
 Generate a new SSH Key-Pair with `ssh-keygen` with ***NO*** passphrase.
@@ -62,6 +63,7 @@ ubuntu@ubuntu:~$
 
 
 
+<br><br><br>
 ***
 
 Below is a ***SAMPLE*** of SSH Private Key file's content. Note that actual SSH Private Key file may contains much more lines.
@@ -93,6 +95,7 @@ ubuntu@ubuntu:~$
 
 
 
+<br><br><br>
 ***
 
 Below is a ***SAMPLE*** of SSH Public Key file's content, which usually already formatted in one line. No changes needed. Also note that the actual SSH Public Key file may have more/longer characters in the one-line.
@@ -105,6 +108,7 @@ ubuntu@ubuntu:~$
 
 
 
+<br><br><br>
 ***
 
 During CloudFormation template launch, copy paste the one-line formatted Key-Pair files content to respective parameters.
@@ -127,6 +131,7 @@ into `K8s Nodes SSH Public Key` (`K8sSSHPublicKey`) parameter input field.
 
 
 
+<br><br><br>
 ***
 
 <br><br><br>
