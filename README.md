@@ -17,7 +17,7 @@ Network ACLs and Security Groups allow ALL Types of Traffics.
 
 This CloudFormation template is designed for building Demo/Testing environment only.
 It was NOT designed to be used for Live/Commercial environment !!!
-This CloudFormation Template is developed by independent individual and therefore is NOT supported by F5 Networks.
+This CloudFormation Template is developed by independent individual and therefore is NOT supported by NGINX nor F5 Networks.
 Refer to [Disclaimers and Limitations of Liability](#disclaimers-and-limitations-of-liability) for the no-terms and no-conditions under which you can utilize the codes, information, service or any contents of this repository.
 ***Launching the CloudFormation template will incur costs which AWS will bill to the account on which you launch the CloudFormation Template on.***
 
