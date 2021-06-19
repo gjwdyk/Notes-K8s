@@ -1,10 +1,15 @@
 # K8s Nodes SSH Private and Public Key-Pair specific for this CloudFormation template
 
 The K8s Nodes SSH Private and Public Key-Pair are normal SSH Key-Pair, which can be generated with common ssh tools, such as `ssh-keygen`.
-As with normal SSH Key-Pair, you need to **keep the Private Key information/file securely**, since if it falls into the wrong hand, it can be used to access your EC2 instances which carry the Public Key.
+As with normal SSH Key-Pair, you need to ***keep the Private Key information/file securely***, since if it falls into the wrong hand, it can be used to access your EC2 instances which carry the Public Key.
 
+In this CloudFormation template, the K8s Nodes SSH Private and Public Key-Pair are used only between K8s Master Node to send instructions to all K8s Worker Nodes.
+It is recommended that you generate a new SSH Key-Pair specific for this CloudFormation template only, and not using your AWS Key-Pair or other SSH Key-Pair you use for other purposes.
+On the other hand, do not use the SSH Key-Pair you generate for this CloudFormation template for other purposes.
+These restrictions improve your security posture, since separate SSH Key-Pair isolates the damage only to systems which use the leaked SSH Key-Pair only.
 
-Note that you need to keep 
+Why not use URL to pick up the SSH Key-Pair files? Because URL can (and needs to be) be accessed by the public Internet. Which means the SSH Key-Pair is 
+
 
 ```
 ubuntu@ubuntu:~$ ssh-keygen
