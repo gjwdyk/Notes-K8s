@@ -58,18 +58,18 @@ Before you start launching the CloudFormation template, you need to prepare or t
 | K8s Nodes' Instance Type | K8sNodeInstanceType | Mandatory with Default Value | Select an EC2 Instance Type for the K8s Nodes. Note that instance type also influences the number of CPU and amount of Memory available for the K8s Node. Refer also to official guides from Ubuntu (https://help.ubuntu.com/community/Installation/SystemRequirements) and Kubernetes (https://docs.kublr.com/installation/hardware-recommendation/) on the minimal system requirements for each platform, and pick the largest specification on each aspect. |
 | Number of K8s Worker Node(s) | NumberOfK8sWorkerNode | Mandatory with Default Value | Select from 1 to 9 Worker Nodes to be created by the CloudFormation template. |
 | EC2 SSH Key-Pair | EC2SSHKeyPair | Optional | This Key-Pair will be used for SSH access into the EC2 instances or the K8s Nodes. Select a Key-Pair from the drop-down list of Existing Key-Pairs. If the Key-Pair you want to use is created after you execute/launch this CloudFormation template (example: on separate browser's tab you created a new Key-Pair after you execute/launch this CloudFormation template), the new Key-Pair will not be shown. You need to assign/use a Key-Pair if you'd like to access any of the K8s Node's CLI. |
-| Existing Registered Domain Name in AWS Route53 | ParentDomainName | Blah | Blah |
-| K8s Nodes SSH Private Key | K8sSSHPrivateKey | Mandatory | Blah |
-| K8s Nodes SSH Public Key | K8sSSHPublicKey | Mandatory | Blah |
-| Time Zone | TimeZone | Optional with Default Value | Blah |
-| URL of OS Preparation Script | OSPreparationScript | Mandatory with Default Value | Blah |
-| URL of Docker Preparation Script | DockerPreparationScript | Mandatory with Default Value | Blah |
-| URL of Common K8s Preparation Script | CommonK8sPreparationScript | Mandatory with Default Value | Blah |
-| URL of K8s Master Preparation Script | K8sMasterPreparationScript | Mandatory with Default Value | Blah |
-| URL of Cluster Networking (flannel) YAML File | ClusterNetworkConfiguration | Mandatory with Default Value | Blah |
-| URL of K8s Worker Preparation Script | K8sWorkerPreparationScript | Mandatory with Default Value | Blah |
-| URL of K8s Fundamental Services Script | K8sServicePreparationScript | Optional with Default Value | Blah |
-| URL of NGINX+ Compilation Script | CompileNGINXPlusScript | Optional with Default Value | Blah |
+| Existing Registered Domain Name in AWS Route53 | ParentDomainName | Optional | NGINX+ Kubernetes Ingress Controller requires domain name for the service's Ingress configuration. Specify an active and registered AWS Route53 Domain Name, which you have full access to add, create, modify, and delete `A` records. |
+| K8s Nodes SSH Private Key | K8sSSHPrivateKey | Mandatory | Together with "K8s Nodes SSH Public Key" (K8sSSHPublicKey) they both form a Key-Pair to be used only between K8s Master Node to send instructions to all K8s Worker Nodes. Refer to [KeyPair](KeyPair\/) for more detail explanations. |
+| K8s Nodes SSH Public Key | K8sSSHPublicKey | Mandatory | Together with "K8s Nodes SSH Private Key" (K8sSSHPrivateKey) they both form a Key-Pair to be used only between K8s Master Node to send instructions to all K8s Worker Nodes. Refer to [KeyPair](KeyPair\/) for more detail explanations. |
+| Time Zone | TimeZone | Optional with Default Value | Select a Time Zone to be applied for all EC2 instances (i.e. all Kubernetes Nodes). |
+| URL of OS Preparation Script | OSPreparationScript | Mandatory with Default Value | URL of a bash script used to prepare the Ubuntu OS for Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
+| URL of Docker Preparation Script | DockerPreparationScript | Mandatory with Default Value | URL of a bash script used to prepare the containerization platform for Kubernetes implementation (e.g. Docker). If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
+| URL of Common K8s Preparation Script | CommonK8sPreparationScript | Mandatory with Default Value | URL of a bash script used to prepare the common factors of Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
+| URL of K8s Master Preparation Script | K8sMasterPreparationScript | Mandatory with Default Value | URL of a bash script used to prepare the Kubernetes' master node implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
+| URL of Cluster Networking (flannel) YAML File | ClusterNetworkConfiguration | Mandatory with Default Value | URL of a YAML file to be used to implement a Cluster Networking within the Kubernetes Cluster (e.g. flannel). If the YAML file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
+| URL of K8s Worker Preparation Script | K8sWorkerPreparationScript | Mandatory with Default Value | URL of a bash script used to prepare the Kubernetes' worker nodes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
+| URL of K8s Fundamental Services Script | K8sServicePreparationScript | Optional with Default Value | URL of a bash script used to deploy fundamental K8s services within the Kubernetes cluster (example: Kubernetes Dashboard, Prometheus and Grafana for Monitoring). If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
+| URL of NGINX+ Compilation Script | CompileNGINXPlusScript | Optional with Default Value | URL of a bash script to build/compile NGINX+ container image. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
 | NGINX+ Version | NGINXPlusVersion | Optional with Default Value | Blah |
 | NGINX+ Repository Certificate | NGINXRepositoryCertificate | Optional | Blah |
 | NGINX+ Repository Private Key | NGINXRepositoryPrivateKey | Optional | Blah |
@@ -86,6 +86,21 @@ Before you start launching the CloudFormation template, you need to prepare or t
 
 
 
+
+
+
+
+If you 
+Paste the version of NGINX+ KIC to be implemented. [NGINX+ KIC GitHub](https://github.com/nginxinc/kubernetes-ingress/)
+
+Paste the text content of a NGINX+ Repository Certificate (i.e. nginx-repo.crt file). You can skip this parameter if you're also skipping the NGINX+ Compilation.
+Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file). You can skip this parameter if you're also skipping the NGINX+ Compilation.
+User ID used to access to the (Docker Hub) Repository, for uploading to and downloading from the compiled NGINX+ container. You can skip this parameter if you're also skipping the NGINX+ Compilation. Note that the Repository's User ID must be in sync with the Repository's (Complete) Name, which contains also the User ID information.
+Password for the User ID to access the (Docker Hub) Repository. You can skip this parameter if you're also skipping the NGINX+ Compilation.
+The (Docker Hub) Repository's Name, for uploading to and downloading from the compiled NGINX+ container. In case of Docker Hub, use format UserID/RepositoryName . Note that the supplied Repository's (Complete) Name, which also contains the Repository's User ID information, must be in sync with the Repository's User ID parameter.
+Whether to Skip Compilation of NGINX+ ; Example: If you have compiled the NGINX+ before.
+URL of a bash script to implement NGINX+ as K8s Ingress Controller . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file).
+URL of a bash script used to deploy fundamental K8s services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file).
 
 
 
