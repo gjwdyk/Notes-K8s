@@ -1,5 +1,13 @@
 # K8s Nodes SSH Private and Public Key-Pair specific for this CloudFormation template
 
+The K8s Nodes SSH Private and Public Key-Pair are normal SSH Key-Pair, which can be generated with common ssh tools, such as `ssh-keygen`.
+As with normal SSH Key-Pair, you need to keep the Private Key file in a secure manner, since if it falls into the wrong hand, it can be used to access your EC2
+
+
+
+Note that you need to keep 
+
+```
 ubuntu@ubuntu:~$ ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa):
@@ -22,6 +30,11 @@ The key's randomart image is:
 |       = #+BB o  |
 |        *oX*.+   |
 +----[SHA256]-----+
+ubuntu@ubuntu:~$
+```
+
+
+
 ubuntu@ubuntu:~$ ls -lap
 total 32
 drwxr-xr-x 4 ubuntu ubuntu 4096 Jun 19 05:31 ./
