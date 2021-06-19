@@ -12,7 +12,7 @@ Why not use URL to pick up the SSH Key-Pair files? Because URL can be (and needs
 Using a masked text input (on the CloudFormation template) means you are the only one who is able to provide the SSH Key-Pair, and the SSH Key-Pair do not need to be exposed to public Internet.
 Due to this security measure, the SSH Key-Pair need to be formatted to fit into AWS CloudFormation template's masked text input parameter.
 
-In summary, the Key-Pair files content which can contain multiple lines, need to be formatted into a single line; with the `new-line` character substituted with escaped sequence `\n`.
+In summary, the Key-Pair files' content which can contain multiple lines, need to be formatted into a single line; with the `new-line` character substituted with escaped sequence `\n`.
 
 
 ```
