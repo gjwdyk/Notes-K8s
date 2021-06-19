@@ -23,11 +23,11 @@ Network ACLs and Security Groups allow ALL Types of Traffics.
 
 Before you start launching the CloudFormation template, you need to prepare or to have the followings ready:
 
-- [ ] K8s Nodes SSH Private and Public Key-Pair
+- [ ] K8s Nodes SSH Private and Public Key-Pair. Refer to . . . . . . . . .
 
-- [ ] Have a Registered a Route53 Domain Name
+- [ ] Have an active and registered AWS Route53 Domain Name, which you have full access to add, create, modify, and delete `A` records.
 
-- [ ] Docker Hub Account
+- [ ] Docker Hub Account. An important note to Docker Hub account is that the "Default Repository Privacy" needs to be set to "Public".
 ![DockerHub Default Repository Privacy](Figures/DockerHubDefaultRepositoryPrivacy.png)
 
 - [ ] NGINX Repository Certificate and Private Key
