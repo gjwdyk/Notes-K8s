@@ -15,7 +15,7 @@ Table below describes parameters requirement depending on whether you are buildi
 
 On both cases, the scripts are all mandatory, and there are no differences in usage or treatment between both cases.
 
-
+<br><br><br>
 
 ## When SKIPPING Building/Compiling NGINX+ KIC Container Image
 
@@ -25,12 +25,17 @@ When you select to SKIP building/compiling the NGINX+ KIC container image, you d
 - [ ] Repository (Docker Hub) User ID (DockerHubUserID)
 - [ ] Repository (Docker Hub) Password (DockerHubPassword)
 
-This also means you are using NGINX+ KIC container image which has been built/compiled and stored in some repository somewhere.
+This also means you are using NGINX+ KIC container image which has been built/compiled and stored in some repository somewhere. For example as depicted below:
+
 ![gjwdyk/nginx-ingress](../Figures/gjwdyknginxingress.png)
 
+Following the example above, the:
+- [ ] NGINX+'s Repository (Docker Hub) Name (DockerHubRepositoryName) is the complete Repository Name, which is `gjwdyk/nginx-ingress` .
+- [ ] NGINX+ Version (NGINXPlusVersion) is the tag (version) of repository you want to choose. From the example above there is only one tag (version) available, which is `v1.11.3` .
 
 
 
+<br><br><br>
 
 ## When Building/Compiling NGINX+ KIC Container Image
 
