@@ -15,6 +15,17 @@ Note that the environment created by this CloudFormation template does not provi
 Each of the EC2 instances has a Public IP and therefore can be accessed directly from Internet.
 Network ACLs and Security Groups allow ALL Types of Traffics.
 
+This CloudFormation template is designed for building Demo/Testing environment only.
+It was NOT designed to be used for Live/Commercial environment !!!
+This CloudFormation Template is developed by independent individual and therefore is NOT supported by F5 Networks.
+Refer to [Disclaimers and Limitations of Liability](#disclaimers-and-limitations-of-liability) for the no-terms and no-conditions under which you can utilize the codes, information, service or any contents of this repository.
+***Launching the CloudFormation template will incur costs which AWS will bill to the account on which you launch the CloudFormation Template on.***
+
+Read through the input parameters descriptions below to understand what the CloudFormation template creates and does.
+Some further references are provided on the description of each parameter field.
+
+Some of the folders contain further details, specific to the part/subject which the folder covers.
+
 
 
 ***
@@ -30,7 +41,7 @@ Before you start launching the CloudFormation template, you need to prepare or t
 - [ ] Docker Hub Account. An important note to Docker Hub account is that the "Default Repository Privacy" needs to be set to "Public".
 ![DockerHub Default Repository Privacy](Figures/DockerHubDefaultRepositoryPrivacy.png)
 
-- [ ] NGINX Repository Certificate and Private Key
+- [ ] NGINX+ Repository Certificate and Private Key
 
 
 
