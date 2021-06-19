@@ -15,6 +15,11 @@ Due to this security measure, the SSH Key-Pair need to be formatted to fit into 
 In summary, the Key-Pair files' content which can contain multiple lines, need to be formatted into a single line; with the `new-line` character substituted with escaped sequence `\n`.
 
 
+
+Below a guidance to generate a new SSH Key-Pair and to properly format the SSH Key-Pair for this CloudFormation template.
+
+Generate a new SSH Key-Pair with `ssh-keygen` with ***NO*** passphrase.
+
 ```
 ubuntu@ubuntu:~$ ssh-keygen
 Generating public/private rsa key pair.
