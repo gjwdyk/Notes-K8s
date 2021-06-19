@@ -19,7 +19,9 @@ Diagram below depicts the logical diagram of nodes within AWS VPC.
 
 Before you start, you need to prepare the followings:
 
-SSH Private and Public Keys
+K8s Nodes SSH Private and Public Key-Pair
+
+Have a Registered a Route53 Domain Name
 
 Docker Hub Account
 ![DockerHub Default Repository Privacy](Figures/DockerHubDefaultRepositoryPrivacy.png)
@@ -61,7 +63,7 @@ NGINX Repository Certificate and Private Key
 | NGINX+'s Repository (Docker Hub) Name | DockerHubRepositoryName | Optional | Blah |
 | Skip NGINX+ Compilation ? | SkipNGINXPlusCompilation | Optional with Default Value | Blah |
 | URL of NGINX+ KIC Script | NGINXPlusIngressScript | Optional with Default Value | Blah |
-| Blah | ApplicationServiceScript | Optional with Default Value | Blah |
+| URL of Application Service(s) Script | ApplicationServiceScript | Optional with Default Value | Blah |
 
 
 

@@ -458,6 +458,14 @@
       "SkipNGINXPlusCompilation",
       "NGINXPlusIngressScript"
      ]
+    },
+    {
+     "Label": {
+      "default": "Application Service(s) Parameters"
+     },
+     "Parameters": [
+      "ApplicationServiceScript"
+     ]
     }
    ],
    "ParameterLabels": {
@@ -541,6 +549,9 @@
     },
     "NGINXPlusIngressScript": {
      "default": "URL of NGINX+ KIC Script"
+    },
+    "ApplicationServiceScript": {
+     "default": "URL of Application Service(s) Script"
     }
    }
   }
