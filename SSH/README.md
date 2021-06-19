@@ -14,9 +14,11 @@ Due to this security measure, the SSH Key-Pair need to be formatted to fit into 
 
 In summary, the Key-Pair files' content which can contain multiple lines, need to be formatted into a single line; with the `new-line` character substituted with escaped sequence `\n`.
 
-
-
 Below a guidance to generate a new SSH Key-Pair and to properly format the SSH Key-Pair for this CloudFormation template.
+
+
+
+***
 
 Generate a new SSH Key-Pair with `ssh-keygen` with ***NO*** passphrase.
 
@@ -58,7 +60,11 @@ drwxr-xr-x 4 ubuntu ubuntu 4096 Jun 19 05:31 ../
 ubuntu@ubuntu:~$
 ```
 
-Below is a ***SAMPLE*** of SSH Private Key file's content.
+
+
+***
+
+Below is a ***SAMPLE*** of SSH Private Key file's content. Note that actual SSH Private Key file may contains much more lines.
 
 ```
 ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa
@@ -85,7 +91,11 @@ ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa
 ubuntu@ubuntu:~$
 ```
 
-Below is a ***SAMPLE*** of SSH Public Key file's content, which usually already formatted in one line. No changes needed.
+
+
+***
+
+Below is a ***SAMPLE*** of SSH Public Key file's content, which usually already formatted in one line. No changes needed. Also note that the actual SSH Public Key file may have more/longer characters in the one-line.
 
 ```
 ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa.pub
@@ -93,7 +103,13 @@ ssh-rsa abcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345ab
 ubuntu@ubuntu:~$
 ```
 
+
+
+***
+
 During CloudFormation template launch, copy paste the one-line formatted Key-Pair files content to respective parameters.
+
+
 
 Following the example above, copy paste:
 ```
@@ -101,10 +117,26 @@ Following the example above, copy paste:
 ```
 into `K8s Nodes SSH Private Key` (`K8sSSHPrivateKey`) parameter input field.
 
+
+
 And copy paste:
 ```
 ssh-rsa abcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345abcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345abcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ== ubuntu@ubuntu
 ```
 into `K8s Nodes SSH Public Key` (`K8sSSHPublicKey`) parameter input field.
+
+
+
+***
+
+<br><br><br>
+```
+╔═╦═════════════════╦═╗
+╠═╬═════════════════╬═╣
+║ ║ End of Document ║ ║
+╠═╬═════════════════╬═╣
+╚═╩═════════════════╩═╝
+```
+<br><br><br>
 
 
