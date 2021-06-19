@@ -11,22 +11,26 @@ Diagram below depicts the logical diagram of nodes within AWS VPC.
 
 ![K8s Cluster Logical Diagram - with Public IP for each Node](Figures/K8sClusterLogicalDiagramAllIP.png)
 
+Note that the environment created by this CloudFormation template does not provide any security measures to any of the created AWS resources.
+Each of the EC2 instances has a Public IP and therefore can be accessed directly from Internet.
+Network ACLs and Security Groups allow ALL Types of Traffics.
+
 
 
 ***
 
 ## PreRequisites
 
-Before you start , you need to prepare the followings:
+Before you start launching the CloudFormation template, you need to prepare or to have the followings ready:
 
-K8s Nodes SSH Private and Public Key-Pair
+- [ ] K8s Nodes SSH Private and Public Key-Pair
 
-Have a Registered a Route53 Domain Name
+- [ ] Have a Registered a Route53 Domain Name
 
-Docker Hub Account
+- [ ] Docker Hub Account
 ![DockerHub Default Repository Privacy](Figures/DockerHubDefaultRepositoryPrivacy.png)
 
-NGINX Repository Certificate and Private Key
+- [ ] NGINX Repository Certificate and Private Key
 
 
 
