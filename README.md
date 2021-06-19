@@ -34,7 +34,7 @@ Some of the folders contain further details, specific to the part/subject which 
 
 Before you start launching the CloudFormation template, you need to prepare or to have the followings ready:
 
-- [ ] K8s Nodes SSH Private and Public Key-Pair. Refer to . . . . . . . . .
+- [ ] K8s Nodes SSH Private and Public Key-Pair. Refer to [KeyPair](KeyPair\/) for more detail explanations.
 
 - [ ] Have an active and registered AWS Route53 Domain Name, which you have full access to add, create, modify, and delete `A` records.
 
