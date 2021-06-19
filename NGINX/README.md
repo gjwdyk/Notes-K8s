@@ -26,7 +26,7 @@ When you select to SKIP building/compiling the NGINX+ KIC container image, you d
 - [ ] Repository (Docker Hub) Password (DockerHubPassword)
 
 This also means you are using NGINX+ KIC container image which has been built/compiled and stored in some repository somewhere.
-![gjwdyk/nginx-ingress](Figures/gjwdyknginxingress.png)
+![gjwdyk/nginx-ingress](../Figures/gjwdyknginxingress.png)
 
 
 
