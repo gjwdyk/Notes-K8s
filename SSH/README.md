@@ -43,25 +43,18 @@ ubuntu@ubuntu:~$
 
 
 
-ubuntu@ubuntu:~$ ls -lap
-total 32
-drwxr-xr-x 4 ubuntu ubuntu 4096 Jun 19 05:31 ./
-drwxr-xr-x 3 root   root   4096 Dec 16  2020 ../
--rw------- 1 ubuntu ubuntu   27 Dec 16  2020 .bash_history
--rw-r--r-- 1 ubuntu ubuntu  220 Feb 25  2020 .bash_logout
--rw-r--r-- 1 ubuntu ubuntu 3771 Feb 25  2020 .bashrc
-drwx------ 2 ubuntu ubuntu 4096 Dec 16  2020 .cache/
--rw-r--r-- 1 ubuntu ubuntu  807 Feb 25  2020 .profile
-drwx------ 2 ubuntu ubuntu 4096 Jun 19 05:31 .ssh/
--rw-r--r-- 1 ubuntu ubuntu    0 Dec 16  2020 .sudo_as_admin_successful
-ubuntu@ubuntu:~$ cd .ssh/
-ubuntu@ubuntu:~/.ssh$ ls -lap
+```
+ubuntu@ubuntu:~$ ls -lap /home/ubuntu/.ssh/
 total 16
 drwx------ 2 ubuntu ubuntu 4096 Jun 19 05:31 ./
 drwxr-xr-x 4 ubuntu ubuntu 4096 Jun 19 05:31 ../
 -rw------- 1 ubuntu ubuntu 2602 Jun 19 05:31 id_rsa
 -rw-r--r-- 1 ubuntu ubuntu  567 Jun 19 05:31 id_rsa.pub
 ubuntu@ubuntu:~/.ssh$ cat id_rsa
+```
+
+
+
 -----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
 NhAAAAAwEAAQAAAYEAssgN7suIgaB7gO4NNbTjlVmvBXeInqIVAi5eLZUPBO3fKYk4HAZl
