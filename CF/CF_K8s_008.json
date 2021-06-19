@@ -337,10 +337,12 @@
    "ConstraintDescription": "Kindly check the CompileNGINXPlusScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script to compile NGINX+ . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
-  "NGINXPlusVersion": {
+  "SkipNGINXPlusCompilation": {
    "Type": "String",
-   "Default": "v1.11.3",
-   "Description": "Paste the version of NGINX+ to be implemented."
+   "Default": "Yes",
+   "AllowedValues": [ "Yes", "No" ],
+   "AllowedPattern": "^Yes|No$",
+   "Description": "Whether to Skip Compilation of NGINX+ ; Example: If you have compiled the NGINX+ before."
   },
   "NGINXRepositoryCertificate": {
    "Type": "String",
@@ -370,12 +372,10 @@
    "Default": "gjwdyk/nginx-ingress",
    "Description": "The (Docker Hub) Repository's Name, for uploading to and downloading from the compiled NGINX+ container. In case of Docker Hub, use format UserID/RepositoryName . Note that the supplied Repository's (Complete) Name, which also contains the Repository's User ID information, must be in sync with the Repository's User ID parameter."
   },
-  "SkipNGINXPlusCompilation": {
+  "NGINXPlusVersion": {
    "Type": "String",
-   "Default": "Yes",
-   "AllowedValues": [ "Yes", "No" ],
-   "AllowedPattern": "^Yes|No$",
-   "Description": "Whether to Skip Compilation of NGINX+ ; Example: If you have compiled the NGINX+ before."
+   "Default": "v1.11.3",
+   "Description": "Paste the version of NGINX+ to be implemented."
   },
   "NGINXPlusIngressScript": {
    "Type": "String",
@@ -449,13 +449,13 @@
      },
      "Parameters": [
       "CompileNGINXPlusScript",
-      "NGINXPlusVersion",
+      "SkipNGINXPlusCompilation",
       "NGINXRepositoryCertificate",
       "NGINXRepositoryPrivateKey",
       "DockerHubUserID",
       "DockerHubPassword",
       "DockerHubRepositoryName",
-      "SkipNGINXPlusCompilation",
+      "NGINXPlusVersion",
       "NGINXPlusIngressScript"
      ]
     },
@@ -526,8 +526,8 @@
     "CompileNGINXPlusScript": {
      "default": "URL of NGINX+ Compilation Script"
     },
-    "NGINXPlusVersion": {
-     "default": "NGINX+ Version"
+    "SkipNGINXPlusCompilation": {
+     "default": "Skip NGINX+ Compilation ?"
     },
     "NGINXRepositoryCertificate": {
      "default": "NGINX+ Repository Certificate"
@@ -544,8 +544,8 @@
     "DockerHubRepositoryName": {
      "default": "NGINX+'s Repository (Docker Hub) Name"
     },
-    "SkipNGINXPlusCompilation": {
-     "default": "Skip NGINX+ Compilation ?"
+    "NGINXPlusVersion": {
+     "default": "NGINX+ Version"
     },
     "NGINXPlusIngressScript": {
      "default": "URL of NGINX+ KIC Script"
