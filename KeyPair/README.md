@@ -21,7 +21,7 @@ Below a guidance to generate a new SSH Key-Pair and to properly format the SSH K
 <br><br><br>
 ***
 
-Generate a new SSH Key-Pair with `ssh-keygen` with ***NO*** passphrase.
+Generate a new SSH Key-Pair with `ssh-keygen` with ***NO Passphrase***.
 
 ```
 ubuntu@ubuntu:~$ ssh-keygen
@@ -113,7 +113,7 @@ ubuntu@ubuntu:~$
 
 During CloudFormation template launch, copy paste the one-line formatted Key-Pair files content to respective parameters.
 
-
+<br><br>
 
 Following the example above, copy paste:
 ```
@@ -121,7 +121,7 @@ Following the example above, copy paste:
 ```
 into `K8s Nodes SSH Private Key` (`K8sSSHPrivateKey`) parameter input field.
 
-
+<br><br>
 
 And copy paste:
 ```
