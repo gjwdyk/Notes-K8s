@@ -33,6 +33,8 @@ Following the example above, the:
 - [ ] NGINX+'s Repository (Docker Hub) Name (DockerHubRepositoryName) is the complete Repository Name, which is `gjwdyk/nginx-ingress` .
 - [ ] NGINX+ Version (NGINXPlusVersion) is the tag (version) of repository you want to choose. From the example above there is only one tag (version) available, which is `v1.11.3` .
 
+This step/procedure also applies when you want to deploy any other service container image where you do not have the source and/or you do not want the hassle to build/compile it, and the service container image is available/publicly accessible on some repository.
+
 
 
 <br><br><br>
