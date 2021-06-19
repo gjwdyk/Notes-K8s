@@ -113,7 +113,7 @@ ubuntu@ubuntu:~$
 
 During CloudFormation template launch, copy paste the one-line formatted Key-Pair files content to respective parameters.
 
-<br><br>
+<br>
 
 Following the example above, copy paste:
 ```
@@ -121,7 +121,7 @@ Following the example above, copy paste:
 ```
 into `K8s Nodes SSH Private Key` (`K8sSSHPrivateKey`) parameter input field.
 
-<br><br>
+<br>
 
 And copy paste:
 ```
