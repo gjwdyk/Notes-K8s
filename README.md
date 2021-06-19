@@ -42,9 +42,9 @@ NGINX Repository Certificate and Private Key
 | Number of K8s Worker Node(s) | NumberOfK8sWorkerNode | Mandatory with Default Value | Select from 1 to 9 Worker Nodes to be created by the CloudFormation template. |
 | EC2 SSH Key-Pair | EC2SSHKeyPair | Optional | This Key-Pair will be used for SSH access into the EC2 instances or the K8s Nodes. Select a Key-Pair from the drop-down list of Existing Key-Pairs. If the Key-Pair you want to use is created after you execute/launch this CloudFormation template (example: on separate browser's tab you created a new Key-Pair after you execute/launch this CloudFormation template), the new Key-Pair will not be shown. You need to assign/use a Key-Pair if you'd like to access any of the K8s Node's CLI. |
 | Existing Registered Domain Name in AWS Route53 | ParentDomainName | Blah | Blah |
-| K8s Nodes SSH Private Key | K8sSSHPrivateKey | Blah | Blah |
-| K8s Nodes SSH Public Key | K8sSSHPublicKey | Blah | Blah |
-| Time Zone | TimeZone | Blah | Blah |
+| K8s Nodes SSH Private Key | K8sSSHPrivateKey | Mandatory | Blah |
+| K8s Nodes SSH Public Key | K8sSSHPublicKey | Mandatory | Blah |
+| Time Zone | TimeZone | Optional with Default Value | Blah |
 | URL of OS Preparation Script | OSPreparationScript | Mandatory with Default Value | Blah |
 | URL of Docker Preparation Script | DockerPreparationScript | Mandatory with Default Value | Blah |
 | URL of Common K8s Preparation Script | CommonK8sPreparationScript | Mandatory with Default Value | Blah |
@@ -61,7 +61,7 @@ NGINX Repository Certificate and Private Key
 | NGINX+'s Repository (Docker Hub) Name | DockerHubRepositoryName | Optional | Blah |
 | Skip NGINX+ Compilation ? | SkipNGINXPlusCompilation | Optional with Default Value | Blah |
 | URL of NGINX+ KIC Script | NGINXPlusIngressScript | Optional with Default Value | Blah |
-
+| Blah | ApplicationServiceScript | Optional with Default Value | Blah |
 
 
 
