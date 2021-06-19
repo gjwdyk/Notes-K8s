@@ -39,8 +39,9 @@ Following the example above, the:
 
 ## When Building/Compiling NGINX+ KIC Container Image
 
-
-
+When you select to Build/Compile the NGINX+ KIC container image, that means you do:
+- [ ] Build/Compile the NGINX+ KIC container image, and Push/Upload the built/compiled container image to the Repository (Docker Hub) following the configured Account Credentials, Repository Name and Container Image's Tag (Version).
+- [ ] Pull/Download the NGINX+ KIC container image from the exact same Repository Name and Container Image's Tag (Version). This is why the "NGINX+'s Repository (Docker Hub) Name" (DockerHubRepositoryName) parameter needs to be in sync with the "Repository (Docker Hub) User ID" (DockerHubUserID) parameter.
 
 
 
