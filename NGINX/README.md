@@ -48,10 +48,12 @@ When you select to Build/Compile the NGINX+ KIC container image, that means you 
 - [ ] Build/Compile the NGINX+ KIC container image, and Push/Upload the built/compiled container image to the Repository (Docker Hub) following the configured Account Credentials, Repository Name and Container Image's Tag (Version).
 - [ ] Pull/Download the NGINX+ KIC container image from the exact same Repository Name and Container Image's Tag (Version). This step is exactly the same as the above [When SKIPPING Building/Compiling NGINX+ KIC Container Image](#when-skipping-buildingcompiling-nginx-kic-container-image) section. This is why the "NGINX+'s Repository (Docker Hub) Name" (DockerHubRepositoryName) parameter needs to be in sync with the "Repository (Docker Hub) User ID" (DockerHubUserID) parameter.
 
-When you choose to build/compile the NGINX+ KIC container image, choose the tag/version from the [NGINX+ KIC source repository](https://github.com/nginxinc/kubernetes-ingress/).
+When you choose to build/compile the NGINX+ KIC container image, choose the tag/version from the [NGINX+ KIC source repository](https://github.com/nginxinc/kubernetes-ingress/) .
 As depicted on the below capture, the "branches/tags" drop-down selection lists the available tags/versions.
 The "Releases" section on the right side of the page also states the latest tag/version available.
 Note that the exact same tag/version string will be used to push the built/compiled NGINX+ KIC container image into your Repository (Docker Hub) Account.
+
+You may want to check whether the compilation process/procedure of commands of the tag/version you choose is still supported (same as) between the provided [NGINX+ Compilation Script](../Bash/CompileNGINXPlus.sh) and the official guide for [Building the NGINX+ KIC Container Image](https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/) .
 
 ![nginxinc/kubernetes-ingress](../Figures/NGINXKICGitHub.png)
 
