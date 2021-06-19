@@ -1,8 +1,7 @@
 # K8s Nodes SSH Private and Public Key-Pair specific for this CloudFormation template
 
 The K8s Nodes SSH Private and Public Key-Pair are normal SSH Key-Pair, which can be generated with common ssh tools, such as `ssh-keygen`.
-As with normal SSH Key-Pair, you need to keep the Private Key file in a secure manner, since if it falls into the wrong hand, it can be used to access your EC2
-
+As with normal SSH Key-Pair, you need to **keep the Private Key information/file securely**, since if it falls into the wrong hand, it can be used to access your EC2 instances which carry the Public Key.
 
 
 Note that you need to keep 
