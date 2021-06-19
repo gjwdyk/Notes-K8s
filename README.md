@@ -34,18 +34,14 @@ Some of the folders contain further details, specific to the part/subject which 
 
 Before you start launching the CloudFormation template, you need to prepare or to have the followings ready:
 
-- [ ] K8s Nodes SSH Private and Public Key-Pair.<br>
-      Refer to [KeyPair](KeyPair\/) for more detail explanations.
+- [ ] K8s Nodes SSH Private and Public Key-Pair. Refer to [KeyPair](KeyPair\/) for more detail explanations.
 
 - [ ] Have an active and registered AWS Route53 Domain Name, which you have full access to add, create, modify, and delete `A` records.
 
-- [ ] Docker Hub account's credentials.<br>
-      An important note to Docker Hub account is that the "Default Repository Privacy" needs to be set to "Public".
+- [ ] Docker Hub account's credentials. An important note to Docker Hub account is that the "Default Repository Privacy" needs to be set to "Public".
       ![DockerHub Default Repository Privacy](Figures/DockerHubDefaultRepositoryPrivacy.png)
 
-- [ ] NGINX+ Repository Certificate and Private Key.<br>
-      The NGINX+ Repository Certificate and Private Key need to be formatted into one-line exactly the same way as described in [KeyPair](KeyPair\/).
-      You need to supply NGINX+ Repository Certificate and Private Key, when you need to build the NGINX+ container image as pointed out in [Building the Ingress Controller Image](https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/).
+- [ ] NGINX+ Repository Certificate and Private Key. The NGINX+ Repository Certificate and Private Key need to be formatted into one-line exactly the same way as described in [KeyPair](KeyPair\/). You need to supply NGINX+ Repository Certificate and Private Key, when you need to build the NGINX+ container image as pointed out in [Building the Ingress Controller Image](https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/).
 
 
 
