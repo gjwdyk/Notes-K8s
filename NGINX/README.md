@@ -57,12 +57,20 @@ You may want to check whether the compilation process/procedure of commands of t
 
 ![nginxinc/kubernetes-ingress](../Figures/NGINXKICGitHub.png)
 
+After the build/compile finished, the NGINX+ KIC container image needs to be pushed to the Repository (Docker Hub), and the Push needs account's credentials.
+Therefore the "Repository (Docker Hub) User ID" (DockerHubUserID) parameter and "Repository (Docker Hub) Password" (DockerHubPassword) parameter are needed.
+This is the same concept as Social Media account. Uploading content to your account, you need to provide credentials.
+However anyone else who just want to see/access your content, can do so freely.
 
+The "NGINX+'s Repository (Docker Hub) Name" (DockerHubRepositoryName), use format of UserID/RepositoryName.
+So note that the required information also contains User ID information, which must be in sync with the Repository's User ID parameter.
 
-Push needs credentials (you do not want just anyone can upload trash to your docker hub account).
-Pull does not need credentials, since the requirement is that the uploaded container image is for public access.
-
-
+Both "NGINX+ Repository Certificate" (NGINXRepositoryCertificate) parameter and "NGINX+ Repository Private Key" (NGINXRepositoryPrivateKey) parameter are basically authentication/authorization method.
+They're sensitive information which you should treat them securely.
+Therefore they need to be supplied also in a secure manner.
+"NGINX+ Repository Certificate" and "NGINX+ Repository Private Key" are usually supplied to you by NGINX, each in their own file: `nginx-repo.crt` and `nginx-repo.key` respectively.
+You need to reformat a copy of the `nginx-repo.crt` and `nginx-repo.key` , each into a one-line information which you can copy and paste into the respective CloudFormation parameter input field.
+Refer to [KeyPair](../KeyPair/) section for more detail on how to re-format them.
 
 <br><br><br>
 
