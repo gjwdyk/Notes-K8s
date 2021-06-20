@@ -71,42 +71,14 @@ Before you start launching the CloudFormation template, you need to prepare or t
 | URL of K8s Fundamental Services Script | K8sServicePreparationScript | Optional with Default Value | URL of a bash script used to deploy fundamental K8s services within the Kubernetes cluster (example: Kubernetes Dashboard, Prometheus and Grafana for Monitoring). If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
 | URL of NGINX+ Compilation Script | CompileNGINXPlusScript | Optional with Default Value | URL of a bash script to build/compile NGINX+ container image. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
 | Skip NGINX+ Compilation ? | SkipNGINXPlusCompilation | Optional with Default Value | Whether to Skip Compilation of NGINX+ KIC Container Image. Example: If you have compiled the NGINX+ KIC Container Image before, and want to just re-use that NGINX+ KIC Container Image. |
-| NGINX+ Repository Certificate | NGINXRepositoryCertificate | Optional | Blah |
-| NGINX+ Repository Private Key | NGINXRepositoryPrivateKey | Optional | Blah |
-| Repository (Docker Hub) User ID | DockerHubUserID | Optional | Blah |
-| Repository (Docker Hub) Password | DockerHubPassword | Optional | Blah |
-| NGINX+'s Repository (Docker Hub) Name | DockerHubRepositoryName | Optional | Blah |
+| NGINX+ Repository Certificate | NGINXRepositoryCertificate | Optional | If you choose to Compile NGINX+ : Paste the text content of a NGINX+ Repository Certificate (i.e. nginx-repo.crt file) in one-line format. Refer to both [NGINX](NGINX/) and [KeyPair](KeyPair/) for more details.<br><br>If you choose to SKIP NGINX+ Compilation : You can skip this parameter. |
+| NGINX+ Repository Private Key | NGINXRepositoryPrivateKey | Optional | If you choose to Compile NGINX+ : Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file) in one-line format. Refer to both [NGINX](NGINX/) and [KeyPair](KeyPair/) for more details.<br><br>If you choose to SKIP NGINX+ Compilation : You can skip this parameter. |
+| Repository (Docker Hub) User ID | DockerHubUserID | Optional | If you choose to Compile NGINX+ : Provide the User ID information to the (Docker Hub) Repository you'd like to Push and Pull the resulted compiled NGINX+ KIC Container Image. Refer to [NGINX](NGINX/) for more details.<br><br>If you choose to SKIP NGINX+ Compilation : You can skip this parameter. |
+| Repository (Docker Hub) Password | DockerHubPassword | Optional | If you choose to Compile NGINX+ : Provide the Password for the User ID to access the (Docker Hub) Repository. Refer to [NGINX](NGINX/) for more details.<br><br>If you choose to SKIP NGINX+ Compilation : You can skip this parameter. |
+| NGINX+'s Repository (Docker Hub) Name | DockerHubRepositoryName | Optional | If you choose to Compile NGINX+ : Provide the (Docker Hub) Repository's Complete Name, which you'd like to Push and Pull the resulted compiled NGINX+ KIC Container Image. Note that the required information uses format of UserID/RepositoryName, i.e. it contains User ID information, which must be in sync with the Repository's User ID parameter. Refer to [NGINX](NGINX/) for more details.<br><br>If you choose to SKIP NGINX+ Compilation : Provide the (Docker Hub) Repository's Complete Name, which you'd like to Pull the already available NGINX+ KIC Container Image. Refer to [NGINX](NGINX/) for more details. |
 | NGINX+ Version | NGINXPlusVersion | Optional with Default Value | If you choose to Compile NGINX+ : Paste the tag/version of NGINX+ KIC you wish to implement. You can refer to [NGINX+ KIC GitHub](https://github.com/nginxinc/kubernetes-ingress/) for the available tags/versions available. Note that NOT all tags/versions are compatible with this CloudFormation template. Refer to [NGINX](NGINX/) section for more detail.<br><br>If you choose to SKIP NGINX+ Compilation : Paste the tag/version of NGINX+ KIC you wish to implement from the Repository (Docker Hub) you like to Pull the NGINX+ KIC Container Image from. Refer to [NGINX](NGINX/) section for more detail. |
 | URL of NGINX+ KIC Script | NGINXPlusIngressScript | Optional with Default Value | URL of a bash script to implement NGINX+ as K8s Ingress Controller . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
 | URL of Application Service(s) Script | ApplicationServiceScript | Optional with Default Value | URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Paste the text content of a NGINX+ Repository Certificate (i.e. nginx-repo.crt file). You can skip this parameter if you're also skipping the NGINX+ Compilation.
-Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file). You can skip this parameter if you're also skipping the NGINX+ Compilation.
-User ID used to access to the (Docker Hub) Repository, for uploading to and downloading from the compiled NGINX+ container. You can skip this parameter if you're also skipping the NGINX+ Compilation. Note that the Repository's User ID must be in sync with the Repository's (Complete) Name, which contains also the User ID information.
-Password for the User ID to access the (Docker Hub) Repository. You can skip this parameter if you're also skipping the NGINX+ Compilation.
-The (Docker Hub) Repository's Name, for uploading to and downloading from the compiled NGINX+ container. In case of Docker Hub, use format UserID/RepositoryName . Note that the supplied Repository's (Complete) Name, which also contains the Repository's User ID information, must be in sync with the Repository's User ID parameter.
-
-
-
-
-
-
-
 
 
 
