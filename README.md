@@ -34,14 +34,14 @@ Some of the folders contain further details, specific to the part/subject which 
 
 Before you start launching the CloudFormation template, you need to prepare or to have the followings ready:
 
-- [ ] K8s Nodes SSH Private and Public Key-Pair. Refer to [KeyPair](KeyPair\/) for more detail explanations.
+- [ ] K8s Nodes SSH Private and Public Key-Pair. Refer to [KeyPair](KeyPair/) for more detail explanations.
 
 - [ ] Have an active and registered AWS Route53 Domain Name, which you have full access to add, create, modify, and delete `A` records.
 
 - [ ] Docker Hub account's credentials. An important note to Docker Hub account is that the "Default Repository Privacy" needs to be set to "Public".
       ![DockerHub Default Repository Privacy](Figures/DockerHubDefaultRepositoryPrivacy.png)
 
-- [ ] NGINX+ Repository Certificate and Private Key. The NGINX+ Repository Certificate and Private Key need to be formatted into one-line exactly the same way as described in [KeyPair](KeyPair\/). You need to supply NGINX+ Repository Certificate and Private Key, when you need to build the NGINX+ container image as pointed out in [Building the Ingress Controller Image](https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/).
+- [ ] NGINX+ Repository Certificate and Private Key. The NGINX+ Repository Certificate and Private Key need to be formatted into one-line exactly the same way as described in [KeyPair](KeyPair/). You need to supply NGINX+ Repository Certificate and Private Key, when you need to build the NGINX+ container image as pointed out in [Building the Ingress Controller Image](https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/).
 
 
 
@@ -59,8 +59,8 @@ Before you start launching the CloudFormation template, you need to prepare or t
 | Number of K8s Worker Node(s) | NumberOfK8sWorkerNode | Mandatory with Default Value | Select from 1 to 9 Worker Nodes to be created by the CloudFormation template. |
 | EC2 SSH Key-Pair | EC2SSHKeyPair | Optional | This Key-Pair will be used for SSH access into the EC2 instances or the K8s Nodes. Select a Key-Pair from the drop-down list of Existing Key-Pairs. If the Key-Pair you want to use is created after you execute/launch this CloudFormation template (example: on separate browser's tab you created a new Key-Pair after you execute/launch this CloudFormation template), the new Key-Pair will not be shown. You need to assign/use a Key-Pair if you'd like to access any of the K8s Node's CLI. |
 | Existing Registered Domain Name in AWS Route53 | ParentDomainName | Optional | NGINX+ Kubernetes Ingress Controller requires domain name for the service's Ingress configuration. Specify an active and registered AWS Route53 Domain Name, which you have full access to add, create, modify, and delete `A` records. |
-| K8s Nodes SSH Private Key | K8sSSHPrivateKey | Mandatory | Together with "K8s Nodes SSH Public Key" (K8sSSHPublicKey) they both form a Key-Pair to be used only between K8s Master Node to send instructions to all K8s Worker Nodes. Refer to [KeyPair](KeyPair\/) for more detail explanations. |
-| K8s Nodes SSH Public Key | K8sSSHPublicKey | Mandatory | Together with "K8s Nodes SSH Private Key" (K8sSSHPrivateKey) they both form a Key-Pair to be used only between K8s Master Node to send instructions to all K8s Worker Nodes. Refer to [KeyPair](KeyPair\/) for more detail explanations. |
+| K8s Nodes SSH Private Key | K8sSSHPrivateKey | Mandatory | Together with "K8s Nodes SSH Public Key" (K8sSSHPublicKey) they both form a Key-Pair to be used only between K8s Master Node to send instructions to all K8s Worker Nodes. Refer to [KeyPair](KeyPair/) for more detail explanations. |
+| K8s Nodes SSH Public Key | K8sSSHPublicKey | Mandatory | Together with "K8s Nodes SSH Private Key" (K8sSSHPrivateKey) they both form a Key-Pair to be used only between K8s Master Node to send instructions to all K8s Worker Nodes. Refer to [KeyPair](KeyPair/) for more detail explanations. |
 | Time Zone | TimeZone | Optional with Default Value | Select a Time Zone to be applied for all EC2 instances (i.e. all Kubernetes Nodes). |
 | URL of OS Preparation Script | OSPreparationScript | Mandatory with Default Value | URL of a bash script used to prepare the Ubuntu OS for Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
 | URL of Docker Preparation Script | DockerPreparationScript | Mandatory with Default Value | URL of a bash script used to prepare the containerization platform for Kubernetes implementation (e.g. Docker). If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
