@@ -70,7 +70,7 @@ They're sensitive information which you should treat them securely.
 Therefore they need to be supplied also in a secure manner.
 "NGINX+ Repository Certificate" and "NGINX+ Repository Private Key" are usually supplied to you by NGINX, each in their own file: `nginx-repo.crt` and `nginx-repo.key` respectively.
 You need to reformat a copy of the `nginx-repo.crt` and `nginx-repo.key` , each into a one-line information which you can copy and paste into the respective CloudFormation parameter input field.
-Refer to [KeyPair](../KeyPair/) section for more detail on how to re-format them.
+Refer to [KeyPair](../KeyPair/) section for more detail on how to re-format the content of each file into a one-line information.
 
 <br><br><br>
 
