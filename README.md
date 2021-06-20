@@ -76,7 +76,7 @@ Before you start launching the CloudFormation template, you need to prepare or t
 | Repository (Docker Hub) User ID | DockerHubUserID | Optional | Blah |
 | Repository (Docker Hub) Password | DockerHubPassword | Optional | Blah |
 | NGINX+'s Repository (Docker Hub) Name | DockerHubRepositoryName | Optional | Blah |
-| NGINX+ Version | NGINXPlusVersion | Optional with Default Value | Blah |
+| NGINX+ Version | NGINXPlusVersion | Optional with Default Value | If you choose to Compile NGINX+ : Paste the tag/version of NGINX+ KIC you wish to implement. You can refer to [NGINX+ KIC GitHub](https://github.com/nginxinc/kubernetes-ingress/) for the available tags/versions available. Note that NOT all tags/versions are compatible with this CloudFormation template. Refer to [NGINX](../NGINX/) section for more detail.<br>If you choose to SKIP NGINX+ Compilation : Paste the tag/version of NGINX+ KIC you wish to implement from the Repository (Docker Hub) you like to Pull the NGINX+ KIC Container Image from. Refer to [NGINX](../NGINX/) section for more detail. |
 | URL of NGINX+ KIC Script | NGINXPlusIngressScript | Optional with Default Value | URL of a bash script to implement NGINX+ as K8s Ingress Controller . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
 | URL of Application Service(s) Script | ApplicationServiceScript | Optional with Default Value | URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file). |
 
@@ -90,8 +90,10 @@ Before you start launching the CloudFormation template, you need to prepare or t
 
 
 
-If you 
-Paste the version of NGINX+ KIC to be implemented. [NGINX+ KIC GitHub](https://github.com/nginxinc/kubernetes-ingress/)
+
+
+
+
 
 Paste the text content of a NGINX+ Repository Certificate (i.e. nginx-repo.crt file). You can skip this parameter if you're also skipping the NGINX+ Compilation.
 Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file). You can skip this parameter if you're also skipping the NGINX+ Compilation.
