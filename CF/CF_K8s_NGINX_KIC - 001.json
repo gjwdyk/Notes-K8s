@@ -2178,97 +2178,13 @@
          "Fn::Join": [
           "",
           [
-           "ifconfig; ",
-           "GATEWAY_MAC_0=`ifconfig eth0 | egrep ether | awk '{print tolower($2)}'`; ",
-           "GATEWAY_CIDR_BLOCK_0=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_0}/subnet-ipv4-cidr-block`; ",
-           "GATEWAY_NET_0=${GATEWAY_CIDR_BLOCK_0%/*}; ",
-           "GATEWAY_PREFIX_0=${GATEWAY_CIDR_BLOCK_0#*/}; ",
-           "GATEWAY_0=`echo ${GATEWAY_NET_0} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
-           "echo \"GATEWAY 0 : ${GATEWAY_0}\"; ",
-           "echo \"GATEWAY MAC 0 : ${GATEWAY_MAC_0}\"; ",
-           "echo \"GATEWAY NET 0 : ${GATEWAY_NET_0}\"; ",
-           "echo \"GATEWAY PREFIX 0 : ${GATEWAY_PREFIX_0}\"; ",
-           "echo \"GATEWAY CIDR BLOCK 0 : ${GATEWAY_CIDR_BLOCK_0}\"; ",
-
-           "ifconfig; ",
-           "GATEWAY_MAC_1=`ifconfig eth1 | egrep ether | awk '{print tolower($2)}'`; ",
-           "GATEWAY_CIDR_BLOCK_1=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_1}/subnet-ipv4-cidr-block`; ",
-           "GATEWAY_NET_1=${GATEWAY_CIDR_BLOCK_1%/*}; ",
-           "GATEWAY_PREFIX_1=${GATEWAY_CIDR_BLOCK_1#*/}; ",
-           "GATEWAY_1=`echo ${GATEWAY_NET_1} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
-           "echo \"GATEWAY 1 : ${GATEWAY_1}\"; ",
-           "echo \"GATEWAY MAC 1 : ${GATEWAY_MAC_1}\"; ",
-           "echo \"GATEWAY NET 1 : ${GATEWAY_NET_1}\"; ",
-           "echo \"GATEWAY PREFIX 1 : ${GATEWAY_PREFIX_1}\"; ",
-           "echo \"GATEWAY CIDR BLOCK 1 : ${GATEWAY_CIDR_BLOCK_1}\"; ",
-
-           "ifconfig; ",
-           "GATEWAY_MAC_2=`ifconfig eth2 | egrep ether | awk '{print tolower($2)}'`; ",
-           "GATEWAY_CIDR_BLOCK_2=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_2}/subnet-ipv4-cidr-block`; ",
-           "GATEWAY_NET_2=${GATEWAY_CIDR_BLOCK_2%/*}; ",
-           "GATEWAY_PREFIX_2=${GATEWAY_CIDR_BLOCK_2#*/}; ",
-           "GATEWAY_2=`echo ${GATEWAY_NET_2} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
-           "echo \"GATEWAY 2 : ${GATEWAY_2}\"; ",
-           "echo \"GATEWAY MAC 2 : ${GATEWAY_MAC_2}\"; ",
-           "echo \"GATEWAY NET 2 : ${GATEWAY_NET_2}\"; ",
-           "echo \"GATEWAY PREFIX 2 : ${GATEWAY_PREFIX_2}\"; ",
-           "echo \"GATEWAY CIDR BLOCK 2 : ${GATEWAY_CIDR_BLOCK_2}\"; ",
-
-           "ifconfig; ",
-           "GATEWAY_MAC_3=`ifconfig eth3 | egrep ether | awk '{print tolower($2)}'`; ",
-           "GATEWAY_CIDR_BLOCK_3=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${GATEWAY_MAC_3}/subnet-ipv4-cidr-block`; ",
-           "GATEWAY_NET_3=${GATEWAY_CIDR_BLOCK_3%/*}; ",
-           "GATEWAY_PREFIX_3=${GATEWAY_CIDR_BLOCK_3#*/}; ",
-           "GATEWAY_3=`echo ${GATEWAY_NET_3} | awk -F. '{ print $1\".\"$2\".\"$3\".\"$4+1 }'`; ",
-           "echo \"GATEWAY 3 : ${GATEWAY_3}\"; ",
-           "echo \"GATEWAY MAC 3 : ${GATEWAY_MAC_3}\"; ",
-           "echo \"GATEWAY NET 3 : ${GATEWAY_NET_3}\"; ",
-           "echo \"GATEWAY PREFIX 3 : ${GATEWAY_PREFIX_3}\"; ",
-           "echo \"GATEWAY CIDR BLOCK 3 : ${GATEWAY_CIDR_BLOCK_3}\"; ",
-
            "nohup /config/waitThenRun.sh ",
-           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/network.js ",
-           "--host localhost ",
-           "--user admin ",
-           "--password-url file:///config/cloud/aws/.adminPassword ",
-           "--password-encrypted ",
-           "-o /var/log/cloud/aws/network.log ",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js ",
+           "--file /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/aws/1nicSetup.sh ",
+           "--cwd /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/aws ",
            "--log-level silly ",
-           "--wait-for ADMIN_CREATED ",
+           "-o /var/log/cloud/aws/1nicSetup.log ",
            "--signal NETWORK_CONFIG_DONE ",
-
-           "--vlan name:external,nic:1.1 ",
-           "--self-ip name:external-self,address:",
-           {
-            "Fn::GetAtt": [
-             "BigIPExternalNetworkInterface",
-             "PrimaryPrivateIpAddress"
-            ]
-           },
-           "/${GATEWAY_PREFIX_1},vlan:external ",
-
-           "--vlan name:internal,nic:1.2 ",
-           "--self-ip name:internal-self,address:",
-           {
-            "Fn::GetAtt": [
-             "BigIPInternalNetworkInterface",
-             "PrimaryPrivateIpAddress"
-            ]
-           },
-           "/${GATEWAY_PREFIX_2},vlan:internal ",
-
-           "--vlan name:control,nic:1.3 ",
-           "--self-ip name:control-self,address:",
-           {
-            "Fn::GetAtt": [
-             "BigIPControlNetworkInterface",
-             "PrimaryPrivateIpAddress"
-            ]
-           },
-           "/${GATEWAY_PREFIX_3},vlan:control ",
-
-           "--default-gw ${GATEWAY_1} ",
-
            "&>> /var/log/cloud/aws/install.log < /dev/null &"
           ]
          ]
