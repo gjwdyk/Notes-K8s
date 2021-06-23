@@ -1,6 +1,7 @@
 # Notes on Kubernetes and NGINX+ as Kubernetes Ingress Controller
 
-This repository builds a Kubernetes Cluster within a AWS VPC using CloudFormation template as well as bash scripts. The Kubernetes Cluster is built from N units of EC2 Ubuntu servers (where N can be between 1 to 9 worker nodes).
+This repository builds a Kubernetes Cluster within a new AWS VPC using CloudFormation template as well as bash scripts.
+The Kubernetes Cluster is built from N units of EC2 Ubuntu servers (where N can be between 1 to 9 worker nodes).
 There is only one K8s Master Node built on this repository.
 
 Why not use AWS EKS instead? To have the exposure of provisioning and/or managing the K8s Master Instance, as not everyone who wants to implement containerization service can do it on EKS. Some of us still need to build our own Kubernetes Cluster.
@@ -14,6 +15,10 @@ Diagram below depicts the logical diagram of nodes within AWS VPC.
 Note that the environment created by this CloudFormation template does not provide any security measures to any of the created AWS resources.
 Each of the EC2 instances has a Public IP and therefore can be accessed directly from Internet.
 Network ACLs and Security Groups allow ALL Types of Traffics.
+Therefore you need to consider this unsecurity factor when deploying this CloudFormation template.
+Do not leave the EC2 instances run when you don't use them, may be a good precautions; until this CloudFormation template gets improved with better security measures.
+
+The whole set-up require around 15 to 20 minutes to fully completed. Although the CloudFormation stack itself stated it has completed, the EC2 instances themselves need much more time to self-configure.
 
 This CloudFormation template is designed for building Demo/Testing environment only.
 It was NOT designed to be used for Live/Commercial environment !!!
