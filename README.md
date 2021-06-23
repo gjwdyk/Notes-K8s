@@ -19,6 +19,12 @@ Therefore you need to consider this unsecurity factor when deploying this CloudF
 Do not leave the EC2 instances run when you don't use them, may be a good precautions; until this CloudFormation template gets improved with better security measures.
 
 The whole set-up require around 15 to 20 minutes to fully completed. Although the CloudFormation stack itself stated it has completed, the EC2 instances themselves need much more time to self-configure.
+You can see the Kubernetes Cluster build up and deploying the container services once the CloudFormation template emits the output, by SSH to the Master Node and do `tail -f /var/log/cloud-init-output.log` .
+The set-up is completed when you see the lines similar to the 2 followings in the `/var/log/cloud-init-output.log` file :
+``
+Cloud-init v. 21.1-19-gbad84ad4-0ubuntu1~20.04.2 running 'modules:final' at Wed, 23 Jun 2021 04:51:51 +0000. Up 34.36 seconds.
+Cloud-init v. 21.1-19-gbad84ad4-0ubuntu1~20.04.2 finished at Wed, 23 Jun 2021 05:02:12 +0000. Datasource DataSourceEc2Local.  Up 655.15 seconds
+``
 
 This CloudFormation template is designed for building Demo/Testing environment only.
 It was NOT designed to be used for Live/Commercial environment !!!
