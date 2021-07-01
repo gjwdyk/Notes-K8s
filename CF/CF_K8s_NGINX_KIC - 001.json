@@ -366,7 +366,11 @@
   "CreateWorkerNode8": { "Fn::Or": [ { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "8" ] }, { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] } ] },
   "CreateWorkerNode9": { "Fn::Equals": [ { "Ref": "NumberOfK8sWorkerNode" }, "9" ] },
   "DefaultK8sNodeImageID": { "Fn::Equals": [ { "Ref": "K8sNodeImageID" }, "Default" ] },
-  "SkipNGINXCompilation": { "Fn::Equals": [ { "Ref": "SkipNGINXPlusCompilation" }, "Yes" ] }
+  "SkipNGINXCompilation": { "Fn::Equals": [ { "Ref": "SkipNGINXPlusCompilation" }, "Yes" ] },
+  "DefaultBigIPImageID": { "Fn::Equals" : [ { "Ref": "BigIPImageID" }, "Default" ] },
+  "DownLoadImage": { "Fn::Equals" : [ { "Ref": "UpgradeBigIP" }, "No" ] },
+  "UseTMSHCommandsFile": { "Fn::Or": [ { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "TMSH" ] }, { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3 and TMSH" ] } ] },
+  "UseAS3File": { "Fn::Or": [ { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3" ] }, { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3 and TMSH" ] } ] }
  },
 
  "Parameters": {
@@ -546,13 +550,19 @@
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "ConstraintDescription": "Kindly check the K8sServicePreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  }
+  },
 
   "BigIPImageID": {
    "Type": "String",
    "Default": "Default",
    "AllowedPattern": "^([aA][mM][iI]\\-)([0-9a-zA-Z]{8}|[0-9a-zA-Z]{17})$|^Default$",
    "Description": "Provide a Valid Custom AMI ID of Big-IP in the Region, In Case a Custom Big-IP Image is Required."
+  },
+  "BigIPImageType": {
+   "Type": "String",
+   "Default": "AllTwoBootLocations",
+   "AllowedValues": [ "AllOneBootLocation", "AllTwoBootLocations", "LTMOneBootLocation", "LTMTwoBootLocations" ],
+   "Description": "Select an AMI Type for the Big-IP Node, i.e. supported module(s) and number of supported boot partitions of the Big-IP node. This parameter does NOT matter if you provide/use NON-Default AMI ID."
   },
   "BigIPInstanceType": {
    "Type": "String",
@@ -579,9 +589,9 @@
    "Type": "String"
   },
   "BigIPManagementGUIPort": {
-   "Type": "Number",
+   "Type": "String",
    "Default": "8443",
-   "AllowedPattern": "^[0-9]{1,5}$",
+   "AllowedPattern": "^[1-9]{1}[0-9]{0,4}$",
    "ConstraintDescription": "Must be a valid, unused port on the Big-IP.",
    "Description": "Port for the Big-IP management Configuration utility."
   },
@@ -757,6 +767,7 @@
      },
      "Parameters": [
       "BigIPImageID",
+      "BigIPImageType",
       "BigIPInstanceType",
       "BigIPRegistrationKeyLicense",
       "BigIPModules",
@@ -869,6 +880,9 @@
 
     "BigIPImageID": {
      "default": "Big-IP Image ID"
+    },
+    "BigIPImageType": {
+     "default": "Big-IP Image Type"
     },
     "BigIPInstanceType": {
      "default": "Big-IP Instance Type"
@@ -2120,7 +2134,7 @@
      "\n"
     ]]}}
    }
-  }
+  },
 
 
 
@@ -2761,7 +2775,7 @@
         "owner": "root"
        },
        "/config/lidsa/IPToAWSInstanceMetaData": {
-        "content": { "Fn::FindInMap": [ "IPAddressConfig", "BigIPInstance", "External" ] },
+        "content": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] },
         "group": "root",
         "mode": "000666",
         "owner": "root"
@@ -2810,58 +2824,30 @@
      }
     ],
     "IamInstanceProfile": { "Ref": "BigIPServiceDiscoveryProfile" },
-    "ImageId": { "Fn::If": [ "DefaultBigIPImageID", { "Fn::FindInMap": [ "RegionAMIMap", { "Ref": "AWS::Region" }, "BigIP" ] }, { "Ref": "BigIPImageID" } ] },
+    "ImageId": { "Fn::If": [ "DefaultBigIPImageID", { "Fn::FindInMap": [ "BigIPRegionAMI", { "Ref": "AWS::Region" }, { "Ref": "BigIPImageType" } ] }, { "Ref": "BigIPImageID" } ] },
     "InstanceType": { "Ref": "BigIPInstanceType" },
     "KeyName": { "Ref": "EC2SSHKeyPair" },
-
     "NetworkInterfaces": [
      {
-      "Description": "BigIP Management Interface",
+      "Description": "Big-IP Single Interface",
       "DeviceIndex": "0",
-      "NetworkInterfaceId": {
-       "Ref": "BigIPManagementNetworkInterface"
-      }
-     },
-     {
-      "Description": "BigIP External Interface",
-      "DeviceIndex": "1",
-      "NetworkInterfaceId": {
-       "Ref": "BigIPExternalNetworkInterface"
-      }
-     },
-     {
-      "Description": "BigIP Internal Interface",
-      "DeviceIndex": "2",
-      "NetworkInterfaceId": {
-       "Ref": "BigIPInternalNetworkInterface"
-      }
-     },
-     {
-      "Description": "BigIP Control and Signaling Interface",
-      "DeviceIndex": "3",
-      "NetworkInterfaceId": {
-       "Ref": "BigIPControlNetworkInterface"
-      }
+      "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" }
      }
     ],
-
     "Tags": [
       {
         "Key": "Name",
         "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInstance" ] ] }
       }
     ],
-
     "UserData": {
      "Fn::Base64": {
       "Fn::Join": [
        "",
        [
         "#!/bin/bash\n",
-
         "Wait_Period=\"3m 33s\"\n",
         "Log_File=/var/log/cloud/aws/install.log\n",
-
         "if [ -f /config/UpgradeImageFileName ]; then\n",
         "  echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /config/UpgradeImageFileName   found.\"\n",
         "  if [ -f \"/shared/images/`cat /config/UpgradeImageFileName`\" ] && [ -f \"/shared/images/`cat /config/UpgradeImageFileName`.md5\" ]; then\n",
@@ -2879,7 +2865,6 @@
         "  sleep $Wait_Period\n",
         "  /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
         "fi\n",
-
         "\n"
        ]
       ]
@@ -2993,6 +2978,11 @@
    "Condition": "CreateWorkerNode9",
    "Description": "IP Address of K8s Worker 9",
    "Value": { "Ref": "K8sWorker9EIP" }
+  },
+
+  "BigIPIPAddress": {
+   "Description": "IP Address of Big-IP Node",
+   "Value": { "Ref": "BigIPEIP" }
   },
 
   "K8sDashboardURL": {
