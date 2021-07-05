@@ -2639,7 +2639,7 @@
         "group": "root",
         "mode": "000777",
         "owner": "root",
-        "source": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpGrade.sh"
+        "source": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGrade.sh"
        },
        "/config/ssmtp/SMTPUserID": {
         "content": { "Ref": "SMTPUserID" },
