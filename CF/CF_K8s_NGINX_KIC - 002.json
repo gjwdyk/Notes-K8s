@@ -1507,7 +1507,12 @@
      "file_acl[8]=\"777\"\n",
      "file_owner[8]=\"ubuntu:ubuntu\"\n",
 
-     "max_counter=8\n",
+     "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepBigIP.sh\"\n",
+     "file_name[9]=\"/home/ubuntu/BigIPScript\"\n",
+     "file_acl[9]=\"777\"\n",
+     "file_owner[9]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=9\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
@@ -1555,6 +1560,8 @@
      "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
      "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, "\n",
+
+     "sudo bash /home/ubuntu/BigIPScript ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\n",
 
      "\n"
     ]]}}
