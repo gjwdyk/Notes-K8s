@@ -2411,6 +2411,8 @@
            " fi\n",
            "done\n",
 
+           "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/admin/.ssh/authorized_keys\n",
+
            "\n"
           ]
          ]
