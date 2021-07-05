@@ -1,7 +1,5 @@
 #!/bin/bash -xe
 
-sudo su
-
 BigIPAddress="$1"
 Loop="Yes"
 Loop_Period="2m 2s"
