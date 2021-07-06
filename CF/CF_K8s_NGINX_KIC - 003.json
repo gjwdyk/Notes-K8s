@@ -548,8 +548,30 @@
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepApplicationService.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the K8sServicePreparationScript parameter input. Ensure it follows common URL pattern.",
+   "ConstraintDescription": "Kindly check the ApplicationServiceScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+  },
+
+  "BigIPCISScript": {
+   "Type": "String",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepBigIP.sh",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "ConstraintDescription": "Kindly check the BigIPCISScript parameter input. Ensure it follows common URL pattern.",
+   "Description": "URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+  },
+  "BigIPCISNodeTemplate": {
+   "Type": "String",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/yaml/bigip-node.template",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "ConstraintDescription": "Kindly check the BigIPCISNodeTemplate parameter input. Ensure it follows common URL pattern.",
+   "Description": "URL of a YAML template used to integrate Big-IP as external node within the Kubernetes cluster. If the YAML template file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML template file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+  },
+  "BigIPCISClusterDeploymentTemplate": {
+   "Type": "String",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/yaml/bigip-cluster-deployment.template",
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
+   "ConstraintDescription": "Kindly check the BigIPCISClusterDeploymentTemplate parameter input. Ensure it follows common URL pattern.",
+   "Description": "URL of a YAML template used to deploy the K8s Big-IP Controller (F5's CIS) within the Kubernetes cluster. If the YAML template file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML template file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
 
   "BigIPImageID": {
@@ -763,6 +785,16 @@
     },
     {
      "Label": {
+      "default": "Big-IP CIS Parameters"
+     },
+     "Parameters": [
+      "BigIPCISScript",
+      "BigIPCISNodeTemplate",
+      "BigIPCISClusterDeploymentTemplate"
+     ]
+    },
+    {
+     "Label": {
       "default": "Big-IP Parameters"
      },
      "Parameters": [
@@ -876,6 +908,16 @@
     },
     "ApplicationServiceScript": {
      "default": "URL of Application Service(s) Script"
+    },
+
+    "BigIPCISScript": {
+     "default": "URL of Big-IP CIS Script"
+    },
+    "BigIPCISNodeTemplate": {
+     "default": "URL of Big-IP CIS Node Template"
+    },
+    "BigIPCISClusterDeploymentTemplate": {
+     "default": "URL of Big-IP CIS Cluster Deployment Template"
     },
 
     "BigIPImageID": {
@@ -1507,12 +1549,22 @@
      "file_acl[8]=\"777\"\n",
      "file_owner[8]=\"ubuntu:ubuntu\"\n",
 
-     "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepBigIP.sh\"\n",
-     "file_name[9]=\"/home/ubuntu/BigIPScript\"\n",
+     "file_url[9]=\"", { "Ref": "BigIPCISScript" }, "\"\n",
+     "file_name[9]=\"/home/ubuntu/BigIPCISScript\"\n",
      "file_acl[9]=\"777\"\n",
      "file_owner[9]=\"ubuntu:ubuntu\"\n",
 
-     "max_counter=9\n",
+     "file_url[10]=\"", { "Ref": "BigIPCISNodeTemplate" }, "\"\n",
+     "file_name[10]=\"/home/ubuntu/BigIPCISNodeTemplate\"\n",
+     "file_acl[10]=\"666\"\n",
+     "file_owner[10]=\"ubuntu:ubuntu\"\n",
+
+     "file_url[11]=\"", { "Ref": "BigIPCISClusterDeploymentTemplate" }, "\"\n",
+     "file_name[11]=\"/home/ubuntu/BigIPCISClusterDeploymentTemplate\"\n",
+     "file_acl[11]=\"666\"\n",
+     "file_owner[11]=\"ubuntu:ubuntu\"\n",
+
+     "max_counter=11\n",
 
      "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
@@ -1561,7 +1613,12 @@
 
      "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, "\n",
 
-     "runuser -u ubuntu -- bash /home/ubuntu/BigIPScript ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/BigIPCISScript ",
+	  { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, " ",
+      { "Ref": "BigIPManagementGUIPort" }, " ",
+      { "Fn::FindInMap": [ "IPAddress", "K8sPod", "CIDR" ] }, " ",
+      { "Ref": "BigIPAdminPassword" },
+	 "\n",
 
      "\n"
     ]]}}

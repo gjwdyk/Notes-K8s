@@ -1,9 +1,50 @@
 #!/bin/bash -xe
 
 BigIPAddress="$1"
+BigIPManagementPort="$2"
+PodCIDR="$3"
+Password="$4"
+
+DEBUG=ON
+
 User=admin
 Loop="Yes"
 Loop_Period="1m"
+
+PartitionName=kubernetes
+VXLANProfileName=fl-vxlan
+VXLANTunnelName=fl-tunnel
+VXLANTunnelSelfIPName=fl-vxlan-selfip
+
+PodCIDRPreFix=`echo "$PodCIDR" | egrep -o "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\."`
+PodCIDRSubNet=`echo "$PodCIDR" | egrep -o "\/(3[012]|[12][0-9]|[0-9])$"`
+BigIPPodCIDRInFix="245"
+BigIPPodCIDRSufFix="245"
+BigIPPodCIDRSubNet="/24"
+VXLANTunnelSelfIP=$PodCIDRPreFix$BigIPPodCIDRInFix.$BigIPPodCIDRSufFix$PodCIDRSubNet
+
+
+if [ "$DEBUG" == "ON" ] ; then
+ echo "BigIPAddress=$BigIPAddress"
+ echo "BigIPManagementPort=$BigIPManagementPort"
+ echo "PodCIDR=$PodCIDR"
+ echo "Password=$Password"
+
+ echo "PartitionName=$PartitionName"
+ echo "VXLANProfileName=$VXLANProfileName"
+ echo "VXLANTunnelName=$VXLANTunnelName"
+ echo "VXLANTunnelSelfIPName=$VXLANTunnelSelfIPName"
+
+ echo "PodCIDRPreFix=$PodCIDRPreFix"
+ echo "PodCIDRSubNet=$PodCIDRSubNet"
+ echo "BigIPPodCIDRInFix=$BigIPPodCIDRInFix"
+ echo "BigIPPodCIDRSufFix=$BigIPPodCIDRSufFix"
+ echo "BigIPPodCIDRSubNet=$BigIPPodCIDRSubNet"
+ echo "VXLANTunnelSelfIP=$VXLANTunnelSelfIP"
+
+ echo ""
+
+fi
 
 
 
@@ -19,11 +60,11 @@ done
 
 echo "`date +%Y%m%d%H%M%S` Out of Loop"
 
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition kubernetes
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels tunnel fl-tunnel { app-service none key 1 local-address $BigIPAddress profile fl-vxlan }
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net self fl-vxlan-selfip { address 10.244.21.1/16 vlan fl-tunnel allow-service all }
+ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $PartitionName
+ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels vxlan $VXLANProfileName { app-service none port 8472 flooding-type none }
+ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels tunnel $VXLANTunnelName { app-service none key 1 local-address $BigIPAddress profile $VXLANProfileName }
+ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net self $VXLANTunnelSelfIPName { address $VXLANTunnelSelfIP vlan $VXLANTunnelName allow-service all }
 
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net tunnels tunnel fl-tunnel all-properties
+ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net tunnels tunnel $VXLANTunnelName all-properties
 
 
