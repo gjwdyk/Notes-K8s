@@ -36,7 +36,7 @@ spec:
             "--bigip-password=$(BIGIP_PASSWORD)",
             "--bigip-url=https://0.0.0.0:0",
             "--insecure=true",
-            "--bigip-partition=kubernetes",
+            "--bigip-partition=kubernetes-partition",
             "--pool-member-type=cluster",
-            "--flannel-name=/Common/fl-tunnel"
+            "--flannel-name=/Common/flannel-tunnel"
           ]
