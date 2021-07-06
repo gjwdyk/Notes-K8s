@@ -29,12 +29,14 @@ BigIPAddressPort=$BigIPAddress:$BigIPManagementPort
 if [ "$DEBUG" == "ON" ] ; then
  echo "`date +%Y%m%d%H%M%S` BigIPAddress=$BigIPAddress"
  echo "`date +%Y%m%d%H%M%S` BigIPManagementPort=$BigIPManagementPort"
- echo "`date +%Y%m%d%H%M%S` PodCIDR=$PodCIDR"
+ echo "`date +%Y%m%d%H%M%S` BigIPAddressPort=$BigIPAddressPort"
+ echo "`date +%Y%m%d%H%M%S` User=$User"
  echo "`date +%Y%m%d%H%M%S` Password=$Password"
  echo "`date +%Y%m%d%H%M%S` PartitionName=$PartitionName"
  echo "`date +%Y%m%d%H%M%S` VXLANProfileName=$VXLANProfileName"
  echo "`date +%Y%m%d%H%M%S` VXLANTunnelName=$VXLANTunnelName"
  echo "`date +%Y%m%d%H%M%S` VXLANTunnelSelfIPName=$VXLANTunnelSelfIPName"
+ echo "`date +%Y%m%d%H%M%S` PodCIDR=$PodCIDR"
  echo "`date +%Y%m%d%H%M%S` PodCIDRPreFix=$PodCIDRPreFix"
  echo "`date +%Y%m%d%H%M%S` PodCIDRSubNet=$PodCIDRSubNet"
  echo "`date +%Y%m%d%H%M%S` BigIPPodCIDRInFix=$BigIPPodCIDRInFix"
@@ -42,7 +44,6 @@ if [ "$DEBUG" == "ON" ] ; then
  echo "`date +%Y%m%d%H%M%S` BigIPPodCIDRSubNet=$BigIPPodCIDRSubNet"
  echo "`date +%Y%m%d%H%M%S` BigIPPodCIDR=$BigIPPodCIDR"
  echo "`date +%Y%m%d%H%M%S` VXLANTunnelSelfIP=$VXLANTunnelSelfIP"
- echo "`date +%Y%m%d%H%M%S` BigIPAddressPort=$BigIPAddressPort"
 fi
 
 while ( [ "$Loop" == "Yes" ] ) ; do
