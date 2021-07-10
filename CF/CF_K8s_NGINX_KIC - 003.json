@@ -2961,9 +2961,9 @@
    "Value": { "Ref": "K8sWorker9EIP" }
   },
 
-  "BigIPIPAddress": {
-   "Description": "IP Address of Big-IP Node",
-   "Value": { "Ref": "BigIPEIP" }
+  "BigIPManagementURL": {
+   "Description": "URL of Big-IP Management Interface",
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Ref": "BigIPEIP" }, ":8443/" ] ] }
   },
 
   "K8sDashboardURL": {
