@@ -58,7 +58,7 @@ done
 
 echo "`date +%Y%m%d%H%M%S` Out of Loop"
 
-# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $PartitionName
+ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $PartitionName
 # ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels vxlan $VXLANProfileName { app-service none port 8472 flooding-type none }
 # ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels tunnel $VXLANTunnelName { app-service none key 1 local-address $BigIPAddress profile $VXLANProfileName }
 # ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net self $VXLANTunnelSelfIPName { address $VXLANTunnelSelfIP vlan $VXLANTunnelName allow-service all }
