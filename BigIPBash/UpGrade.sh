@@ -7,6 +7,7 @@ DEBUG=ON
 
 Log_File=/var/log/cloud/aws/install.log
 UpGradeImageName_File=/config/UpgradeImageFileName
+UpGradeResult=/config/UpgradeResult
 
 Log_Wait_Period="3m 33s"
 UpGrade_ShortWait_Period="22s"
@@ -206,4 +207,6 @@ else
 
 
 fi
-echo "`date +%Y%m%d%H%M%S` Custom Configuration Finished ."
+echo "`date +%Y%m%d%H%M%S` Custom Configuration Finished ." > $UpGradeResult
+
+
