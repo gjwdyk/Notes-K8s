@@ -1,0 +1,18 @@
+#!/bin/bash -xe
+
+if [ "$#" -le 0 ] ; then
+ exit 101
+else
+
+ for aFile in "$@"
+ do
+  if [ -f $aFile ]; then
+   cat $aFile
+  else
+   exit 101
+  fi
+ done
+
+fi
+
+
