@@ -48,15 +48,15 @@ fi
 
 while ( [ "$Loop" == "Yes" ] ) ; do
  if ( ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o "^([0-9]{14} Custom Configuration Finished \.)$" ) ; then
-  echo "`date +%Y%m%d%H%M%S` Success : $?"
+  echo "`date +%Y%m%d%H%M%S` Big-IP is Ready : $?"
   Loop="No"
  else
-  echo "`date +%Y%m%d%H%M%S` Fail : $?"
+  echo "`date +%Y%m%d%H%M%S` Big-IP is NOT Ready : $?"
   sleep $Loop_Period
  fi
 done
 
-echo "`date +%Y%m%d%H%M%S` Out of Loop"
+echo "`date +%Y%m%d%H%M%S` Out of Checking Loop."
 
 ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $PartitionName
 # ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels vxlan $VXLANProfileName { app-service none port 8472 flooding-type none }

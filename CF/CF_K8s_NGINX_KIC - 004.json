@@ -1123,6 +1123,44 @@
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" }
    }
   },
+
+  "BigIPSecurityGroup": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security Group for Big-IP",
+    "VpcId": { "Ref": "VPC" },
+    "SecurityGroupEgress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
+    "SecurityGroupIngress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
+    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPSecurityGroup" ] ] } } ]
+   }
+  },
+  "BigIPEIP": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP" ] ] } } ]
+   }
+  },
+  "BigIPNetworkInterface": {
+   "Type": "AWS::EC2::NetworkInterface",
+   "Properties": {
+    "Description": "Network Interface for Big-IP",
+    "GroupSet": [ {"Ref": "BigIPSecurityGroup"} ],
+    "SourceDestCheck": "false",
+    "SubnetId": { "Ref": "K8sNodeSubnet" },
+    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] },
+    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPNetworkInterface" ] ] } } ]
+   }
+  },
+  "BigIPEIPAssociation": {
+   "Type": "AWS::EC2::EIPAssociation",
+   "Properties": {
+    "AllocationId": { "Fn::GetAtt": [ "BigIPEIP", "AllocationId" ] },
+    "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" },
+    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }
+   }
+  },
+
   "K8sNodeSecurityGroup": {
    "Type": "AWS::EC2::SecurityGroup",
    "Properties": {
@@ -1418,43 +1456,6 @@
    }
   },
 
-  "BigIPSecurityGroup": {
-   "Type": "AWS::EC2::SecurityGroup",
-   "Properties": {
-    "GroupDescription": "Security Group for Big-IP",
-    "VpcId": { "Ref": "VPC" },
-    "SecurityGroupEgress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
-    "SecurityGroupIngress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
-    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPSecurityGroup" ] ] } } ]
-   }
-  },
-  "BigIPEIP": {
-   "Type": "AWS::EC2::EIP",
-   "Properties": {
-    "Domain": "vpc",
-    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP" ] ] } } ]
-   }
-  },
-  "BigIPNetworkInterface": {
-   "Type": "AWS::EC2::NetworkInterface",
-   "Properties": {
-    "Description": "Network Interface for Big-IP",
-    "GroupSet": [ {"Ref": "BigIPSecurityGroup"} ],
-    "SourceDestCheck": "false",
-    "SubnetId": { "Ref": "K8sNodeSubnet" },
-    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] },
-    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPNetworkInterface" ] ] } } ]
-   }
-  },
-  "BigIPEIPAssociation": {
-   "Type": "AWS::EC2::EIPAssociation",
-   "Properties": {
-    "AllocationId": { "Fn::GetAtt": [ "BigIPEIP", "AllocationId" ] },
-    "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" },
-    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }
-   }
-  },
-
   "CafeDNSRecord": {
    "Type": "AWS::Route53::RecordSet",
    "Properties": {
@@ -1464,6 +1465,714 @@
     "TTL": "22",
     "ResourceRecords": [ { "Ref": "K8sMaster1EIP" } ]
    }
+  },
+
+  "BigIPInstance": {
+   "Metadata": {
+    "AWS::CloudFormation::Init": {
+     "config": {
+      "commands": {
+       "000-disable-1nicautoconfig": {
+        "command": "/usr/bin/setdb provision.1nicautoconfig disable"
+       },
+       "001-rest-provision-extramb": {
+        "command": "/usr/bin/setdb provision.extramb 1000"
+       },
+       "002-rest-use-extramb": {
+        "command": "/usr/bin/setdb restjavad.useextramb true"
+       },
+       "003-rest-post": {
+        "command": "/usr/bin/curl -s -f -u admin: -H \"Content-Type: application/json\" -d '{\"maxMessageBodySize\":134217728}' -X POST http://localhost:8100/mgmt/shared/server/messaging/settings/8100 | jq ."
+       },
+       "010-install-libs": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          [
+           "mkdir -p /var/log/cloud/aws;",
+           "nohup /config/installCloudLibs.sh",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
+       "040-network-config": {
+        "command": {
+         "Fn::Join": [
+          "",
+          [
+           "nohup /config/waitThenRun.sh ",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js ",
+           "--file /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/aws/1nicSetup.sh ",
+           "--cwd /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/aws ",
+           "--log-level silly ",
+           "-o /var/log/cloud/aws/1nicSetup.log ",
+           "--signal NETWORK_CONFIG_DONE ",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
+       "050-onboard-BIG-IP": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          [
+           "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
+           "nohup /config/waitThenRun.sh",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/onboard.js",
+           "--install-ilx-package file:///var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm",
+           "--port 8443",
+           "--ssl-port ", { "Ref": "BigIPManagementGUIPort" },
+           "--wait-for NETWORK_CONFIG_DONE",
+           "--signal ONBOARD_DONE",
+           "-o /var/log/cloud/aws/onboard.log",
+           "--log-level silly",
+           "--no-reboot",
+           "--host localhost",
+           "--hostname `/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/hostname`",
+           "--ntp ", { "Ref": "NTPServer" },
+           "--tz ", { "Ref": "TimeZone" },
+           "--dns ${NAME_SERVER}",
+           "--modules ", { "Ref": "BigIPModules" },
+           "--license ", { "Ref": "BigIPRegistrationKeyLicense" },
+           "-d tm.tcpudptxchecksum:software-only ",
+           "--ping",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
+       "055-custom-config": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          [
+           "nohup /config/waitThenRun.sh",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           "--file /config/cloud/aws/custom-config.sh",
+           "--cwd /config/cloud/aws",
+           "-o /var/log/cloud/aws/custom-config.log",
+           "--log-level silly",
+           "--wait-for ONBOARD_DONE",
+           "--signal CUSTOM_CONFIG_DONE",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
+       "060-cluster": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          []
+         ]
+        }
+       },
+       "065-cfe": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          []
+         ]
+        }
+       }
+      },
+
+      "files": {
+       "/config/cloud/aws/custom-config.sh": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "#!/bin/bash\n",
+           "PROGNAME=$(basename $0)\n",
+           "function error_exit {\n",
+           "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",
+           "exit 1\n",
+           "}\n",
+           "declare -a tmsh=()\n",
+           "echo 'starting custom-config.sh'\n",
+           "source /config/cloud/aws/onboard_config_vars\n",
+           "if [[ $AllowPhoneHome == \"No\" ]]; then\n",
+           "  tmsh+=(\n",
+           "  \"tmsh show sys software\"\n",
+           "  \"tmsh modify sys software update auto-phonehome disabled\"\n",
+           "  \"tmsh show sys software\")\n",
+           "else\n",
+           "  tmsh+=(\n",
+           "  \"tmsh show sys software\"\n",
+           "  \"tmsh modify sys software update auto-phonehome enabled\"\n",
+           "  \"tmsh show sys software\")\n",
+           "fi\n",
+           "echo \"HC's Mark --------->>>>>>>>> Adding Certificate Installation Command.\"\n",
+           "tmsh+=(\n",
+           "\"tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\"\n",
+           "\"tmsh load sys application template /config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\"\n",
+           "\"tmsh install /sys crypto cert HC-Imported-SSL-Certificate from-local-file /config/cloud/domain.name.rsa.crt\"\n",
+           "\"tmsh install /sys crypto key HC-Imported-SSL-Key from-local-file /config/cloud/domain.name.rsa.key\"\n",
+           "\"tmsh save /sys config\")\n",
+           "for CMD in \"${tmsh[@]}\"\n",
+           "do\n",
+           "  \"/config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/waitForMcp.sh\"\n",
+           "    if $CMD;then\n",
+           "      echo \"command $CMD successfully executed.\"\n",
+           "    else\n",
+           "      error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
+           "    fi\n",
+           "done\n",
+           "date\n",
+           "echo \"HC's Mark --------->>>>>>>>> After initialization, before AS3 execution.\"\n",
+           "### START CUSTOM CONFIGURATION\n",
+           "deployed=\"no\"\n",
+           "url_regex=\"(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$\"\n",
+           "file_loc=\"/config/cloud/custom_config\"\n",
+           "if [[ $declarationUrl =~ $url_regex ]]; then\n",
+           "  response_code=$(/usr/bin/curl -sk -w \"%{http_code}\" $declarationUrl -o $file_loc)\n",
+           "  if [[ $response_code == 200 ]]; then\n",
+           "    echo \"Custom config download complete; checking for valid JSON.\"\n",
+           "    cat $file_loc | jq .class\n",
+           "    if [[ $? == 0 ]]; then\n",
+           "      response_code=$(/usr/bin/curl -skvvu ${adminUsername}:$passwd -w \"%{http_code}\" -X POST -H \"Content-Type: application/json\" -H \"Expect:\" https://localhost:${managementGuiPort}/mgmt/shared/appsvcs/declare -d @$file_loc -o /dev/null)\n",
+           "      if [[ $response_code == 200 || $response_code == 502 ]]; then\n",
+           "        echo \"Deployment of custom application succeeded.\"\n",
+           "        deployed=\"yes\"\n",
+           "      else\n",
+           "        echo \"Failed to deploy custom application; continuing...\"\n",
+           "      fi\n",
+           "    else\n",
+           "      echo \"Custom config was not valid JSON, continuing...\"\n",
+           "    fi\n",
+           "  else\n",
+           "    echo \"Failed to download custom config; continuing...\"\n",
+           "  fi\n",
+           "else\n",
+           "  echo \"Custom config was not a URL, continuing...\"\n",
+           "fi\n",
+           "### END CUSTOM CONFIGURATION\n",
+
+           "echo \"HC's Mark --------->>>>>>>>> After AS3 execution. Additional Custom Configuration can be Applied.\"\n",
+
+           "declare -a file_url\n",
+           "declare -a file_name\n",
+           "declare -a file_acl\n",
+           "declare -a file_result\n",
+
+           "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/BigIPSendMail\"\n",
+           "file_name[0]=\"/config/BigIPSendMail\"\n",
+           "file_acl[0]=\"777\"\n",
+
+           "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/ClearFlags\"\n",
+           "file_name[1]=\"/config/ClearFlags\"\n",
+           "file_acl[1]=\"777\"\n",
+
+           "file_url[2]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/RotateLog\"\n",
+           "file_name[2]=\"/config/RotateLog\"\n",
+           "file_acl[2]=\"777\"\n",
+
+           "file_url[3]=\"", { "Ref": "SSMTPConfiguration" }, "\"\n",
+           "file_name[3]=\"/config/ssmtp/ArchiveSSMTPConfiguration\"\n",
+           "file_acl[3]=\"666\"\n",
+
+           "file_url[4]=\"", { "Ref": "UserAlertConfiguration" }, "\"\n",
+           "file_name[4]=\"/config/user_alert.archive\"\n",
+           "file_acl[4]=\"666\"\n",
+
+           "file_url[5]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPLidsa\"\n",
+           "file_name[5]=\"/config/lidsa/BigIPLidsa\"\n",
+           "file_acl[5]=\"777\"\n",
+
+           "file_url[6]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPSendMailLidsa\"\n",
+           "file_name[6]=\"/config/lidsa/BigIPSendMailLidsa\"\n",
+           "file_acl[6]=\"777\"\n",
+
+           "file_url[7]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+           "file_name[7]=\"/config/lidsa/ClearLidsaFlags\"\n",
+           "file_acl[7]=\"777\"\n",
+
+           "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+           "file_name[8]=\"/config/lidsa/ClearLidsaFlags\"\n",
+           "file_acl[8]=\"777\"\n",
+
+           "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/anacrontab\"\n",
+           "file_name[9]=\"/config/anacrontab\"\n",
+           "file_acl[9]=\"666\"\n",
+
+           "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/crontab\"\n",
+           "file_name[10]=\"/config/crontab\"\n",
+           "file_acl[10]=\"666\"\n",
+
+           "file_url[11]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
+           "file_name[11]=\"/config/AS3Configuration.sh\"\n",
+           "file_acl[11]=\"777\"\n",
+
+           "file_url[12]=\"", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
+           "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
+           "file_acl[12]=\"777\"\n",
+
+           "file_url[13]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
+           "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
+           "file_acl[13]=\"777\"\n",
+
+           "file_url[14]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
+           "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
+           "file_acl[14]=\"666\"\n",
+
+           "file_url[15]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
+           "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
+           "file_acl[15]=\"666\"\n",
+
+           "file_url[16]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGradeStatus.sh\"\n",
+           "file_name[16]=\"/config/UpGradeStatus.sh\"\n",
+           "file_acl[16]=\"777\"\n",
+
+           "max_counter=16\n",
+
+           "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
+
+           "for counter in $(seq 0 $max_counter); do\n",
+           " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
+           "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+           "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
+           "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
+           "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
+           "  else\n",
+           "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
+           "  fi\n",
+           " else\n",
+           "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
+           " fi\n",
+           "done\n",
+
+           "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/admin/.ssh/authorized_keys\n",
+
+           "\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/cloud/aws/getNameServer.sh": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "INTERFACE=$1",
+           "INTERFACE_MAC=`ifconfig ${INTERFACE} | egrep ether | awk '{print tolower($2)}'`",
+           "VPC_CIDR_BLOCK=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${INTERFACE_MAC}/vpc-ipv4-cidr-block`",
+           "VPC_NET=${VPC_CIDR_BLOCK%/*}",
+           "NAME_SERVER=`echo ${VPC_NET} | awk -F. '{ printf \"%d.%d.%d.%d\", $1, $2, $3, $4+2 }'`",
+           "echo $NAME_SERVER"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/cloud/aws/onboard_config_vars": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "",
+           "#!/bin/bash\n",
+           "#\n",
+           "hostname=`/usr/bin/curl http://169.254.169.254/latest/meta-data/hostname`\n",
+           "region='", { "Ref": "AWS::Region" }, "'\n",
+           "adminUsername='srv_user'\n",
+           "timezone='", { "Ref": "TimeZone" }, "'\n",
+           "ntpServer='", { "Ref": "NTPServer" }, "'\n",
+           "declarationUrl='", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] }, "none" ] }, "'\n",
+           "AllowPhoneHome='", { "Ref": "AllowPhoneHome" }, "'\n",
+           "passwd=$(f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/decryptDataFromFile.js --data-file /config/cloud/aws/.adminPassword)\n",
+           "managementGuiPort='", { "Ref": "BigIPManagementGUIPort" }, "'\n",
+
+           "UpGradeVolume_File='/config/UpgradeVolume'\n",
+           "UpGradeVolume_Value='HD1.9'\n",
+           "UpgradeBigIP='", { "Ref": "UpgradeBigIP" }, "'\n",
+           "DeclarationURLPost='", { "Fn::If": [ "NotDownLoadImage", "none", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] } ] }, "'\n",
+
+           "#\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/installCloudLibs.sh": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "#!/bin/bash",
+           "echo about to execute",
+           "checks=0",
+           "while [ $checks -lt 120 ]; do echo checking mcpd",
+           "  tmsh -a show sys mcp-state field-fmt | grep -q running",
+           "  if [ $? == 0 ]; then",
+           "    echo mcpd ready",
+           "    break",
+           "  fi",
+           "  echo mcpd not ready yet",
+           "  let checks=checks+1",
+           "  sleep 10",
+           "done",
+           "echo loading verifyHash script",
+           "if ! tmsh load sys config merge file /config/verifyHash; then",
+           "  echo cannot validate signature of /config/verifyHash",
+           "  exit",
+           "fi",
+           "echo loaded verifyHash",
+           "declare -a filesToVerify=(\"/config/cloud/f5-cloud-libs.tar.gz\" \"/config/cloud/f5-cloud-libs-aws.tar.gz\" \"/var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm\" \"/config/cloud/aws/f5.service_discovery.tmpl\" \"/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\")",
+           "for fileToVerify in \"${filesToVerify[@]}\"",
+           "do",
+           "  echo verifying \"$fileToVerify\"",
+           "  if ! tmsh run cli script verifyHash \"$fileToVerify\"; then",
+           "    echo \"$fileToVerify\" is not valid",
+           "    exit 1",
+           "  fi",
+           "  echo verified \"$fileToVerify\"",
+           "done",
+           "mkdir -p /config/cloud/aws/node_modules/@f5devcentral",
+           "echo expanding f5-cloud-libs.tar.gz",
+           "tar xvfz /config/cloud/f5-cloud-libs.tar.gz -C /config/cloud/aws/node_modules/@f5devcentral",
+           "echo installing dependencies",
+           "tar xvfz /config/cloud/f5-cloud-libs-aws.tar.gz -C /config/cloud/aws/node_modules/@f5devcentral",
+           "echo cloud libs install complete",
+           "touch /config/cloud/cloudLibsReady"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/verifyHash": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "cli script /Common/verifyHash {",
+           "  proc script::run {} {",
+           "    if {[catch {",
+           "      set hashes(f5-cloud-libs.tar.gz) 04cd9b161f619bf0f06f52466f7e1891912737b8b50bda4fe521edd6f7f54818c705d87f745c4f37964c9ab80bcb6f755596917d8b83bffca124e87d7f5efabd",
+           "      set hashes(f5-cloud-libs-aws.tar.gz) 091ea7b18aca7f18a0ec377a6886d5d666cc81349eafa5725ab0758ddcc17c10e03737195384eafd63c117d25913c15a11284d2cc3b221d7ba3c31422172142b",
+           "      set hashes(f5-cloud-libs-azure.tar.gz) e7973a1fe85b5a832c5ecd1cfce66b43b84e42cf2a06b2751734f79812de187ee1ad8730a129cb08198a452157c466bb87180c17dfd2e09b49be6efe9e9a57fe",
+           "      set hashes(f5-cloud-libs-gce.tar.gz) cd95a5cc36c39f80f95476ad000f7dcc21a9fef414c8edac82be2e491c0fa9eba51b145f75ba0f3c0dae48e1c731432217b3bb700f71fe1912152dbe439e8967",
+           "      set hashes(f5-cloud-libs-openstack.tar.gz) 5c83fe6a93a6fceb5a2e8437b5ed8cc9faf4c1621bfc9e6a0779f6c2137b45eab8ae0e7ed745c8cf821b9371245ca29749ca0b7e5663949d77496b8728f4b0f9",
+           "      set hashes(f5-cloud-libs-consul.tar.gz) a32aab397073df92cbbba5067e5823e9b5fafca862a258b60b6b40aa0975c3989d1e110f706177b2ffbe4dde65305a260a5856594ce7ad4ef0c47b694ae4a513",
+           "      set hashes(asm-policy-linux.tar.gz) 63b5c2a51ca09c43bd89af3773bbab87c71a6e7f6ad9410b229b4e0a1c483d46f1a9fff39d9944041b02ee9260724027414de592e99f4c2475415323e18a72e0",
+           "      set hashes(f5.http.v1.2.0rc4.tmpl) 47c19a83ebfc7bd1e9e9c35f3424945ef8694aa437eedd17b6a387788d4db1396fefe445199b497064d76967b0d50238154190ca0bd73941298fc257df4dc034",
+           "      set hashes(f5.http.v1.2.0rc6.tmpl) 811b14bffaab5ed0365f0106bb5ce5e4ec22385655ea3ac04de2a39bd9944f51e3714619dae7ca43662c956b5212228858f0592672a2579d4a87769186e2cbfe",
+           "      set hashes(f5.http.v1.2.0rc7.tmpl) 21f413342e9a7a281a0f0e1301e745aa86af21a697d2e6fdc21dd279734936631e92f34bf1c2d2504c201f56ccd75c5c13baa2fe7653213689ec3c9e27dff77d",
+           "      set hashes(f5.aws_advanced_ha.v1.3.0rc1.tmpl) 9e55149c010c1d395abdae3c3d2cb83ec13d31ed39424695e88680cf3ed5a013d626b326711d3d40ef2df46b72d414b4cb8e4f445ea0738dcbd25c4c843ac39d",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc1.tmpl) de068455257412a949f1eadccaee8506347e04fd69bfb645001b76f200127668e4a06be2bbb94e10fefc215cfc3665b07945e6d733cbe1a4fa1b88e881590396",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc2.tmpl) 6ab0bffc426df7d31913f9a474b1a07860435e366b07d77b32064acfb2952c1f207beaed77013a15e44d80d74f3253e7cf9fbbe12a90ec7128de6facd097d68f",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc3.tmpl) 2f2339b4bc3a23c9cfd42aae2a6de39ba0658366f25985de2ea53410a745f0f18eedc491b20f4a8dba8db48970096e2efdca7b8efffa1a83a78e5aadf218b134",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc4.tmpl) 2418ac8b1f1884c5c096cbac6a94d4059aaaf05927a6a4508fd1f25b8cc6077498839fbdda8176d2cf2d274a27e6a1dae2a1e3a0a9991bc65fc74fc0d02ce963",
+           "      set hashes(f5.aws_advanced_ha.v1.4.0rc5.tmpl) 5e582187ae1a6323e095d41eddd41151d6bd38eb83c634410d4527a3d0e246a8fc62685ab0849de2ade62b0275f51264d2deaccbc16b773417f847a4a1ea9bc4",
+           "      set hashes(asm-policy.tar.gz) 2d39ec60d006d05d8a1567a1d8aae722419e8b062ad77d6d9a31652971e5e67bc4043d81671ba2a8b12dd229ea46d205144f75374ed4cae58cefa8f9ab6533e6",
+           "      set hashes(deploy_waf.sh) 1a3a3c6274ab08a7dc2cb73aedc8d2b2a23cd9e0eb06a2e1534b3632f250f1d897056f219d5b35d3eed1207026e89989f754840fd92969c515ae4d829214fb74",
+           "      set hashes(f5.policy_creator.tmpl) 06539e08d115efafe55aa507ecb4e443e83bdb1f5825a9514954ef6ca56d240ed00c7b5d67bd8f67b815ee9dd46451984701d058c89dae2434c89715d375a620",
+           "      set hashes(f5.service_discovery.tmpl) 4811a95372d1dbdbb4f62f8bcc48d4bc919fa492cda012c81e3a2fe63d7966cc36ba8677ed049a814a930473234f300d3f8bced2b0db63176d52ac99640ce81b",
+           "      set hashes(f5.cloud_logger.v1.0.0.tmpl) 64a0ed3b5e32a037ba4e71d460385fe8b5e1aecc27dc0e8514b511863952e419a89f4a2a43326abb543bba9bc34376afa114ceda950d2c3bd08dab735ff5ad20",
+           "      set hashes(f5-appsvcs-3.5.1-5.noarch.rpm) ba71c6e1c52d0c7077cdb25a58709b8fb7c37b34418a8338bbf67668339676d208c1a4fef4e5470c152aac84020b4ccb8074ce387de24be339711256c0fa78c8",
+           "      set hashes(f5-appsvcs-3.18.0-4.noarch.rpm) e72ee8005a27070ac399ab097e8aa507a72aae4721d7491589cfeb821db3ef86cbc979e796ab319ec727bb51400ccda813c4b9eb4a6b3d1220a396b582f8f400",
+           "      set hashes(f5-appsvcs-3.20.0-3.noarch.rpm) d4bba8892a2068bb53f88c6090dc65f17707abca35a7ed2fff39980057fe7f7a2ebf710ab2284a1d83d70b7746beabad9df603017c0fd8728f7457661c95ac8d",
+           "      set hashes(f5-appsvcs-3.25.0-3.noarch.rpm) 26f19bdaaa81cbe0421b3e08c09987f9dd0c54b05a626d6a21a836b34248d2d9d83095f0daad8e7a4a068e9ef99b89fbcd246ae8b617ac2b2456599157d0e8b3",
+           "      set hashes(f5-appsvcs-3.26.1-1.noarch.rpm) b460e11679d38a96549b5041def27b419f1a41c8f788f9f8c7a034aa5cb5a8c9fd151c7c439bebd093fcd85cd8657f1c064551d9337566f9fc7e9506c55dc02c",
+           "      set hashes(f5-cloud-failover-1.1.0-0.noarch.rpm) 15a440c299f9e4af86a3d0f5b0d75b0054385b95e47c3ef116d2e0bfb0041a26dcbf549028e2a26d2c718ec61446bd657be38fbbcd9db781efe5414c174ac68c",
+           "      set hashes(f5-cloud-failover-1.3.0-0.noarch.rpm) 19681eb33d9f910c913f8180199485eb653b4b5ebeaae0b90a6ce8341d7a22fed8d21815b5ba148c468852d20cc26fad4c4242e50ecc184f1f8770dacced6f6a",
+           "      set hashes(f5-cloud-failover-1.4.0-0.noarch.rpm) 49e9108a070e0c8713aeb7b330662358542e61b7c53a9d45108d37a9bf5246f9e4aaae10cc61064801dcccd20bfd5108347b0f694510e7ece07f96c45ba683b0",
+           "      set hashes(f5-cloud-failover-1.5.0-0.noarch.rpm) 33a7e2d047106bcce681757a65240bfacedd48e13567e05fdb23a4b269d266aa5001f81158c3964dc297f0428db31c9df428002898d190285b349c59422a573b",
+           "      set hashes(f5-cloud-failover-1.6.1-1.noarch.rpm) c1b842da21b8d1ba21b6eb63c8598a9ea9986d5daddc21e4d280e1d6b09d3db1de8ac7de5c84edf07b43e4af03daf8fe747a4048f6573d955206352cde2cec65",
+           "      set hashes(f5-cloud-failover-1.7.1-1.noarch.rpm) 14ff0cd2bb49780cc0ae3021c4fc8fcc096e3fce2258096a4aa026d6d37de728ca7345bfe3a79031e336e74d25a2b40ff28324c2c752bf0ee71b7fc89b6fc8fe",
+           "      set hashes(f5-cloud-failover-1.8.0-0.noarch.rpm) 23086d1cbf3cb24eac7eba2305156c600fa21f1b896321a2fa5225d331d7e41471edb3f5368144d86848a4520b1e005c014485ff451e7da6429053f58bfe8ce4",
+           "      set file_path [lindex $tmsh::argv 1]",
+           "      set file_name [file tail $file_path]",
+           "      if {![info exists hashes($file_name)]} {",
+           "        tmsh::log err \"No hash found for $file_name\"",
+           "        exit 1",
+           "      }",
+           "      set expected_hash $hashes($file_name)",
+           "      set computed_hash [lindex [exec /usr/bin/openssl dgst -r -sha512 $file_path] 0]",
+           "      if { $expected_hash eq $computed_hash } {",
+           "        exit 0",
+           "      }",
+           "      tmsh::log err \"Hash does not match for $file_path\"",
+           "      exit 1",
+           "    }]} {",
+           "      tmsh::log err {Unexpected error in verifyHash}",
+           "      exit 1",
+           "    }",
+           "  }",
+           "}"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/waitThenRun.sh": {
+        "content": {
+         "Fn::Join": [
+          "\n",
+          [
+           "#!/bin/bash",
+           "while true; do echo \"waiting for cloud libs install to complete\"",
+           "  if [ -f /config/cloud/cloudLibsReady ]; then",
+           "    break",
+           "  else",
+           "    sleep 10",
+           "  fi",
+           "done",
+           "\"$@\""
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+
+       "/config/cloud/f5-cloud-libs.tar.gz": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs/v4.25.0/f5-cloud-libs.tar.gz"
+       },
+       "/config/cloud/f5-cloud-libs-aws.tar.gz": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs-aws/v2.10.0/f5-cloud-libs-aws.tar.gz"
+       },
+       "/var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-appsvcs-extension/v3.26.1/f5-appsvcs-3.26.1-1.noarch.rpm"
+       },
+       "/config/cloud/aws/f5.service_discovery.tmpl": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-service-discovery/v2.3.2/f5.service_discovery.tmpl"
+       },
+       "/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-cloud-logger/v1.0.0/f5.cloud_logger.v1.0.0.tmpl"
+       },
+       "/config/UpGrade": {
+        "group": "root",
+        "mode": "000777",
+        "owner": "root",
+        "source": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGrade.sh"
+       },
+       "/config/ssmtp/SMTPUserID": {
+        "content": { "Ref": "SMTPUserID" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/ssmtp/SMTPUserPassword": {
+        "content":{ "Ref": "SMTPUserPassword" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/BigIPUnitID": {
+        "content": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInstance" ] ] },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/ssmtp/eMailNotificationRecipient": {
+        "content": { "Ref": "eMailNotificationRecipient" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/BigIPModules": {
+        "content": { "Ref": "BigIPModules" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/TimeZone": {
+        "content": { "Ref": "TimeZone" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/NTPServer": {
+        "content": { "Ref": "NTPServer" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/TemporaryLidsa": {
+        "content": { "Ref": "Lidsa" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/lidsa/IPToAWSInstanceMetaData": {
+        "content": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/BigIPAdminPassword": {
+        "content": { "Ref": "BigIPAdminPassword" },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/UpgradeImageFileName": {
+        "content": { "Fn::If": [ "NotDownLoadImage", "BIGIP-12.3.4.5-6.7.89.iso", { "Ref": "UpgradeImageFileName" } ] },
+        "group": "root",
+        "mode": "000666",
+        "owner": "root"
+       },
+       "/config/cloud/domain.name.rsa.key": {
+        "group": "root",
+        "mode": "000666",
+        "owner": "root",
+        "source": { "Ref": "BigIPTrafficTLSKey" }
+       },
+       "/config/cloud/domain.name.rsa.crt": {
+        "group": "root",
+        "mode": "000666",
+        "owner": "root",
+        "source": { "Ref": "BigIPTrafficTLSCertificate" }
+       }
+      }
+     }
+    }
+   },
+   "Properties": {
+    "BlockDeviceMappings": [
+     {
+      "DeviceName": "/dev/xvda",
+      "Ebs": {
+       "DeleteOnTermination": "true",
+       "VolumeSize": "100",
+       "VolumeType": "gp2"
+      }
+     },
+     {
+      "DeviceName": "/dev/xvdb",
+      "NoDevice": {}
+     }
+    ],
+    "IamInstanceProfile": { "Ref": "BigIPServiceDiscoveryProfile" },
+    "ImageId": { "Fn::If": [ "DefaultBigIPImageID", { "Fn::FindInMap": [ "BigIPRegionAMI", { "Ref": "AWS::Region" }, { "Ref": "BigIPImageType" } ] }, { "Ref": "BigIPImageID" } ] },
+    "InstanceType": { "Ref": "BigIPInstanceType" },
+    "KeyName": { "Ref": "EC2SSHKeyPair" },
+    "NetworkInterfaces": [
+     {
+      "Description": "Big-IP Single Interface",
+      "DeviceIndex": "0",
+      "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" }
+     }
+    ],
+    "Tags": [
+      {
+        "Key": "Name",
+        "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInstance" ] ] }
+      }
+    ],
+    "UserData": {
+     "Fn::Base64": {
+      "Fn::Join": [
+       "",
+       [
+        "#!/bin/bash\n",
+        "Wait_Period=\"3m 33s\"\n",
+        "Log_File=/var/log/cloud/aws/install.log\n",
+        "if [ -f /config/UpgradeImageFileName ]; then\n",
+        "  echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /config/UpgradeImageFileName   found.\"\n",
+        "  if [ -f \"/shared/images/`cat /config/UpgradeImageFileName`\" ] && [ -f \"/shared/images/`cat /config/UpgradeImageFileName`.md5\" ]; then\n",
+        "    echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /shared/images/`cat /config/UpgradeImageFileName`   and   /shared/images/`cat /config/UpgradeImageFileName`.md5   found. UpGrade had been executed.\"\n",
+        "    /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
+        "  else\n",
+        "    echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /shared/images/`cat /config/UpgradeImageFileName`   and/or   /shared/images/`cat /config/UpgradeImageFileName`.md5   NOT found. UpGrade has NOT been executed or NOT requested.\"\n",
+        "    /opt/aws/apitools/cfn-init/bin/cfn-init -v -s ", { "Ref": "AWS::StackId" }, " -r ", "BigIPInstance", " --region ", { "Ref": "AWS::Region" }, "\n",
+        "    sleep $Wait_Period\n",
+        "    /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
+        "  fi\n",
+        "else\n",
+        "  echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /config/UpgradeImageFileName   NOT found. UpGrade has NOT been executed or NOT requested.\"\n",
+        "  /opt/aws/apitools/cfn-init/bin/cfn-init -v -s ", { "Ref": "AWS::StackId" }, " -r ", "BigIPInstance", " --region ", { "Ref": "AWS::Region" }, "\n",
+        "  sleep $Wait_Period\n",
+        "  /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
+        "fi\n",
+        "\n"
+       ]
+      ]
+     }
+    }
+   },
+   "Type": "AWS::EC2::Instance"
+  },
+
+  "BigIPServiceDiscoveryAccessRole": {
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": [ "sts:AssumeRole" ],
+       "Effect": "Allow",
+       "Principal": { "Service": [ "ec2.amazonaws.com" ] }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Path": "/",
+    "Policies": [
+     {
+      "PolicyDocument": {
+       "Statement": [
+        {
+         "Action": [
+          "ec2:DescribeInstances",
+          "ec2:DescribeInstanceStatus",
+          "ec2:DescribeAddresses",
+          "ec2:AssociateAddress",
+          "ec2:DisassociateAddress",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DescribeNetworkInterfaceAttribute",
+          "ec2:DescribeRouteTables",
+          "ec2:ReplaceRoute",
+          "ec2:assignprivateipaddresses",
+          "sts:AssumeRole"
+         ],
+         "Effect": "Allow",
+         "Resource": [ "*" ]
+        }
+       ],
+       "Version": "2012-10-17"
+      },
+      "PolicyName": "BigipServiceDiscoveryPolicy"
+     }
+    ]
+   },
+   "Type": "AWS::IAM::Role"
+  },
+  "BigIPServiceDiscoveryProfile": {
+   "Properties": {
+    "Path": "/",
+    "Roles": [ { "Ref": "BigIPServiceDiscoveryAccessRole" } ]
+   },
+   "Type": "AWS::IAM::InstanceProfile"
   },
 
   "K8sMaster1Instance": {
@@ -2186,720 +2895,7 @@
      "\n"
     ]]}}
    }
-  },
-
-
-
-  "BigIPInstance": {
-   "Metadata": {
-    "AWS::CloudFormation::Init": {
-     "config": {
-      "commands": {
-       "000-disable-1nicautoconfig": {
-        "command": "/usr/bin/setdb provision.1nicautoconfig disable"
-       },
-       "001-rest-provision-extramb": {
-        "command": "/usr/bin/setdb provision.extramb 1000"
-       },
-       "002-rest-use-extramb": {
-        "command": "/usr/bin/setdb restjavad.useextramb true"
-       },
-       "003-rest-post": {
-        "command": "/usr/bin/curl -s -f -u admin: -H \"Content-Type: application/json\" -d '{\"maxMessageBodySize\":134217728}' -X POST http://localhost:8100/mgmt/shared/server/messaging/settings/8100 | jq ."
-       },
-       "010-install-libs": {
-        "command": {
-         "Fn::Join": [
-          " ",
-          [
-           "mkdir -p /var/log/cloud/aws;",
-           "nohup /config/installCloudLibs.sh",
-           "&>> /var/log/cloud/aws/install.log < /dev/null &"
-          ]
-         ]
-        }
-       },
-       "040-network-config": {
-        "command": {
-         "Fn::Join": [
-          "",
-          [
-           "nohup /config/waitThenRun.sh ",
-           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js ",
-           "--file /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/aws/1nicSetup.sh ",
-           "--cwd /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/aws ",
-           "--log-level silly ",
-           "-o /var/log/cloud/aws/1nicSetup.log ",
-           "--signal NETWORK_CONFIG_DONE ",
-           "&>> /var/log/cloud/aws/install.log < /dev/null &"
-          ]
-         ]
-        }
-       },
-       "050-onboard-BIG-IP": {
-        "command": {
-         "Fn::Join": [
-          " ",
-          [
-           "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
-           "nohup /config/waitThenRun.sh",
-           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/onboard.js",
-           "--install-ilx-package file:///var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm",
-           "--port 8443",
-           "--ssl-port ", { "Ref": "BigIPManagementGUIPort" },
-           "--wait-for NETWORK_CONFIG_DONE",
-           "--signal ONBOARD_DONE",
-           "-o /var/log/cloud/aws/onboard.log",
-           "--log-level silly",
-           "--no-reboot",
-           "--host localhost",
-           "--hostname `/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/hostname`",
-           "--ntp ", { "Ref": "NTPServer" },
-           "--tz ", { "Ref": "TimeZone" },
-           "--dns ${NAME_SERVER}",
-           "--modules ", { "Ref": "BigIPModules" },
-           "--license ", { "Ref": "BigIPRegistrationKeyLicense" },
-           "-d tm.tcpudptxchecksum:software-only ",
-           "--ping",
-           "&>> /var/log/cloud/aws/install.log < /dev/null &"
-          ]
-         ]
-        }
-       },
-       "055-custom-config": {
-        "command": {
-         "Fn::Join": [
-          " ",
-          [
-           "nohup /config/waitThenRun.sh",
-           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
-           "--file /config/cloud/aws/custom-config.sh",
-           "--cwd /config/cloud/aws",
-           "-o /var/log/cloud/aws/custom-config.log",
-           "--log-level silly",
-           "--wait-for ONBOARD_DONE",
-           "--signal CUSTOM_CONFIG_DONE",
-           "&>> /var/log/cloud/aws/install.log < /dev/null &"
-          ]
-         ]
-        }
-       },
-       "060-cluster": {
-        "command": {
-         "Fn::Join": [
-          " ",
-          []
-         ]
-        }
-       },
-       "065-cfe": {
-        "command": {
-         "Fn::Join": [
-          " ",
-          []
-         ]
-        }
-       }
-      },
-
-      "files": {
-       "/config/cloud/aws/custom-config.sh": {
-        "content": {
-         "Fn::Join": [
-          "",
-          [
-           "#!/bin/bash\n",
-           "PROGNAME=$(basename $0)\n",
-           "function error_exit {\n",
-           "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",
-           "exit 1\n",
-           "}\n",
-           "declare -a tmsh=()\n",
-           "echo 'starting custom-config.sh'\n",
-           "source /config/cloud/aws/onboard_config_vars\n",
-           "if [[ $AllowPhoneHome == \"No\" ]]; then\n",
-           "  tmsh+=(\n",
-           "  \"tmsh show sys software\"\n",
-           "  \"tmsh modify sys software update auto-phonehome disabled\"\n",
-           "  \"tmsh show sys software\")\n",
-           "else\n",
-           "  tmsh+=(\n",
-           "  \"tmsh show sys software\"\n",
-           "  \"tmsh modify sys software update auto-phonehome enabled\"\n",
-           "  \"tmsh show sys software\")\n",
-           "fi\n",
-           "echo \"HC's Mark --------->>>>>>>>> Adding Certificate Installation Command.\"\n",
-           "tmsh+=(\n",
-           "\"tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\"\n",
-           "\"tmsh load sys application template /config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\"\n",
-           "\"tmsh install /sys crypto cert HC-Imported-SSL-Certificate from-local-file /config/cloud/domain.name.rsa.crt\"\n",
-           "\"tmsh install /sys crypto key HC-Imported-SSL-Key from-local-file /config/cloud/domain.name.rsa.key\"\n",
-           "\"tmsh save /sys config\")\n",
-           "for CMD in \"${tmsh[@]}\"\n",
-           "do\n",
-           "  \"/config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/waitForMcp.sh\"\n",
-           "    if $CMD;then\n",
-           "      echo \"command $CMD successfully executed.\"\n",
-           "    else\n",
-           "      error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
-           "    fi\n",
-           "done\n",
-           "date\n",
-           "echo \"HC's Mark --------->>>>>>>>> After initialization, before AS3 execution.\"\n",
-           "### START CUSTOM CONFIGURATION\n",
-           "deployed=\"no\"\n",
-           "url_regex=\"(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$\"\n",
-           "file_loc=\"/config/cloud/custom_config\"\n",
-           "if [[ $declarationUrl =~ $url_regex ]]; then\n",
-           "  response_code=$(/usr/bin/curl -sk -w \"%{http_code}\" $declarationUrl -o $file_loc)\n",
-           "  if [[ $response_code == 200 ]]; then\n",
-           "    echo \"Custom config download complete; checking for valid JSON.\"\n",
-           "    cat $file_loc | jq .class\n",
-           "    if [[ $? == 0 ]]; then\n",
-           "      response_code=$(/usr/bin/curl -skvvu ${adminUsername}:$passwd -w \"%{http_code}\" -X POST -H \"Content-Type: application/json\" -H \"Expect:\" https://localhost:${managementGuiPort}/mgmt/shared/appsvcs/declare -d @$file_loc -o /dev/null)\n",
-           "      if [[ $response_code == 200 || $response_code == 502 ]]; then\n",
-           "        echo \"Deployment of custom application succeeded.\"\n",
-           "        deployed=\"yes\"\n",
-           "      else\n",
-           "        echo \"Failed to deploy custom application; continuing...\"\n",
-           "      fi\n",
-           "    else\n",
-           "      echo \"Custom config was not valid JSON, continuing...\"\n",
-           "    fi\n",
-           "  else\n",
-           "    echo \"Failed to download custom config; continuing...\"\n",
-           "  fi\n",
-           "else\n",
-           "  echo \"Custom config was not a URL, continuing...\"\n",
-           "fi\n",
-           "### END CUSTOM CONFIGURATION\n",
-
-           "echo \"HC's Mark --------->>>>>>>>> After AS3 execution. Additional Custom Configuration can be Applied.\"\n",
-
-           "declare -a file_url\n",
-           "declare -a file_name\n",
-           "declare -a file_acl\n",
-           "declare -a file_result\n",
-
-           "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/BigIPSendMail\"\n",
-           "file_name[0]=\"/config/BigIPSendMail\"\n",
-           "file_acl[0]=\"777\"\n",
-
-           "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/ClearFlags\"\n",
-           "file_name[1]=\"/config/ClearFlags\"\n",
-           "file_acl[1]=\"777\"\n",
-
-           "file_url[2]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/RotateLog\"\n",
-           "file_name[2]=\"/config/RotateLog\"\n",
-           "file_acl[2]=\"777\"\n",
-
-           "file_url[3]=\"", { "Ref": "SSMTPConfiguration" }, "\"\n",
-           "file_name[3]=\"/config/ssmtp/ArchiveSSMTPConfiguration\"\n",
-           "file_acl[3]=\"666\"\n",
-
-           "file_url[4]=\"", { "Ref": "UserAlertConfiguration" }, "\"\n",
-           "file_name[4]=\"/config/user_alert.archive\"\n",
-           "file_acl[4]=\"666\"\n",
-
-           "file_url[5]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPLidsa\"\n",
-           "file_name[5]=\"/config/lidsa/BigIPLidsa\"\n",
-           "file_acl[5]=\"777\"\n",
-
-           "file_url[6]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPSendMailLidsa\"\n",
-           "file_name[6]=\"/config/lidsa/BigIPSendMailLidsa\"\n",
-           "file_acl[6]=\"777\"\n",
-
-           "file_url[7]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
-           "file_name[7]=\"/config/lidsa/ClearLidsaFlags\"\n",
-           "file_acl[7]=\"777\"\n",
-
-           "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
-           "file_name[8]=\"/config/lidsa/ClearLidsaFlags\"\n",
-           "file_acl[8]=\"777\"\n",
-
-           "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/anacrontab\"\n",
-           "file_name[9]=\"/config/anacrontab\"\n",
-           "file_acl[9]=\"666\"\n",
-
-           "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/crontab\"\n",
-           "file_name[10]=\"/config/crontab\"\n",
-           "file_acl[10]=\"666\"\n",
-
-           "file_url[11]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
-           "file_name[11]=\"/config/AS3Configuration.sh\"\n",
-           "file_acl[11]=\"777\"\n",
-
-           "file_url[12]=\"", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
-           "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
-           "file_acl[12]=\"777\"\n",
-
-           "file_url[13]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
-           "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
-           "file_acl[13]=\"777\"\n",
-
-           "file_url[14]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
-           "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
-           "file_acl[14]=\"666\"\n",
-
-           "file_url[15]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
-           "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
-           "file_acl[15]=\"666\"\n",
-
-           "file_url[16]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGradeStatus.sh\"\n",
-           "file_name[16]=\"/config/UpGradeStatus.sh\"\n",
-           "file_acl[16]=\"777\"\n",
-
-           "max_counter=16\n",
-
-           "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
-
-           "for counter in $(seq 0 $max_counter); do\n",
-           " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-           "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
-           "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
-           "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
-           "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
-           "  else\n",
-           "   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"\n",
-           "  fi\n",
-           " else\n",
-           "  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"\n",
-           " fi\n",
-           "done\n",
-
-           "sudo printf \"", { "Ref": "K8sSSHPublicKey" }, "\" >> /home/admin/.ssh/authorized_keys\n",
-
-           "\n"
-          ]
-         ]
-        },
-        "group": "root",
-        "mode": "000777",
-        "owner": "root"
-       },
-       "/config/cloud/aws/getNameServer.sh": {
-        "content": {
-         "Fn::Join": [
-          "\n",
-          [
-           "INTERFACE=$1",
-           "INTERFACE_MAC=`ifconfig ${INTERFACE} | egrep ether | awk '{print tolower($2)}'`",
-           "VPC_CIDR_BLOCK=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${INTERFACE_MAC}/vpc-ipv4-cidr-block`",
-           "VPC_NET=${VPC_CIDR_BLOCK%/*}",
-           "NAME_SERVER=`echo ${VPC_NET} | awk -F. '{ printf \"%d.%d.%d.%d\", $1, $2, $3, $4+2 }'`",
-           "echo $NAME_SERVER"
-          ]
-         ]
-        },
-        "group": "root",
-        "mode": "000777",
-        "owner": "root"
-       },
-       "/config/cloud/aws/onboard_config_vars": {
-        "content": {
-         "Fn::Join": [
-          "",
-          [
-           "",
-           "#!/bin/bash\n",
-           "#\n",
-           "hostname=`/usr/bin/curl http://169.254.169.254/latest/meta-data/hostname`\n",
-           "region='", { "Ref": "AWS::Region" }, "'\n",
-           "adminUsername='srv_user'\n",
-           "timezone='", { "Ref": "TimeZone" }, "'\n",
-           "ntpServer='", { "Ref": "NTPServer" }, "'\n",
-           "declarationUrl='", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] }, "none" ] }, "'\n",
-           "AllowPhoneHome='", { "Ref": "AllowPhoneHome" }, "'\n",
-           "passwd=$(f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/decryptDataFromFile.js --data-file /config/cloud/aws/.adminPassword)\n",
-           "managementGuiPort='", { "Ref": "BigIPManagementGUIPort" }, "'\n",
-
-           "UpGradeVolume_File='/config/UpgradeVolume'\n",
-           "UpGradeVolume_Value='HD1.9'\n",
-           "UpgradeBigIP='", { "Ref": "UpgradeBigIP" }, "'\n",
-           "DeclarationURLPost='", { "Fn::If": [ "NotDownLoadImage", "none", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] } ] }, "'\n",
-
-           "#\n"
-          ]
-         ]
-        },
-        "group": "root",
-        "mode": "000777",
-        "owner": "root"
-       },
-       "/config/installCloudLibs.sh": {
-        "content": {
-         "Fn::Join": [
-          "\n",
-          [
-           "#!/bin/bash",
-           "echo about to execute",
-           "checks=0",
-           "while [ $checks -lt 120 ]; do echo checking mcpd",
-           "  tmsh -a show sys mcp-state field-fmt | grep -q running",
-           "  if [ $? == 0 ]; then",
-           "    echo mcpd ready",
-           "    break",
-           "  fi",
-           "  echo mcpd not ready yet",
-           "  let checks=checks+1",
-           "  sleep 10",
-           "done",
-           "echo loading verifyHash script",
-           "if ! tmsh load sys config merge file /config/verifyHash; then",
-           "  echo cannot validate signature of /config/verifyHash",
-           "  exit",
-           "fi",
-           "echo loaded verifyHash",
-           "declare -a filesToVerify=(\"/config/cloud/f5-cloud-libs.tar.gz\" \"/config/cloud/f5-cloud-libs-aws.tar.gz\" \"/var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm\" \"/config/cloud/aws/f5.service_discovery.tmpl\" \"/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\")",
-           "for fileToVerify in \"${filesToVerify[@]}\"",
-           "do",
-           "  echo verifying \"$fileToVerify\"",
-           "  if ! tmsh run cli script verifyHash \"$fileToVerify\"; then",
-           "    echo \"$fileToVerify\" is not valid",
-           "    exit 1",
-           "  fi",
-           "  echo verified \"$fileToVerify\"",
-           "done",
-           "mkdir -p /config/cloud/aws/node_modules/@f5devcentral",
-           "echo expanding f5-cloud-libs.tar.gz",
-           "tar xvfz /config/cloud/f5-cloud-libs.tar.gz -C /config/cloud/aws/node_modules/@f5devcentral",
-           "echo installing dependencies",
-           "tar xvfz /config/cloud/f5-cloud-libs-aws.tar.gz -C /config/cloud/aws/node_modules/@f5devcentral",
-           "echo cloud libs install complete",
-           "touch /config/cloud/cloudLibsReady"
-          ]
-         ]
-        },
-        "group": "root",
-        "mode": "000777",
-        "owner": "root"
-       },
-       "/config/verifyHash": {
-        "content": {
-         "Fn::Join": [
-          "\n",
-          [
-           "cli script /Common/verifyHash {",
-           "  proc script::run {} {",
-           "    if {[catch {",
-           "      set hashes(f5-cloud-libs.tar.gz) 04cd9b161f619bf0f06f52466f7e1891912737b8b50bda4fe521edd6f7f54818c705d87f745c4f37964c9ab80bcb6f755596917d8b83bffca124e87d7f5efabd",
-           "      set hashes(f5-cloud-libs-aws.tar.gz) 091ea7b18aca7f18a0ec377a6886d5d666cc81349eafa5725ab0758ddcc17c10e03737195384eafd63c117d25913c15a11284d2cc3b221d7ba3c31422172142b",
-           "      set hashes(f5-cloud-libs-azure.tar.gz) e7973a1fe85b5a832c5ecd1cfce66b43b84e42cf2a06b2751734f79812de187ee1ad8730a129cb08198a452157c466bb87180c17dfd2e09b49be6efe9e9a57fe",
-           "      set hashes(f5-cloud-libs-gce.tar.gz) cd95a5cc36c39f80f95476ad000f7dcc21a9fef414c8edac82be2e491c0fa9eba51b145f75ba0f3c0dae48e1c731432217b3bb700f71fe1912152dbe439e8967",
-           "      set hashes(f5-cloud-libs-openstack.tar.gz) 5c83fe6a93a6fceb5a2e8437b5ed8cc9faf4c1621bfc9e6a0779f6c2137b45eab8ae0e7ed745c8cf821b9371245ca29749ca0b7e5663949d77496b8728f4b0f9",
-           "      set hashes(f5-cloud-libs-consul.tar.gz) a32aab397073df92cbbba5067e5823e9b5fafca862a258b60b6b40aa0975c3989d1e110f706177b2ffbe4dde65305a260a5856594ce7ad4ef0c47b694ae4a513",
-           "      set hashes(asm-policy-linux.tar.gz) 63b5c2a51ca09c43bd89af3773bbab87c71a6e7f6ad9410b229b4e0a1c483d46f1a9fff39d9944041b02ee9260724027414de592e99f4c2475415323e18a72e0",
-           "      set hashes(f5.http.v1.2.0rc4.tmpl) 47c19a83ebfc7bd1e9e9c35f3424945ef8694aa437eedd17b6a387788d4db1396fefe445199b497064d76967b0d50238154190ca0bd73941298fc257df4dc034",
-           "      set hashes(f5.http.v1.2.0rc6.tmpl) 811b14bffaab5ed0365f0106bb5ce5e4ec22385655ea3ac04de2a39bd9944f51e3714619dae7ca43662c956b5212228858f0592672a2579d4a87769186e2cbfe",
-           "      set hashes(f5.http.v1.2.0rc7.tmpl) 21f413342e9a7a281a0f0e1301e745aa86af21a697d2e6fdc21dd279734936631e92f34bf1c2d2504c201f56ccd75c5c13baa2fe7653213689ec3c9e27dff77d",
-           "      set hashes(f5.aws_advanced_ha.v1.3.0rc1.tmpl) 9e55149c010c1d395abdae3c3d2cb83ec13d31ed39424695e88680cf3ed5a013d626b326711d3d40ef2df46b72d414b4cb8e4f445ea0738dcbd25c4c843ac39d",
-           "      set hashes(f5.aws_advanced_ha.v1.4.0rc1.tmpl) de068455257412a949f1eadccaee8506347e04fd69bfb645001b76f200127668e4a06be2bbb94e10fefc215cfc3665b07945e6d733cbe1a4fa1b88e881590396",
-           "      set hashes(f5.aws_advanced_ha.v1.4.0rc2.tmpl) 6ab0bffc426df7d31913f9a474b1a07860435e366b07d77b32064acfb2952c1f207beaed77013a15e44d80d74f3253e7cf9fbbe12a90ec7128de6facd097d68f",
-           "      set hashes(f5.aws_advanced_ha.v1.4.0rc3.tmpl) 2f2339b4bc3a23c9cfd42aae2a6de39ba0658366f25985de2ea53410a745f0f18eedc491b20f4a8dba8db48970096e2efdca7b8efffa1a83a78e5aadf218b134",
-           "      set hashes(f5.aws_advanced_ha.v1.4.0rc4.tmpl) 2418ac8b1f1884c5c096cbac6a94d4059aaaf05927a6a4508fd1f25b8cc6077498839fbdda8176d2cf2d274a27e6a1dae2a1e3a0a9991bc65fc74fc0d02ce963",
-           "      set hashes(f5.aws_advanced_ha.v1.4.0rc5.tmpl) 5e582187ae1a6323e095d41eddd41151d6bd38eb83c634410d4527a3d0e246a8fc62685ab0849de2ade62b0275f51264d2deaccbc16b773417f847a4a1ea9bc4",
-           "      set hashes(asm-policy.tar.gz) 2d39ec60d006d05d8a1567a1d8aae722419e8b062ad77d6d9a31652971e5e67bc4043d81671ba2a8b12dd229ea46d205144f75374ed4cae58cefa8f9ab6533e6",
-           "      set hashes(deploy_waf.sh) 1a3a3c6274ab08a7dc2cb73aedc8d2b2a23cd9e0eb06a2e1534b3632f250f1d897056f219d5b35d3eed1207026e89989f754840fd92969c515ae4d829214fb74",
-           "      set hashes(f5.policy_creator.tmpl) 06539e08d115efafe55aa507ecb4e443e83bdb1f5825a9514954ef6ca56d240ed00c7b5d67bd8f67b815ee9dd46451984701d058c89dae2434c89715d375a620",
-           "      set hashes(f5.service_discovery.tmpl) 4811a95372d1dbdbb4f62f8bcc48d4bc919fa492cda012c81e3a2fe63d7966cc36ba8677ed049a814a930473234f300d3f8bced2b0db63176d52ac99640ce81b",
-           "      set hashes(f5.cloud_logger.v1.0.0.tmpl) 64a0ed3b5e32a037ba4e71d460385fe8b5e1aecc27dc0e8514b511863952e419a89f4a2a43326abb543bba9bc34376afa114ceda950d2c3bd08dab735ff5ad20",
-           "      set hashes(f5-appsvcs-3.5.1-5.noarch.rpm) ba71c6e1c52d0c7077cdb25a58709b8fb7c37b34418a8338bbf67668339676d208c1a4fef4e5470c152aac84020b4ccb8074ce387de24be339711256c0fa78c8",
-           "      set hashes(f5-appsvcs-3.18.0-4.noarch.rpm) e72ee8005a27070ac399ab097e8aa507a72aae4721d7491589cfeb821db3ef86cbc979e796ab319ec727bb51400ccda813c4b9eb4a6b3d1220a396b582f8f400",
-           "      set hashes(f5-appsvcs-3.20.0-3.noarch.rpm) d4bba8892a2068bb53f88c6090dc65f17707abca35a7ed2fff39980057fe7f7a2ebf710ab2284a1d83d70b7746beabad9df603017c0fd8728f7457661c95ac8d",
-           "      set hashes(f5-appsvcs-3.25.0-3.noarch.rpm) 26f19bdaaa81cbe0421b3e08c09987f9dd0c54b05a626d6a21a836b34248d2d9d83095f0daad8e7a4a068e9ef99b89fbcd246ae8b617ac2b2456599157d0e8b3",
-           "      set hashes(f5-appsvcs-3.26.1-1.noarch.rpm) b460e11679d38a96549b5041def27b419f1a41c8f788f9f8c7a034aa5cb5a8c9fd151c7c439bebd093fcd85cd8657f1c064551d9337566f9fc7e9506c55dc02c",
-           "      set hashes(f5-cloud-failover-1.1.0-0.noarch.rpm) 15a440c299f9e4af86a3d0f5b0d75b0054385b95e47c3ef116d2e0bfb0041a26dcbf549028e2a26d2c718ec61446bd657be38fbbcd9db781efe5414c174ac68c",
-           "      set hashes(f5-cloud-failover-1.3.0-0.noarch.rpm) 19681eb33d9f910c913f8180199485eb653b4b5ebeaae0b90a6ce8341d7a22fed8d21815b5ba148c468852d20cc26fad4c4242e50ecc184f1f8770dacced6f6a",
-           "      set hashes(f5-cloud-failover-1.4.0-0.noarch.rpm) 49e9108a070e0c8713aeb7b330662358542e61b7c53a9d45108d37a9bf5246f9e4aaae10cc61064801dcccd20bfd5108347b0f694510e7ece07f96c45ba683b0",
-           "      set hashes(f5-cloud-failover-1.5.0-0.noarch.rpm) 33a7e2d047106bcce681757a65240bfacedd48e13567e05fdb23a4b269d266aa5001f81158c3964dc297f0428db31c9df428002898d190285b349c59422a573b",
-           "      set hashes(f5-cloud-failover-1.6.1-1.noarch.rpm) c1b842da21b8d1ba21b6eb63c8598a9ea9986d5daddc21e4d280e1d6b09d3db1de8ac7de5c84edf07b43e4af03daf8fe747a4048f6573d955206352cde2cec65",
-           "      set hashes(f5-cloud-failover-1.7.1-1.noarch.rpm) 14ff0cd2bb49780cc0ae3021c4fc8fcc096e3fce2258096a4aa026d6d37de728ca7345bfe3a79031e336e74d25a2b40ff28324c2c752bf0ee71b7fc89b6fc8fe",
-           "      set hashes(f5-cloud-failover-1.8.0-0.noarch.rpm) 23086d1cbf3cb24eac7eba2305156c600fa21f1b896321a2fa5225d331d7e41471edb3f5368144d86848a4520b1e005c014485ff451e7da6429053f58bfe8ce4",
-           "      set file_path [lindex $tmsh::argv 1]",
-           "      set file_name [file tail $file_path]",
-           "      if {![info exists hashes($file_name)]} {",
-           "        tmsh::log err \"No hash found for $file_name\"",
-           "        exit 1",
-           "      }",
-           "      set expected_hash $hashes($file_name)",
-           "      set computed_hash [lindex [exec /usr/bin/openssl dgst -r -sha512 $file_path] 0]",
-           "      if { $expected_hash eq $computed_hash } {",
-           "        exit 0",
-           "      }",
-           "      tmsh::log err \"Hash does not match for $file_path\"",
-           "      exit 1",
-           "    }]} {",
-           "      tmsh::log err {Unexpected error in verifyHash}",
-           "      exit 1",
-           "    }",
-           "  }",
-           "}"
-          ]
-         ]
-        },
-        "group": "root",
-        "mode": "000777",
-        "owner": "root"
-       },
-       "/config/waitThenRun.sh": {
-        "content": {
-         "Fn::Join": [
-          "\n",
-          [
-           "#!/bin/bash",
-           "while true; do echo \"waiting for cloud libs install to complete\"",
-           "  if [ -f /config/cloud/cloudLibsReady ]; then",
-           "    break",
-           "  else",
-           "    sleep 10",
-           "  fi",
-           "done",
-           "\"$@\""
-          ]
-         ]
-        },
-        "group": "root",
-        "mode": "000777",
-        "owner": "root"
-       },
-
-       "/config/cloud/f5-cloud-libs.tar.gz": {
-        "group": "root",
-        "mode": "000777",
-        "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs/v4.25.0/f5-cloud-libs.tar.gz"
-       },
-       "/config/cloud/f5-cloud-libs-aws.tar.gz": {
-        "group": "root",
-        "mode": "000777",
-        "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs-aws/v2.10.0/f5-cloud-libs-aws.tar.gz"
-       },
-       "/var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm": {
-        "group": "root",
-        "mode": "000777",
-        "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/f5-appsvcs-extension/v3.26.1/f5-appsvcs-3.26.1-1.noarch.rpm"
-       },
-       "/config/cloud/aws/f5.service_discovery.tmpl": {
-        "group": "root",
-        "mode": "000777",
-        "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-service-discovery/v2.3.2/f5.service_discovery.tmpl"
-       },
-       "/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl": {
-        "group": "root",
-        "mode": "000777",
-        "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-cloud-logger/v1.0.0/f5.cloud_logger.v1.0.0.tmpl"
-       },
-       "/config/UpGrade": {
-        "group": "root",
-        "mode": "000777",
-        "owner": "root",
-        "source": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGrade.sh"
-       },
-       "/config/ssmtp/SMTPUserID": {
-        "content": { "Ref": "SMTPUserID" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/ssmtp/SMTPUserPassword": {
-        "content":{ "Ref": "SMTPUserPassword" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/BigIPUnitID": {
-        "content": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInstance" ] ] },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/ssmtp/eMailNotificationRecipient": {
-        "content": { "Ref": "eMailNotificationRecipient" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/lidsa/BigIPModules": {
-        "content": { "Ref": "BigIPModules" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/lidsa/TimeZone": {
-        "content": { "Ref": "TimeZone" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/lidsa/NTPServer": {
-        "content": { "Ref": "NTPServer" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/lidsa/TemporaryLidsa": {
-        "content": { "Ref": "Lidsa" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/lidsa/IPToAWSInstanceMetaData": {
-        "content": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/BigIPAdminPassword": {
-        "content": { "Ref": "BigIPAdminPassword" },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/UpgradeImageFileName": {
-        "content": { "Fn::If": [ "NotDownLoadImage", "BIGIP-12.3.4.5-6.7.89.iso", { "Ref": "UpgradeImageFileName" } ] },
-        "group": "root",
-        "mode": "000666",
-        "owner": "root"
-       },
-       "/config/cloud/domain.name.rsa.key": {
-        "group": "root",
-        "mode": "000666",
-        "owner": "root",
-        "source": { "Ref": "BigIPTrafficTLSKey" }
-       },
-       "/config/cloud/domain.name.rsa.crt": {
-        "group": "root",
-        "mode": "000666",
-        "owner": "root",
-        "source": { "Ref": "BigIPTrafficTLSCertificate" }
-       }
-      }
-     }
-    }
-   },
-   "Properties": {
-    "BlockDeviceMappings": [
-     {
-      "DeviceName": "/dev/xvda",
-      "Ebs": {
-       "DeleteOnTermination": "true",
-       "VolumeSize": "100",
-       "VolumeType": "gp2"
-      }
-     },
-     {
-      "DeviceName": "/dev/xvdb",
-      "NoDevice": {}
-     }
-    ],
-    "IamInstanceProfile": { "Ref": "BigIPServiceDiscoveryProfile" },
-    "ImageId": { "Fn::If": [ "DefaultBigIPImageID", { "Fn::FindInMap": [ "BigIPRegionAMI", { "Ref": "AWS::Region" }, { "Ref": "BigIPImageType" } ] }, { "Ref": "BigIPImageID" } ] },
-    "InstanceType": { "Ref": "BigIPInstanceType" },
-    "KeyName": { "Ref": "EC2SSHKeyPair" },
-    "NetworkInterfaces": [
-     {
-      "Description": "Big-IP Single Interface",
-      "DeviceIndex": "0",
-      "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" }
-     }
-    ],
-    "Tags": [
-      {
-        "Key": "Name",
-        "Value": { "Fn::Join" : [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPInstance" ] ] }
-      }
-    ],
-    "UserData": {
-     "Fn::Base64": {
-      "Fn::Join": [
-       "",
-       [
-        "#!/bin/bash\n",
-        "Wait_Period=\"3m 33s\"\n",
-        "Log_File=/var/log/cloud/aws/install.log\n",
-        "if [ -f /config/UpgradeImageFileName ]; then\n",
-        "  echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /config/UpgradeImageFileName   found.\"\n",
-        "  if [ -f \"/shared/images/`cat /config/UpgradeImageFileName`\" ] && [ -f \"/shared/images/`cat /config/UpgradeImageFileName`.md5\" ]; then\n",
-        "    echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /shared/images/`cat /config/UpgradeImageFileName`   and   /shared/images/`cat /config/UpgradeImageFileName`.md5   found. UpGrade had been executed.\"\n",
-        "    /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
-        "  else\n",
-        "    echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /shared/images/`cat /config/UpgradeImageFileName`   and/or   /shared/images/`cat /config/UpgradeImageFileName`.md5   NOT found. UpGrade has NOT been executed or NOT requested.\"\n",
-        "    /opt/aws/apitools/cfn-init/bin/cfn-init -v -s ", { "Ref": "AWS::StackId" }, " -r ", "BigIPInstance", " --region ", { "Ref": "AWS::Region" }, "\n",
-        "    sleep $Wait_Period\n",
-        "    /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
-        "  fi\n",
-        "else\n",
-        "  echo \"`date +%Y%m%d%H%M%S` AWS CloudFormation UserData :   /config/UpgradeImageFileName   NOT found. UpGrade has NOT been executed or NOT requested.\"\n",
-        "  /opt/aws/apitools/cfn-init/bin/cfn-init -v -s ", { "Ref": "AWS::StackId" }, " -r ", "BigIPInstance", " --region ", { "Ref": "AWS::Region" }, "\n",
-        "  sleep $Wait_Period\n",
-        "  /bin/sudo /bin/bash /config/UpGrade >> \"$Log_File\"\n",
-        "fi\n",
-        "\n"
-       ]
-      ]
-     }
-    }
-   },
-   "Type": "AWS::EC2::Instance"
-  },
-
-  "BigIPServiceDiscoveryAccessRole": {
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": [ "sts:AssumeRole" ],
-       "Effect": "Allow",
-       "Principal": { "Service": [ "ec2.amazonaws.com" ] }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "Path": "/",
-    "Policies": [
-     {
-      "PolicyDocument": {
-       "Statement": [
-        {
-         "Action": [
-          "ec2:DescribeInstances",
-          "ec2:DescribeInstanceStatus",
-          "ec2:DescribeAddresses",
-          "ec2:AssociateAddress",
-          "ec2:DisassociateAddress",
-          "ec2:DescribeNetworkInterfaces",
-          "ec2:DescribeNetworkInterfaceAttribute",
-          "ec2:DescribeRouteTables",
-          "ec2:ReplaceRoute",
-          "ec2:assignprivateipaddresses",
-          "sts:AssumeRole"
-         ],
-         "Effect": "Allow",
-         "Resource": [ "*" ]
-        }
-       ],
-       "Version": "2012-10-17"
-      },
-      "PolicyName": "BigipServiceDiscoveryPolicy"
-     }
-    ]
-   },
-   "Type": "AWS::IAM::Role"
-  },
-
-  "BigIPServiceDiscoveryProfile": {
-   "Properties": {
-    "Path": "/",
-    "Roles": [ { "Ref": "BigIPServiceDiscoveryAccessRole" } ]
-   },
-   "Type": "AWS::IAM::InstanceProfile"
   }
-
-
 
  },
 
