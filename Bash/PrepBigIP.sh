@@ -47,7 +47,7 @@ if [ "$DEBUG" == "ON" ] ; then
 fi
 
 while ( [ "$Loop" == "Yes" ] ) ; do
- if ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show sys clock ; then
+ if ( ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o "^([0-9]{14} Custom Configuration Finished \.)$" ) ; then
   echo "`date +%Y%m%d%H%M%S` Success : $?"
   Loop="No"
  else

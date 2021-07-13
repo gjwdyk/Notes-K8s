@@ -2445,8 +2445,8 @@
            "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
            "file_acl[15]=\"666\"\n",
 
-           "file_url[16]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/ShowContentsCat\"\n",
-           "file_name[16]=\"/config/ShowContentsCat\"\n",
+           "file_url[16]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGradeStatus.sh\"\n",
+           "file_name[16]=\"/config/UpGradeStatus.sh\"\n",
            "file_acl[16]=\"777\"\n",
 
            "max_counter=16\n",
