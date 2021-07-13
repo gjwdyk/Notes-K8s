@@ -356,7 +356,7 @@
   "DefaultK8sNodeImageID": { "Fn::Equals": [ { "Ref": "K8sNodeImageID" }, "Default" ] },
   "SkipNGINXCompilation": { "Fn::Equals": [ { "Ref": "SkipNGINXPlusCompilation" }, "Yes" ] },
   "DefaultBigIPImageID": { "Fn::Equals" : [ { "Ref": "BigIPImageID" }, "Default" ] },
-  "DownLoadImage": { "Fn::Equals" : [ { "Ref": "UpgradeBigIP" }, "No" ] },
+  "NotDownLoadImage": { "Fn::Equals" : [ { "Ref": "UpgradeBigIP" }, "No" ] },
   "UseTMSHCommandsFile": { "Fn::Or": [ { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "TMSH" ] }, { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3 and TMSH" ] } ] },
   "UseAS3File": { "Fn::Or": [ { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3" ] }, { "Fn::Equals" : [ { "Ref": "ConfigurationMethod" }, "AS3 and TMSH" ] } ] }
  },
@@ -2425,23 +2425,23 @@
            "file_name[10]=\"/config/crontab\"\n",
            "file_acl[10]=\"666\"\n",
 
-           "file_url[11]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
+           "file_url[11]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
            "file_name[11]=\"/config/AS3Configuration.sh\"\n",
            "file_acl[11]=\"777\"\n",
 
-           "file_url[12]=\"", { "Fn::If": [ "DownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
+           "file_url[12]=\"", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
            "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
            "file_acl[12]=\"777\"\n",
 
-           "file_url[13]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
+           "file_url[13]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
            "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
            "file_acl[13]=\"777\"\n",
 
-           "file_url[14]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
+           "file_url[14]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
            "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
            "file_acl[14]=\"666\"\n",
 
-           "file_url[15]=\"", { "Fn::If": [ "DownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
+           "file_url[15]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
            "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
            "file_acl[15]=\"666\"\n",
 
@@ -2508,7 +2508,7 @@
            "adminUsername='srv_user'\n",
            "timezone='", { "Ref": "TimeZone" }, "'\n",
            "ntpServer='", { "Ref": "NTPServer" }, "'\n",
-           "declarationUrl='", { "Fn::If": [ "DownLoadImage", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] }, "none" ] }, "'\n",
+           "declarationUrl='", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] }, "none" ] }, "'\n",
            "AllowPhoneHome='", { "Ref": "AllowPhoneHome" }, "'\n",
            "passwd=$(f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/decryptDataFromFile.js --data-file /config/cloud/aws/.adminPassword)\n",
            "managementGuiPort='", { "Ref": "BigIPManagementGUIPort" }, "'\n",
@@ -2516,7 +2516,7 @@
            "UpGradeVolume_File='/config/UpgradeVolume'\n",
            "UpGradeVolume_Value='HD1.9'\n",
            "UpgradeBigIP='", { "Ref": "UpgradeBigIP" }, "'\n",
-           "DeclarationURLPost='", { "Fn::If": [ "DownLoadImage", "none", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] } ] }, "'\n",
+           "DeclarationURLPost='", { "Fn::If": [ "NotDownLoadImage", "none", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] } ] }, "'\n",
 
            "#\n"
           ]
@@ -2760,7 +2760,7 @@
         "owner": "root"
        },
        "/config/UpgradeImageFileName": {
-        "content": { "Fn::If": [ "DownLoadImage", "BIGIP-12.3.4.5-6.7.89.iso", { "Ref": "UpgradeImageFileName" } ] },
+        "content": { "Fn::If": [ "NotDownLoadImage", "BIGIP-12.3.4.5-6.7.89.iso", { "Ref": "UpgradeImageFileName" } ] },
         "group": "root",
         "mode": "000666",
         "owner": "root"
