@@ -48,10 +48,10 @@ fi
 
 while ( [ "$Loop" == "Yes" ] ) ; do
  if ( ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o "^([0-9]{14} Custom Configuration Finished \.)$" ) ; then
-  echo "`date +%Y%m%d%H%M%S` Big-IP is Ready : $?"
+  echo "`date +%Y%m%d%H%M%S` Big-IP is Ready ."
   Loop="No"
  else
-  echo "`date +%Y%m%d%H%M%S` Big-IP is NOT Ready : $?"
+  echo "`date +%Y%m%d%H%M%S` Big-IP is NOT Ready ."
   sleep $Loop_Period
  fi
 done
