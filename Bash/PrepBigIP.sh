@@ -56,7 +56,7 @@ while ( [ "$Loop" == "Yes" ] ) ; do
  fi
 done
 
-echo "`date +%Y%m%d%H%M%S` Out of Checking Loop."
+echo "`date +%Y%m%d%H%M%S` Out of Checking Loop for Big-IP."
 
 ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $PartitionName
 # ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels vxlan $VXLANProfileName { app-service none port 8472 flooding-type none }
