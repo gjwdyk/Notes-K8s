@@ -162,7 +162,7 @@ else
  echo "`date +%Y%m%d%H%M%S` UpGrade Process ."
  if [ -f /shared/images/UpgradeImage.iso ] && [ -f /shared/images/UpgradeImage.iso.md5 ] && [[ `cat $UpGradeImageName_File` =~ ^(BIGIP\-)((([0-9]+)\.)+)([0-9]+)\-((([0-9]+)\.)+)([0-9]+)\.iso$ ]]; then
   if [[ $UpgradeBigIP == "No" ]]; then
-   echo "`date +%Y%m%d%H%M%S` UpGrade was NOT requested ." | tee -a $UpGradeResult
+   echo "`date +%Y%m%d%H%M%S` UpGrade was NOT requested ."
    echo "`date +%Y%m%d%H%M%S` Custom Configuration Finished ." | tee -a $UpGradeResult
   else
    mv /shared/images/UpgradeImage.iso /shared/images/`cat $UpGradeImageName_File`
