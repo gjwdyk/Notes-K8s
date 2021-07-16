@@ -5,7 +5,7 @@ The Kubernetes Cluster is built from N units of EC2 Ubuntu servers (where N can 
 There is only one K8s Master Node built on this repository.
 
 Why not use AWS EKS instead? To have the exposure of provisioning and/or managing the K8s Master Instance, as not everyone who wants to implement containerization service can do it on EKS. Some of us still need to build our own Kubernetes Cluster.
-The goal of this repository is to be able to quikly have environment where some demos can be performed; especially ones which involves K8s, NGINX and F5 Big-IP.
+The goal of this repository is to be able to quickly have environment where some demos can be performed; especially ones which involves K8s, NGINX and F5 Big-IP.
 Further down the line, the Environment built by this repository will involve F5 CIS and F5 Big-IP, which may not be possible with AWS EKS, since F5 CIS needs tweaks of the internal interworking of the K8s Cluster itself.
 
 Diagram below depicts the logical diagram of nodes within AWS VPC.
