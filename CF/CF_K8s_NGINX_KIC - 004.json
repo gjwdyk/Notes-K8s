@@ -443,7 +443,7 @@
   },
   "CommonK8sPreparationScript": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepCommonK8s.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepCommonK8sCIS.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the CommonK8sPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the common factors of Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
@@ -464,7 +464,7 @@
   },
   "K8sWorkerPreparationScript": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sWorker.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sWorkerCIS.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the K8sWorkerPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the Kubernetes' worker nodes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
