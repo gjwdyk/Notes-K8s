@@ -97,8 +97,8 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $Parti
 
 
 
-git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
-cd ~/agilitydocs/docs/class1/kubernetes
+# git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
+# cd ~/agilitydocs/docs/class1/kubernetes
 
 # kubectl create secret generic bigip-login -n kube-system --from-literal=username=$User --from-literal=password=$Password
 # kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
