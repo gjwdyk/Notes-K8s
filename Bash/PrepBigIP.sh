@@ -107,25 +107,25 @@ kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=clus
 
 
 sed s/10.1.1.4:8443/$BigIPAddressPort/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-deployment.yaml > /home/ubuntu/nodeport-deployment.yaml
-# kubectl create -f /home/ubuntu/nodeport-deployment.yaml
+kubectl create -f /home/ubuntu/nodeport-deployment.yaml
+sleep 1m
 
 
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml /home/ubuntu/deployment-hello-world.yaml
-# kubectl create -f /home/ubuntu/deployment-hello-world.yaml
+kubectl create -f /home/ubuntu/deployment-hello-world.yaml
 
 
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-service-hello-world.yaml /home/ubuntu/nodeport-service-hello-world.yaml
-# kubectl create -f /home/ubuntu/nodeport-service-hello-world.yaml
+kubectl create -f /home/ubuntu/nodeport-service-hello-world.yaml
 
 
 
 sed s/kubernetes/$PartitionName/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/ingress-hello-world.yaml > /home/ubuntu/Temporary1.yaml
 sed s/10.1.1.4/$BigIPAddress/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/ingress-hello-world.yaml
 rm /home/ubuntu/Temporary*.yaml
-
-# kubectl create -f /home/ubuntu/ingress-hello-world.yaml
+kubectl create -f /home/ubuntu/ingress-hello-world.yaml
 
 
 
