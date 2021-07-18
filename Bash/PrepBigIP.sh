@@ -100,35 +100,35 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $Parti
 git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 cd ~/agilitydocs/docs/class1/kubernetes
 
-kubectl create secret generic bigip-login -n kube-system --from-literal=username=$User --from-literal=password=$Password
-kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
-kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
+# kubectl create secret generic bigip-login -n kube-system --from-literal=username=$User --from-literal=password=$Password
+# kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
+# kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
 
 
-sed s+k8s-bigip-ctlr:2.2.0+k8s-bigip-ctlr:2.4.1+g /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-deployment.yaml > /home/ubuntu/Temporary1.yaml
-sed s/10.1.1.4:8443/$BigIPAddressPort/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/nodeport-deployment.yaml
-rm /home/ubuntu/Temporary*.yaml
+# sed s+k8s-bigip-ctlr:2.2.0+k8s-bigip-ctlr:2.4.1+g /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-deployment.yaml > /home/ubuntu/Temporary1.yaml
+# sed s/10.1.1.4:8443/$BigIPAddressPort/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/nodeport-deployment.yaml
+# rm /home/ubuntu/Temporary*.yaml
 
-kubectl create -f /home/ubuntu/nodeport-deployment.yaml
-
-
-
-cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml /home/ubuntu/deployment-hello-world.yaml
-kubectl create -f /home/ubuntu/deployment-hello-world.yaml
+# kubectl create -f /home/ubuntu/nodeport-deployment.yaml
 
 
 
-cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-service-hello-world.yaml /home/ubuntu/nodeport-service-hello-world.yaml
-kubectl create -f /home/ubuntu/nodeport-service-hello-world.yaml
+# cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml /home/ubuntu/deployment-hello-world.yaml
+# kubectl create -f /home/ubuntu/deployment-hello-world.yaml
 
 
 
-sed s/kubernetes/$PartitionName/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/ingress-hello-world.yaml > /home/ubuntu/Temporary1.yaml
-sed s/10.1.1.4/$BigIPAddress/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/ingress-hello-world.yaml
-rm /home/ubuntu/Temporary*.yaml
+# cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-service-hello-world.yaml /home/ubuntu/nodeport-service-hello-world.yaml
+# kubectl create -f /home/ubuntu/nodeport-service-hello-world.yaml
 
-kubectl create -f /home/ubuntu/ingress-hello-world.yaml
+
+
+# sed s/kubernetes/$PartitionName/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/ingress-hello-world.yaml > /home/ubuntu/Temporary1.yaml
+# sed s/10.1.1.4/$BigIPAddress/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/ingress-hello-world.yaml
+# rm /home/ubuntu/Temporary*.yaml
+
+# kubectl create -f /home/ubuntu/ingress-hello-world.yaml
 
 
 
