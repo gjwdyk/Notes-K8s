@@ -59,13 +59,41 @@ done
 echo "`date +%Y%m%d%H%M%S` Out of Checking Loop for Big-IP."
 
 ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create auth partition $PartitionName
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels vxlan $VXLANProfileName { app-service none port 8472 flooding-type none }
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels tunnel $VXLANTunnelName { app-service none key 1 local-address $BigIPAddress profile $VXLANProfileName }
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net self $VXLANTunnelSelfIPName { address $VXLANTunnelSelfIP vlan $VXLANTunnelName allow-service all }
+# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels vxlan $VXLANProfileName { app-service none port 8472 flooding-type none }
+# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net tunnels tunnel $VXLANTunnelName { app-service none key 1 local-address $BigIPAddress profile $VXLANProfileName }
+# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress create net self $VXLANTunnelSelfIPName { address $VXLANTunnelSelfIP vlan $VXLANTunnelName allow-service all }
 
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net tunnels tunnel $VXLANTunnelName all-properties
-BigIPMAC=`ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net tunnels tunnel $VXLANTunnelName all-properties | egrep -o "([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}"`
-if [ "$DEBUG" == "ON" ] ; then echo "`date +%Y%m%d%H%M%S` BigIPMAC=$BigIPMAC" ; fi
+# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net tunnels tunnel $VXLANTunnelName all-properties
+
+# BigIPMAC=`ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net tunnels tunnel $VXLANTunnelName all-properties | egrep -o "([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}"`
+
+# if [ "$DEBUG" == "ON" ] ; then echo "`date +%Y%m%d%H%M%S` BigIPMAC=$BigIPMAC" ; fi
+
+
+
+# sed s+0.0.0.0/0+$BigIPPodCIDR+g /home/ubuntu/BigIPCISNodeTemplate > /home/ubuntu/Temporary1.yaml
+# sed s/00:00:00:00:00:00/$BigIPMAC/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/Temporary2.yaml
+# sed s/0.0.0.0/$BigIPAddress/g /home/ubuntu/Temporary2.yaml > /home/ubuntu/BigIPCISNode.yaml
+
+# rm /home/ubuntu/Temporary*.yaml
+
+# kubectl create -f /home/ubuntu/BigIPCISNode.yaml
+
+
+
+# kubectl create secret generic bigip-login -n kube-system --from-literal=username=$User --from-literal=password=$Password
+# kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
+# kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
+
+
+
+# sed s+0.0.0.0:0+$BigIPAddressPort+g /home/ubuntu/BigIPCISClusterDeploymentTemplate > /home/ubuntu/Temporary1.yaml
+# sed s/kubernetes-partition/$PartitionName/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/Temporary2.yaml
+# sed s/flannel-tunnel/$VXLANTunnelName/g /home/ubuntu/Temporary2.yaml > /home/ubuntu/BigIPCISClusterDeployment.yaml
+
+# rm /home/ubuntu/Temporary*.yaml
+
+# kubectl create -f /home/ubuntu/BigIPCISClusterDeployment.yaml
 
 
 
@@ -78,34 +106,26 @@ kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=clus
 
 
 
-sed s+0.0.0.0/0+$BigIPPodCIDR+g /home/ubuntu/BigIPCISNodeTemplate > /home/ubuntu/Temporary1.yaml
-sed s/00:00:00:00:00:00/$BigIPMAC/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/Temporary2.yaml
-sed s/0.0.0.0/$BigIPAddress/g /home/ubuntu/Temporary2.yaml > /home/ubuntu/BigIPCISNode.yaml
-rm /home/ubuntu/Temporary*.yaml
-
-# kubectl create -f /home/ubuntu/BigIPCISNode.yaml
-
-
-
-sed s+0.0.0.0:0+$BigIPAddressPort+g /home/ubuntu/BigIPCISClusterDeploymentTemplate > /home/ubuntu/Temporary1.yaml
-sed s/kubernetes-partition/$PartitionName/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/Temporary2.yaml
-sed s/flannel-tunnel/$VXLANTunnelName/g /home/ubuntu/Temporary2.yaml > /home/ubuntu/BigIPCISClusterDeployment.yaml
-rm /home/ubuntu/Temporary*.yaml
-
-# kubectl create -f /home/ubuntu/BigIPCISClusterDeployment.yaml
+sed s/10.1.1.4:8443/$BigIPAddressPort/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-deployment.yaml > /home/ubuntu/nodeport-deployment.yaml
+kubectl create -f /home/ubuntu/nodeport-deployment.yaml
+sleep 1m
 
 
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml /home/ubuntu/deployment-hello-world.yaml
-# kubectl create -f /home/ubuntu/deployment-hello-world.yaml
+kubectl create -f /home/ubuntu/deployment-hello-world.yaml
 
-cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/clusterip-service-hello-world.yaml /home/ubuntu/clusterip-service-hello-world.yaml
-# kubectl create -f /home/ubuntu/clusterip-service-hello-world.yaml
+
+
+cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/nodeport-service-hello-world.yaml /home/ubuntu/nodeport-service-hello-world.yaml
+kubectl create -f /home/ubuntu/nodeport-service-hello-world.yaml
+
+
 
 sed s/kubernetes/$PartitionName/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/ingress-hello-world.yaml > /home/ubuntu/Temporary1.yaml
 sed s/10.1.1.4/$BigIPAddress/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/ingress-hello-world.yaml
 rm /home/ubuntu/Temporary*.yaml
-# kubectl create -f /home/ubuntu/ingress-hello-world.yaml
+kubectl create -f /home/ubuntu/ingress-hello-world.yaml
 
 
 
@@ -120,8 +140,8 @@ kubectl get deployment -o wide -A
 kubectl get pod -o wide -A
 kubectl get service -o wide -A
 
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress list net tunnels tunnel $VXLANTunnelName
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net fdb tunnel $VXLANTunnelName
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net arp all
+# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress list net tunnels tunnel $VXLANTunnelName
+# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net fdb tunnel $VXLANTunnelName
+# ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net arp all
 
 
