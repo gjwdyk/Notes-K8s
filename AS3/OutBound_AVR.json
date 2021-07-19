@@ -13,7 +13,7 @@
       "defaultRouteDomain": 0,
       "Application_Class": {
         "class": "Application",
-        "template": "generic",
+        "template": "http",
 
         "serviceMain": {
           "class": "Service_HTTP",
@@ -24,7 +24,7 @@
           "virtualPort": 80,
           "translateServerAddress": false,
           "translateServerPort": false,
-          "pool": "InternetGateway_Pool"
+          "pool": "InternetGateway_Pool",
           "profileAnalytics": { "use": "HTTP_Analytics_Profile" },
           "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
         },
