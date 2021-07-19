@@ -97,7 +97,7 @@ sleep 1m
 
 
 
-sed s/replicas: 2/replicas: 9/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml > /home/ubuntu/deployment-hello-world.yaml
+sed 's/replicas: 2/replicas: 9/g' /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml > /home/ubuntu/deployment-hello-world.yaml
 kubectl create -f /home/ubuntu/deployment-hello-world.yaml
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/clusterip-service-hello-world.yaml /home/ubuntu/clusterip-service-hello-world.yaml
