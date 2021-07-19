@@ -1,0 +1,253 @@
+{
+  "class": "AS3",
+  "action": "deploy",
+  "persist": true,
+  "declaration": {
+    "class": "ADC",
+    "schemaVersion": "3.5.0",
+    "id": "Sample-LTM-Declaration-for-LAMPv7",
+    "label": "Sample LTM Declaration for LAMPv7",
+    "remark": "Simple HTTP and HTTPS Virtual Servers with Round Robin Pool",
+    "Tenant_Class": {
+      "class": "Tenant",
+      "defaultRouteDomain": 0,
+      "Application_Class": {
+        "class": "Application",
+        "template": "https",
+
+        "serviceMain": {
+          "class": "Service_HTTPS",
+          "allowVlans": [ "external" ],
+          "virtualAddresses": [
+            "10.1.10.241"
+          ],
+          "serverTLS": "ServiceHTTPS_TLSServer",
+          "pool": "ServerHTTP_Pool"
+        },
+        "ServerHTTP_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "HTTP_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 80,
+              "serverAddresses": [
+                "10.1.20.252"
+              ]
+            }
+          ]
+        },
+        "SSH_Service_TCP": {
+          "class": "Service_TCP",
+          "virtualAddresses": [
+            "10.1.10.241"
+          ],
+          "virtualPort": 22,
+          "allowVlans": [ "external" ],
+          "pool": "ServerSSH_Pool"
+        },
+        "ServerSSH_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "TCPHalfOpen_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 22,
+              "serverAddresses": [
+                "10.1.20.252"
+              ]
+            }
+          ]
+        },
+        "VNC_Service_TCP": {
+          "class": "Service_TCP",
+          "virtualAddresses": [
+            "10.1.10.241"
+          ],
+          "virtualPort": 5900,
+          "allowVlans": [ "external" ],
+          "pool": "ServerVNC_Pool"
+        },
+        "ServerVNC_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "TCPHalfOpen_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 5900,
+              "serverAddresses": [
+                "10.1.20.252"
+              ]
+            }
+          ]
+        },
+
+        "StaticWeb_Service_HTTPS": {
+          "class": "Service_HTTPS",
+          "allowVlans": [ "external" ],
+          "virtualAddresses": [
+            "10.1.10.240"
+          ],
+          "serverTLS": "ServiceHTTPS_TLSServer",
+          "persistenceMethods": [],
+          "pool": "StaticWebServers_Pool"
+        },
+        "StaticWebServers_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "HTTP_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 80,
+              "serverAddresses": [
+                "10.1.20.11",
+                "10.1.20.12",
+                "10.1.20.13"
+              ]
+            }
+          ]
+        },
+
+        "DVWA_Service_HTTPS": {
+          "class": "Service_HTTPS",
+          "allowVlans": [ "external" ],
+          "virtualAddresses": [
+            "10.1.10.242"
+          ],
+          "serverTLS": "ServiceHTTPS_TLSServer",
+          "pool": "DVWA_Pool"
+        },
+        "DVWA_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "HTTP_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 80,
+              "serverAddresses": [
+                "10.1.20.17"
+              ]
+            }
+          ]
+        },
+
+        "Hackazon_Service_HTTPS": {
+          "class": "Service_HTTPS",
+          "allowVlans": [ "external" ],
+          "virtualAddresses": [
+            "10.1.10.243"
+          ],
+          "serverTLS": "ServiceHTTPS_TLSServer",
+          "pool": "Hackazon_Pool"
+        },
+        "Hackazon_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "HTTP_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 80,
+              "serverAddresses": [
+                "10.1.20.20"
+              ]
+            }
+          ]
+        },
+
+        "OutboundTCP": {
+          "class": "Service_TCP",
+          "virtualAddresses": [
+            "0.0.0.0"
+          ],
+          "virtualPort": 0,
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+        },
+        "OutboundUDP": {
+          "class": "Service_UDP",
+          "virtualAddresses": [
+            "0.0.0.0"
+          ],
+          "virtualPort": 0,
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+        },
+        "OutboundICMP": {
+          "class": "Service_L4",
+          "virtualAddresses": [
+            "0.0.0.0"
+          ],
+          "virtualPort": 0,
+          "layer4": "icmp",
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+        },
+
+        "InternetGateway_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "ICMP_Gateway_8888_Monitor" },
+            { "use": "ICMP_Gateway_8844_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 0,
+              "serverAddresses": [
+                "10.1.10.1"
+              ]
+            }
+          ]
+        },
+
+        "ServiceHTTPS_TLSServer": {
+          "class": "TLS_Server",
+          "label": "TLS Profile for Clients to Connects to Big-IP",
+          "certificates": [
+            {
+              "certificate": "TLSServer_Certificate"
+            }
+          ]
+        },
+        "TLSServer_Certificate": {
+          "class": "Certificate",
+          "certificate": {"bigip":"/Common/HC-Imported-SSL-Certificate"},
+          "privateKey": {"bigip":"/Common/HC-Imported-SSL-Key"}
+        },
+
+        "HTTP_Monitor": {
+          "class": "Monitor",
+          "monitorType": "http"
+        },
+        "TCPHalfOpen_Monitor": {
+          "class": "Monitor",
+          "monitorType": "tcp-half-open"
+        },
+        "ICMP_Gateway_8888_Monitor": {
+          "class": "Monitor",
+          "monitorType": "icmp",
+          "transparent": true,
+          "targetAddress": "8.8.8.8"
+        },
+        "ICMP_Gateway_8844_Monitor": {
+          "class": "Monitor",
+          "monitorType": "icmp",
+          "transparent": true,
+          "targetAddress": "8.8.4.4"
+        }
+
+      }
+    }
+  }
+}

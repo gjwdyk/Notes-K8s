@@ -1,0 +1,146 @@
+{
+  "class": "AS3",
+  "action": "deploy",
+  "persist": true,
+  "declaration": {
+    "class": "ADC",
+    "schemaVersion": "3.26.0",
+    "id": "OutBound-VS-for-Kubernetes-Nodes",
+    "label": "OutBound VS for Kubernetes Nodes",
+    "remark": "OutBound VS for Kubernetes Nodes",
+    "OutBound": {
+      "class": "Tenant",
+      "defaultRouteDomain": 0,
+      "Application_Class": {
+        "class": "Application",
+        "template": "generic",
+
+        "serviceMain": {
+          "class": "Service_HTTP",
+          "allowVlans": [ "internal" ],
+          "virtualAddresses": [
+            "0.0.0.0"
+          ],
+          "virtualPort": 80,
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+          "profileAnalytics": { "use": "HTTP_Analytics_Profile" },
+          "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
+        },
+
+        "OutboundTCP": {
+          "class": "Service_TCP",
+          "virtualAddresses": [
+            "0.0.0.0"
+          ],
+          "virtualPort": 0,
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool",
+          "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
+        },
+        "OutboundUDP": {
+          "class": "Service_UDP",
+          "virtualAddresses": [
+            "0.0.0.0"
+          ],
+          "virtualPort": 0,
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+        },
+        "OutboundICMP": {
+          "class": "Service_L4",
+          "virtualAddresses": [
+            "0.0.0.0"
+          ],
+          "virtualPort": 0,
+          "layer4": "icmp",
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+        },
+
+        "InternetGateway_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "ICMP_Gateway_8888_Monitor" },
+            { "use": "ICMP_Gateway_8844_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 0,
+              "serverAddresses": [
+                "10.1.1.1"
+              ]
+            }
+          ]
+        },
+        "ICMP_Gateway_8888_Monitor": {
+          "class": "Monitor",
+          "monitorType": "icmp",
+          "transparent": true,
+          "targetAddress": "8.8.8.8"
+        },
+        "ICMP_Gateway_8844_Monitor": {
+          "class": "Monitor",
+          "monitorType": "icmp",
+          "transparent": true,
+          "targetAddress": "8.8.4.4"
+        },
+
+        "HTTP_Analytics_Profile": {
+          "class": "Analytics_Profile",
+          "remark": "HTTP_Analytics_Profile_Remark",
+          "label": "HTTP_Analytics_Profile_Label",
+          "capturedTrafficInternalLogging": true,
+          "collectedStatsInternalLogging": true,
+          "collectClientSideStatistics": true,
+          "collectGeo": true,
+          "collectIp": true,
+          "collectMaxTpsAndThroughput": true,
+          "collectMethod": true,
+          "collectOsAndBrowser": true,
+          "collectPageLoadTime": true,
+          "collectResponseCode": true,
+          "collectSubnet": true,
+          "collectUrl": true,
+          "collectUserAgent": true,
+          "collectUserSession": true,
+          "publishIruleStatistics": true,
+          "sessionCookieSecurity": "always-secure",
+          "sessionTimeoutMinutes": 10,
+          "captureFilter": {
+            "capturedProtocols": "all",
+            "capturedReadyForJsInjection": "disabled",
+            "dosActivity": "any",
+            "requestCapturedParts": "all",
+            "responseCapturedParts": "all"
+          }
+        },
+
+        "TCP_Analytics_Profile": {
+          "class": "Analytics_TCP_Profile",
+          "remark": "TCP_Analytics_Profile_Remark",
+          "label": "TCP_Analytics_Profile_Label",
+          "collectedStatsInternalLogging": true,
+          "collectCity": true,
+          "collectContinent": true,
+          "collectCountry": true,
+          "collectPostCode": true,
+          "collectRegion": true,
+          "collectedByClientSide": true,
+          "collectedByServerSide": true,
+          "collectNexthop": true,
+          "collectRemoteHostIp": true,
+          "collectRemoteHostSubnet": true
+        }
+
+      }
+    }
+  }
+}
