@@ -83,7 +83,7 @@ sed s/00:00:00:00:00:00/$BigIPMAC/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/
 sed s/0.0.0.0/$BigIPAddress/g /home/ubuntu/Temporary2.yaml > /home/ubuntu/BigIPCISNode.yaml
 rm /home/ubuntu/Temporary*.yaml
 
-# kubectl create -f /home/ubuntu/BigIPCISNode.yaml
+kubectl create -f /home/ubuntu/BigIPCISNode.yaml
 
 
 
@@ -92,20 +92,24 @@ sed s/kubernetes-partition/$PartitionName/g /home/ubuntu/Temporary1.yaml > /home
 sed s/flannel-tunnel/$VXLANTunnelName/g /home/ubuntu/Temporary2.yaml > /home/ubuntu/BigIPCISClusterDeployment.yaml
 rm /home/ubuntu/Temporary*.yaml
 
-# kubectl create -f /home/ubuntu/BigIPCISClusterDeployment.yaml
+kubectl create -f /home/ubuntu/BigIPCISClusterDeployment.yaml
+sleep 1m
 
 
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml /home/ubuntu/deployment-hello-world.yaml
-# kubectl create -f /home/ubuntu/deployment-hello-world.yaml
+kubectl create -f /home/ubuntu/deployment-hello-world.yaml
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/clusterip-service-hello-world.yaml /home/ubuntu/clusterip-service-hello-world.yaml
-# kubectl create -f /home/ubuntu/clusterip-service-hello-world.yaml
+kubectl create -f /home/ubuntu/clusterip-service-hello-world.yaml
 
 sed s/kubernetes/$PartitionName/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/ingress-hello-world.yaml > /home/ubuntu/Temporary1.yaml
 sed s/10.1.1.4/$BigIPAddress/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/ingress-hello-world.yaml
 rm /home/ubuntu/Temporary*.yaml
-# kubectl create -f /home/ubuntu/ingress-hello-world.yaml
+kubectl create -f /home/ubuntu/ingress-hello-world.yaml
+sleep 1m
+
+kubectl scale --replicas=10 deployment/f5-hello-world-web -n default
 
 
 
