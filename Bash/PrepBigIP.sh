@@ -97,7 +97,7 @@ sleep 1m
 
 
 
-cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml /home/ubuntu/deployment-hello-world.yaml
+sed s/replicas: 2/replicas: 9/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml > /home/ubuntu/deployment-hello-world.yaml
 kubectl create -f /home/ubuntu/deployment-hello-world.yaml
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/clusterip-service-hello-world.yaml /home/ubuntu/clusterip-service-hello-world.yaml
@@ -107,9 +107,6 @@ sed s/kubernetes/$PartitionName/g /home/ubuntu/agilitydocs/docs/class1/kubernete
 sed s/10.1.1.4/$BigIPAddress/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/ingress-hello-world.yaml
 rm /home/ubuntu/Temporary*.yaml
 kubectl create -f /home/ubuntu/ingress-hello-world.yaml
-sleep 1m
-
-kubectl scale --replicas=10 deployment/f5-hello-world-web -n default
 
 
 
@@ -124,7 +121,6 @@ kubectl get deployment -o wide -A
 kubectl get pod -o wide -A
 kubectl get service -o wide -A
 
-ssh -o StrictHostKeyChecking=no $User@$BigIPAddress list net tunnels tunnel $VXLANTunnelName
 ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net fdb tunnel $VXLANTunnelName
 ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net arp all
 
