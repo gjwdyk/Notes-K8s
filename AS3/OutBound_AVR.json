@@ -29,6 +29,35 @@
           "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
         },
 
+        "SSH_Service_TCP": {
+          "class": "Service_TCP",
+          "shareAddresses": true,
+          "virtualAddresses": [
+            "10.1.1.245"
+          ],
+          "virtualPort": 8022,
+          "allowVlans": [ "internal" ],
+          "pool": "ServerSSH_Pool"
+        },
+        "ServerSSH_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "TCPHalfOpen_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 22,
+              "serverAddresses": [
+                "10.1.1.11"
+              ]
+            }
+          ]
+        },
+        "TCPHalfOpen_Monitor": {
+          "class": "Monitor",
+          "monitorType": "tcp-half-open"
+        },
+
         "OutboundTCP": {
           "class": "Service_TCP",
           "virtualAddresses": [
