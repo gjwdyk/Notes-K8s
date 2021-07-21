@@ -30,7 +30,7 @@ sleep $Loop_Period
 
 Loop="Yes"
 while ( [ "$Loop" == "Yes" ] ) ; do
- if [ `kubectl get nodes | grep -i '\<Ready' | grep -i -v 'Master' | wc -l` -ge $# ] ; then
+ if [ `runuser -u ubuntu -- kubectl get nodes | grep -i '\<Ready' | grep -i -v 'Master' | wc -l` -ge $# ] ; then
   echo "`date +%Y%m%d%H%M%S` All Nodes Already Joined The Kubernetes Cluster."
   Loop="No"
  else
