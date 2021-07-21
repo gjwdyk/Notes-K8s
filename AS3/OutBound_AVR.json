@@ -4,7 +4,7 @@
   "persist": true,
   "declaration": {
     "class": "ADC",
-    "schemaVersion": "3.25.0",
+    "schemaVersion": "3.26.0",
     "id": "OutBound-VS-for-Kubernetes-Nodes",
     "label": "OutBound VS for Kubernetes Nodes",
     "remark": "OutBound VS for Kubernetes Nodes",

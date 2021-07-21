@@ -1496,6 +1496,46 @@
          ]
         }
        },
+       "020-generate-password": {
+        "command": {
+         "Fn::Join": [
+          "",
+          [
+           "nohup /config/waitThenRun.sh",
+           " f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           " --signal PASSWORD_CREATED",
+           " --file f5-rest-node",
+           " --cl-args '/config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/generatePassword --file /config/cloud/aws/.adminPassword --encrypt'",
+           " --log-level silly",
+           " -o /var/log/cloud/aws/generatePassword.log",
+           " &>> /var/log/cloud/aws/install.log < /dev/null",
+           " &"
+          ]
+         ]
+        }
+       },
+       "030-create-admin-user": {
+        "command": {
+         "Fn::Join": [
+          "",
+          [
+           "nohup /config/waitThenRun.sh",
+           " f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           " --wait-for PASSWORD_CREATED",
+           " --signal ADMIN_CREATED",
+           " --file /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/createUser.sh",
+           " --cl-args '--user admin",
+           " --password-file /config/cloud/aws/.adminPassword",
+           " --password-encrypted",
+           "'",
+           " --log-level silly",
+           " -o /var/log/cloud/aws/createUser.log",
+           " &>> /var/log/cloud/aws/install.log < /dev/null",
+           " &"
+          ]
+         ]
+        }
+       },
        "040-network-config": {
         "command": {
          "Fn::Join": [
@@ -1507,6 +1547,7 @@
            "--cwd /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/aws ",
            "--log-level silly ",
            "-o /var/log/cloud/aws/1nicSetup.log ",
+           "--wait-for ADMIN_CREATED ",
            "--signal NETWORK_CONFIG_DONE ",
            "&>> /var/log/cloud/aws/install.log < /dev/null &"
           ]
@@ -1530,6 +1571,9 @@
            "--log-level silly",
            "--no-reboot",
            "--host localhost",
+           "--user admin",
+           "--password-url file:///config/cloud/aws/.adminPassword",
+           "--password-encrypted",
            "--hostname `/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/hostname`",
            "--ntp ", { "Ref": "NTPServer" },
            "--tz ", { "Ref": "TimeZone" },
@@ -1577,8 +1621,24 @@
          ]
         }
        }
+       "070-rm-password": {
+        "command": {
+         "Fn::Join": [
+          " ",
+          [
+           "nohup /config/waitThenRun.sh",
+           "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/runScript.js",
+           "--file /config/cloud/aws/rm-password.sh",
+           "-o /var/log/cloud/aws/rm-password.log",
+           "--log-level silly",
+           "--wait-for CUSTOM_CONFIG_DONE",
+           "--signal PASSWORD_REMOVED",
+           "&>> /var/log/cloud/aws/install.log < /dev/null &"
+          ]
+         ]
+        }
+       }
       },
-
       "files": {
        "/config/cloud/aws/custom-config.sh": {
         "content": {
@@ -1800,7 +1860,7 @@
            "#\n",
            "hostname=`/usr/bin/curl http://169.254.169.254/latest/meta-data/hostname`\n",
            "region='", { "Ref": "AWS::Region" }, "'\n",
-           "adminUsername='srv_user'\n",
+           "adminUsername='admin'\n",
            "timezone='", { "Ref": "TimeZone" }, "'\n",
            "ntpServer='", { "Ref": "NTPServer" }, "'\n",
            "declarationUrl='", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] }, "none" ] }, "'\n",
@@ -1814,6 +1874,37 @@
            "DeclarationURLPost='", { "Fn::If": [ "NotDownLoadImage", "none", { "Fn::If": [ "UseAS3File", { "Ref": "AS3URL" }, "none" ] } ] }, "'\n",
 
            "#\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000777",
+        "owner": "root"
+       },
+       "/config/cloud/aws/rm-password.sh": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "#!/bin/bash\n",
+           "PROGNAME=$(basename $0)\n",
+           "function error_exit {\n",
+           "echo \"${PROGNAME}: ${1:-\"Unknown Error\"}\" 1>&2\n",
+           "exit 1\n",
+           "}\n",
+           "date\n",
+           "echo 'starting rm-password.sh'\n",
+           "declare -a tmsh=()\n",
+           "tmsh+=(\"rm /config/cloud/aws/.adminPassword\")\n",
+           "for CMD in \"${tmsh[@]}\"\n",
+           "do\n",
+           " if $CMD;then\n",
+           "  echo \"command $CMD successfully executed.\"\n",
+           " else\n",
+           "  error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
+           " fi\n",
+           "done\n",
+           "date\n"
           ]
          ]
         },
