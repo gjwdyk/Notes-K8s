@@ -21,7 +21,6 @@ while ( ! [ -f "$Log_File" ] ); do
 done
 
 while ( ! ( ( grep "Sending signal" "$Log_File" | grep "PASSWORD_CREATED" ) && ( grep "Sending signal" "$Log_File" | grep "ADMIN_CREATED" ) && ( grep "Sending signal" "$Log_File" | grep "NETWORK_CONFIG_DONE" ) && ( grep "Sending signal" "$Log_File" | grep "ONBOARD_DONE" ) && ( grep "Sending signal" "$Log_File" | grep "CUSTOM_CONFIG_DONE" ) && ( grep "Sending signal" "$Log_File" | grep "PASSWORD_REMOVED" ) && ( grep "exited with code 0" "$Log_File" | grep "f5-rest-node" ) && ( grep "exited with code 0" "$Log_File" | grep "createUser.sh" ) && ( grep "exited with code 0" "$Log_File" | grep "custom-config.sh" ) && ( grep "exited with code 0" "$Log_File" | grep "rm-password.sh" ) ) ); do
-# while ( ! ( ( grep "Sending signal" "$Log_File" | grep "NETWORK_CONFIG_DONE" ) && ( grep "Sending signal" "$Log_File" | grep "ONBOARD_DONE" ) && ( grep "Sending signal" "$Log_File" | grep "CUSTOM_CONFIG_DONE" ) && ( grep "exited with code 0" "$Log_File" | grep "custom-config.sh" ) ) ); do
  echo "`date +%Y%m%d%H%M%S` Wait for Other Processes to Finish . Sleep for $Log_Wait_Period ."
  sleep $Log_Wait_Period
 done
