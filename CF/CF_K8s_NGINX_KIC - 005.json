@@ -2310,6 +2310,7 @@
      "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
      "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
@@ -2477,6 +2478,13 @@
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
 
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
+
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
@@ -2563,6 +2571,13 @@
      "chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys\n",
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
@@ -2651,6 +2666,13 @@
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
 
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker3", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker3", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
+
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
@@ -2737,6 +2759,13 @@
      "chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys\n",
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker4", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker4", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
@@ -2825,6 +2854,13 @@
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
 
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker5", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker5", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
+
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
@@ -2911,6 +2947,13 @@
      "chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys\n",
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker6", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker6", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
@@ -2999,6 +3042,13 @@
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
 
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
+
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
@@ -3086,6 +3136,13 @@
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
 
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
+
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
@@ -3172,6 +3229,13 @@
      "chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys\n",
      "chmod 600 /home/ubuntu/.ssh/authorized_keys\n",
      "timedatectl set-timezone \"", { "Ref": "TimeZone" }, "\"\n",
+
+     "IFName=`ip -4 -o address | grep \"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, "\" | awk '{print $2}'`\n",
+     "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
+     "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
+     "sudo rm -frv /etc/netplan/*\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
