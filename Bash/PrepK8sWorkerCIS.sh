@@ -24,7 +24,20 @@ do
  runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $arg sudo `kubeadm token create --print-join-command`
 done
 
-sleep 1m
+sleep $Loop_Period
+
+
+
+Loop="Yes"
+while ( [ "$Loop" == "Yes" ] ) ; do
+ if [ `kubectl get nodes | grep -i '\<Ready' | grep -i -v 'Master' | wc -l` -ge $# ] ; then
+  echo "`date +%Y%m%d%H%M%S` All Nodes Already Joined The Kubernetes Cluster."
+  Loop="No"
+ else
+  echo "`date +%Y%m%d%H%M%S` Waiting for one or more node(s) to join the K8s cluster."
+  sleep $Loop_Period
+ fi
+done
 
 
 
