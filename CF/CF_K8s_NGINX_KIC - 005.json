@@ -1620,7 +1620,7 @@
           []
          ]
         }
-       }
+       },
        "070-rm-password": {
         "command": {
          "Fn::Join": [
