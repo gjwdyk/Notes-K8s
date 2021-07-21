@@ -93,12 +93,36 @@ sed s/flannel-tunnel/$VXLANTunnelName/g /home/ubuntu/Temporary2.yaml > /home/ubu
 rm /home/ubuntu/Temporary*.yaml
 
 kubectl create -f /home/ubuntu/BigIPCISClusterDeployment.yaml
-sleep 1m
+sleep $Loop_Period
+
+
+
+Loop="Yes"
+while ( [ "$Loop" == "Yes" ] ) ; do
+ if [ `kubectl get pods --all-namespaces | grep -i '\<k8s-bigip-ctlr' | grep -i 'Running' | wc -l` -ge 1 ] ; then
+  echo "`date +%Y%m%d%H%M%S` Pod k8s-bigip-ctlr is running."
+  Loop="No"
+ else
+  echo "`date +%Y%m%d%H%M%S` Waiting for pod k8s-bigip-ctlr to run."
+  sleep $Loop_Period
+ fi
+done
 
 
 
 sed 's/replicas: 2/replicas: 9/g' /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml > /home/ubuntu/deployment-hello-world.yaml
 kubectl create -f /home/ubuntu/deployment-hello-world.yaml
+
+Loop="Yes"
+while ( [ "$Loop" == "Yes" ] ) ; do
+ if [ `kubectl get pods --all-namespaces | grep -i '\<f5-hello-world-web' | grep -i 'Running' | wc -l` -ge 9 ] ; then
+  echo "`date +%Y%m%d%H%M%S` ALL pod f5-hello-world-web are running."
+  Loop="No"
+ else
+  echo "`date +%Y%m%d%H%M%S` Waiting for one or more pod f5-hello-world-web to run."
+  sleep $Loop_Period
+ fi
+done
 
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/clusterip-service-hello-world.yaml /home/ubuntu/clusterip-service-hello-world.yaml
 kubectl create -f /home/ubuntu/clusterip-service-hello-world.yaml
