@@ -93,9 +93,6 @@ sed s/flannel-tunnel/$VXLANTunnelName/g /home/ubuntu/Temporary2.yaml > /home/ubu
 rm /home/ubuntu/Temporary*.yaml
 
 kubectl create -f /home/ubuntu/BigIPCISClusterDeployment.yaml
-sleep $Loop_Period
-
-
 
 Loop="Yes"
 while ( [ "$Loop" == "Yes" ] ) ; do
@@ -124,6 +121,8 @@ while ( [ "$Loop" == "Yes" ] ) ; do
  fi
 done
 
+
+
 cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/clusterip-service-hello-world.yaml /home/ubuntu/clusterip-service-hello-world.yaml
 kubectl create -f /home/ubuntu/clusterip-service-hello-world.yaml
 
@@ -138,7 +137,7 @@ kubectl create -f /home/ubuntu/ingress-hello-world.yaml
 #║   Review Status   ║
 #╚═══════════════════╝
 
-sleep 1m
+sleep $Loop_Period
 
 kubectl get node -o wide -A
 kubectl get deployment -o wide -A

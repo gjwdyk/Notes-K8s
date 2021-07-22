@@ -24,8 +24,6 @@ do
  runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $arg sudo `kubeadm token create --print-join-command`
 done
 
-sleep $Loop_Period
-
 
 
 Loop="Yes"
