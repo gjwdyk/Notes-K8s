@@ -1482,7 +1482,7 @@
         "command": "/usr/bin/setdb restjavad.useextramb true"
        },
        "003-rest-post": {
-        "command": "/usr/bin/curl -s -f -u admin: -H \"Content-Type: application/json\" -d '{\"maxMessageBodySize\":134217728}' -X POST http://localhost:8100/mgmt/shared/server/messaging/settings/8100 | jq ."
+        "command": "/usr/bin/curl -s -f -u --retry 333 admin: -H \"Content-Type: application/json\" -d '{\"maxMessageBodySize\":134217728}' -X POST http://localhost:8100/mgmt/shared/server/messaging/settings/8100 | jq ."
        },
        "010-install-libs": {
         "command": {
@@ -1574,7 +1574,7 @@
            "--user admin",
            "--password-url file:///config/cloud/aws/.adminPassword",
            "--password-encrypted",
-           "--hostname `/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/hostname`",
+           "--hostname `/usr/bin/curl -s -f --retry 333 http://169.254.169.254/latest/meta-data/hostname`",
            "--ntp ", { "Ref": "NTPServer" },
            "--tz ", { "Ref": "TimeZone" },
            "--dns ${NAME_SERVER}",
@@ -1688,12 +1688,12 @@
            "url_regex=\"(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$\"\n",
            "file_loc=\"/config/cloud/custom_config\"\n",
            "if [[ $declarationUrl =~ $url_regex ]]; then\n",
-           "  response_code=$(/usr/bin/curl -sk -w \"%{http_code}\" $declarationUrl -o $file_loc)\n",
+           "  response_code=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" $declarationUrl -o $file_loc)\n",
            "  if [[ $response_code == 200 ]]; then\n",
            "    echo \"Custom config download complete; checking for valid JSON.\"\n",
            "    cat $file_loc | jq .class\n",
            "    if [[ $? == 0 ]]; then\n",
-           "      response_code=$(/usr/bin/curl -skvvu ${adminUsername}:$passwd -w \"%{http_code}\" -X POST -H \"Content-Type: application/json\" -H \"Expect:\" https://localhost:${managementGuiPort}/mgmt/shared/appsvcs/declare -d @$file_loc -o /dev/null)\n",
+           "      response_code=$(/usr/bin/curl -skvvu --retry 333 ${adminUsername}:$passwd -w \"%{http_code}\" -X POST -H \"Content-Type: application/json\" -H \"Expect:\" https://localhost:${managementGuiPort}/mgmt/shared/appsvcs/declare -d @$file_loc -o /dev/null)\n",
            "      if [[ $response_code == 200 || $response_code == 502 ]]; then\n",
            "        echo \"Deployment of custom application succeeded.\"\n",
            "        deployed=\"yes\"\n",
@@ -1792,7 +1792,7 @@
 
            "for counter in $(seq 0 $max_counter); do\n",
            " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-           "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+           "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
            "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
            "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
            "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -1839,7 +1839,7 @@
           [
            "INTERFACE=$1",
            "INTERFACE_MAC=`ifconfig ${INTERFACE} | egrep ether | awk '{print tolower($2)}'`",
-           "VPC_CIDR_BLOCK=`/usr/bin/curl -s -f --retry 22 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${INTERFACE_MAC}/vpc-ipv4-cidr-block`",
+           "VPC_CIDR_BLOCK=`/usr/bin/curl -s -f --retry 333 http://169.254.169.254/latest/meta-data/network/interfaces/macs/${INTERFACE_MAC}/vpc-ipv4-cidr-block`",
            "VPC_NET=${VPC_CIDR_BLOCK%/*}",
            "NAME_SERVER=`echo ${VPC_NET} | awk -F. '{ printf \"%d.%d.%d.%d\", $1, $2, $3, $4+2 }'`",
            "echo $NAME_SERVER"
@@ -1858,7 +1858,7 @@
            "",
            "#!/bin/bash\n",
            "#\n",
-           "hostname=`/usr/bin/curl http://169.254.169.254/latest/meta-data/hostname`\n",
+           "hostname=`/usr/bin/curl --retry 333 http://169.254.169.254/latest/meta-data/hostname`\n",
            "region='", { "Ref": "AWS::Region" }, "'\n",
            "adminUsername='admin'\n",
            "timezone='", { "Ref": "TimeZone" }, "'\n",
@@ -2401,7 +2401,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -2527,7 +2527,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -2621,7 +2621,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -2715,7 +2715,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -2809,7 +2809,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -2903,7 +2903,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -2997,7 +2997,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -3091,7 +3091,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -3185,7 +3185,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
@@ -3279,7 +3279,7 @@
 
      "for counter in $(seq 0 $max_counter); do\n",
      " if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then\n",
-     "  file_result[$counter]=$(/usr/bin/curl -sk -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
+     "  file_result[$counter]=$(/usr/bin/curl -sk -w --retry 333 \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})\n",
      "  if [[ ${file_result[$counter]} == 200 ]]; then\n",
      "   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"\n",
      "   chmod ${file_acl[$counter]} ${file_name[$counter]}\n",
