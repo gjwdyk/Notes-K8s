@@ -33,8 +33,8 @@ for counter in $(seq 0 $max_counter); do
   file_result[$counter]=$(/usr/bin/curl -sk --retry 333 -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})
   if [[ ${file_result[$counter]} == 200 ]]; then
    echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"
-   chmod ${file_acl[$counter]} ${file_name[$counter]}
    chown ${file_own[$counter]} ${file_name[$counter]}
+   chmod ${file_acl[$counter]} ${file_name[$counter]}
   else
    echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"
   fi
@@ -43,8 +43,8 @@ for counter in $(seq 0 $max_counter); do
  fi
 done
 
-sed s/<ETCD_IP>/10.1.1.11/g /home/ubuntu/calico.yaml > /home/ubuntu/Temporary1.yaml
-sed s/<ETCD_PORT>/2379/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/calico.yaml
+sed s/\<ETCD_IP\>/10.1.1.11/g /home/ubuntu/calico.yaml > /home/ubuntu/Temporary1.yaml
+sed s/\<ETCD_PORT\>/2379/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/calico.yaml
 
 runuser -u ubuntu -- kubectl apply -f /home/ubuntu/calico.yaml
 
