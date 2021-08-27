@@ -43,10 +43,13 @@ for counter in $(seq 0 $max_counter); do
  fi
 done
 
+# You can change/modify the downloaded descriptor yaml file before invoke the creation of CNI
+#
 # sed s/\<ETCD_IP\>/10.1.1.11/g /home/ubuntu/calico.yaml > /home/ubuntu/Temporary1.yaml
 # sed s/\<ETCD_PORT\>/2379/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/calico.yaml
+# rm /home/ubuntu/Temporary*.yaml
 
-# runuser -u ubuntu -- kubectl apply -f /home/ubuntu/calico.yaml
+runuser -u ubuntu -- kubectl apply -f /home/ubuntu/calico.yaml
 
 
 
