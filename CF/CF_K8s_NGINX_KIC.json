@@ -569,6 +569,7 @@
   },
   "K8sNodeSubnet": {
    "Type": "AWS::EC2::Subnet",
+   "DependsOn": [ "VPC" ],
    "Properties": {
     "VpcId": { "Ref": "VPC" },
     "AvailabilityZone": { "Fn::Select": [ "0", { "Fn::GetAZs": { "Ref": "AWS::Region" } } ] },
@@ -585,6 +586,7 @@
   },
   "VPCGatewayAttachment": {
    "Type": "AWS::EC2::VPCGatewayAttachment",
+   "DependsOn": [ "VPC", "InternetGateway" ],
    "Properties": {
     "VpcId": { "Ref": "VPC" },
     "InternetGatewayId": { "Ref": "InternetGateway" }
@@ -592,6 +594,7 @@
   },
   "K8sNodeRouteTable": {
    "Type": "AWS::EC2::RouteTable",
+   "DependsOn": [ "VPC" ],
    "Properties": {
     "VpcId": { "Ref": "VPC" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sNodeRouteTable" ] ] } } ]
@@ -599,7 +602,7 @@
   },
   "K8sNodeRoute": {
    "Type": "AWS::EC2::Route",
-   "DependsOn": "VPCGatewayAttachment",
+   "DependsOn": [ "VPCGatewayAttachment" ],
    "Properties": {
     "RouteTableId": { "Ref": "K8sNodeRouteTable" },
     "DestinationCidrBlock": "0.0.0.0/0",
@@ -608,6 +611,7 @@
   },
   "K8sNodeSubnetRouteTableAssociation": {
    "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "DependsOn": [ "K8sNodeSubnet", "K8sNodeRouteTable" ],
    "Properties": {
     "SubnetId": { "Ref": "K8sNodeSubnet" },
     "RouteTableId": { "Ref": "K8sNodeRouteTable" }
@@ -615,6 +619,7 @@
   },
   "K8sNodeNetworkAcL": {
    "Type": "AWS::EC2::NetworkAcl",
+   "DependsOn": [ "VPC" ],
    "Properties": {
     "VpcId": { "Ref": "VPC" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sNodeNetworkAcL" ] ] } } ]
@@ -622,6 +627,7 @@
   },
   "InboundTCPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
+   "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
     "RuleNumber": "100",
@@ -634,6 +640,7 @@
   },
   "InboundUDPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
+   "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
     "RuleNumber": "200",
@@ -646,6 +653,7 @@
   },
   "InboundICMPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
+   "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
     "RuleNumber": "300",
@@ -658,6 +666,7 @@
   },
   "OutboundTCPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
+   "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
     "RuleNumber": "100",
@@ -670,6 +679,7 @@
   },
   "OutboundUDPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
+   "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
     "RuleNumber": "200",
@@ -682,6 +692,7 @@
   },
   "OutboundICMPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
+   "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
     "RuleNumber": "300",
@@ -694,6 +705,7 @@
   },
   "K8sNodeSubnetNetworkAcLAssociation": {
    "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+   "DependsOn": [ "K8sNodeSubnet", "K8sNodeNetworkAcL" ],
    "Properties": {
     "SubnetId": { "Ref": "K8sNodeSubnet" },
     "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" }
@@ -701,6 +713,7 @@
   },
   "K8sNodeSecurityGroup": {
    "Type": "AWS::EC2::SecurityGroup",
+   "DependsOn": [ "VPC" ],
    "Properties": {
     "GroupDescription": "Security Group for K8s Nodes",
     "VpcId": { "Ref": "VPC" },
@@ -789,6 +802,7 @@
   },
   "K8sMaster1NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Master 1",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -800,6 +814,7 @@
   },
   "K8sWorker1NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 1",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -812,6 +827,7 @@
   "K8sWorker2NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode2",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 2",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -824,6 +840,7 @@
   "K8sWorker3NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode3",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 3",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -836,6 +853,7 @@
   "K8sWorker4NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode4",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 4",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -848,6 +866,7 @@
   "K8sWorker5NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode5",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 5",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -860,6 +879,7 @@
   "K8sWorker6NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode6",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 6",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -872,6 +892,7 @@
   "K8sWorker7NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode7",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 7",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -884,6 +905,7 @@
   "K8sWorker8NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode8",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 8",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -896,6 +918,7 @@
   "K8sWorker9NetworkInterface": {
    "Type": "AWS::EC2::NetworkInterface",
    "Condition": "CreateWorkerNode9",
+   "DependsOn": [ "K8sNodeSecurityGroup", "K8sNodeSubnet" ],
    "Properties": {
     "Description": "Network Interface for K8s Worker 9",
     "GroupSet": [ {"Ref": "K8sNodeSecurityGroup"} ],
@@ -907,6 +930,7 @@
   },
   "K8sMaster1EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
+   "DependsOn": [ "K8sMaster1EIP", "K8sMaster1NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sMaster1EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sMaster1NetworkInterface" },
@@ -915,6 +939,7 @@
   },
   "K8sWorker1EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
+   "DependsOn": [ "K8sWorker1EIP", "K8sWorker1NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker1EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker1NetworkInterface" },
@@ -924,6 +949,7 @@
   "K8sWorker2EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode2",
+   "DependsOn": [ "K8sWorker2EIP", "K8sWorker2NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker2EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker2NetworkInterface" },
@@ -933,6 +959,7 @@
   "K8sWorker3EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode3",
+   "DependsOn": [ "K8sWorker3EIP", "K8sWorker3NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker3EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker3NetworkInterface" },
@@ -942,6 +969,7 @@
   "K8sWorker4EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode4",
+   "DependsOn": [ "K8sWorker4EIP", "K8sWorker4NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker4EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker4NetworkInterface" },
@@ -951,6 +979,7 @@
   "K8sWorker5EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode5",
+   "DependsOn": [ "K8sWorker5EIP", "K8sWorker5NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker5EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker5NetworkInterface" },
@@ -960,6 +989,7 @@
   "K8sWorker6EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode6",
+   "DependsOn": [ "K8sWorker6EIP", "K8sWorker6NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker6EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker6NetworkInterface" },
@@ -969,6 +999,7 @@
   "K8sWorker7EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode7",
+   "DependsOn": [ "K8sWorker7EIP", "K8sWorker7NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker7EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker7NetworkInterface" },
@@ -978,6 +1009,7 @@
   "K8sWorker8EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode8",
+   "DependsOn": [ "K8sWorker8EIP", "K8sWorker8NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker8EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker8NetworkInterface" },
@@ -987,6 +1019,7 @@
   "K8sWorker9EIPAssociation": {
    "Type": "AWS::EC2::EIPAssociation",
    "Condition": "CreateWorkerNode9",
+   "DependsOn": [ "K8sWorker9EIP", "K8sWorker9NetworkInterface" ],
    "Properties": {
     "AllocationId": { "Fn::GetAtt": [ "K8sWorker9EIP", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "K8sWorker9NetworkInterface" },
@@ -996,6 +1029,7 @@
 
   "CafeDNSRecord": {
    "Type": "AWS::Route53::RecordSet",
+   "DependsOn": [ "K8sMaster1EIP" ],
    "Properties": {
     "HostedZoneName": { "Fn::Join": [ "", [ { "Ref": "ParentDomainName" }, "." ] ] },
     "Name": { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" }, "." ] ] },
@@ -1007,10 +1041,11 @@
 
   "K8sMaster1Instance": {
    "Type": "AWS::EC2::Instance",
+   "DependsOn": [ "K8sMaster1NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sMaster1NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sMaster1NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sMaster1Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1131,10 +1166,11 @@
   },
   "K8sWorker1Instance": {
    "Type": "AWS::EC2::Instance",
+   "DependsOn": [ "K8sWorker1NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker1NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker1NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker1Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1195,10 +1231,11 @@
   "K8sWorker2Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode2",
+   "DependsOn": [ "K8sWorker2NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker2NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker2NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker2Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1259,10 +1296,11 @@
   "K8sWorker3Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode3",
+   "DependsOn": [ "K8sWorker3NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker3NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker3NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker3Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1323,10 +1361,11 @@
   "K8sWorker4Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode4",
+   "DependsOn": [ "K8sWorker4NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker4NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker4NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker4Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1387,10 +1426,11 @@
   "K8sWorker5Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode5",
+   "DependsOn": [ "K8sWorker5NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker5NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker5NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker5Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1451,10 +1491,11 @@
   "K8sWorker6Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode6",
+   "DependsOn": [ "K8sWorker6NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker6NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker6NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker6Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1515,10 +1556,11 @@
   "K8sWorker7Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode7",
+   "DependsOn": [ "K8sWorker7NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker7NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker7NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker7Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1579,10 +1621,11 @@
   "K8sWorker8Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode8",
+   "DependsOn": [ "K8sWorker8NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker8NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker8NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker8Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -1643,10 +1686,11 @@
   "K8sWorker9Instance": {
    "Type": "AWS::EC2::Instance",
    "Condition": "CreateWorkerNode9",
+   "DependsOn": [ "K8sWorker9NetworkInterface" ],
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": {"Ref": "K8sWorker9NetworkInterface"}, "DeviceIndex": "0" } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker9NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker9Instance" ] ] } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
