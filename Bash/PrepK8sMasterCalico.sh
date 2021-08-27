@@ -30,16 +30,16 @@ URLRegEx="^(http:\/\/|https:\/\/)?[a-z0-9]+((\-|\.)[a-z0-9]+)*\.[a-z]{2,}(:[0-9]
 
 for counter in $(seq 0 $max_counter); do
  if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then
-  file_result[$counter]=$(/usr/bin/curl -sk --retry 333 -w \"%{http_code}\" ${file_url[$counter]} -o ${file_name[$counter]})
+  file_result[$counter]=$(/usr/bin/curl -sk --retry 333 -w "%{http_code}" ${file_url[$counter]} -o ${file_name[$counter]})
   if [[ ${file_result[$counter]} == 200 ]]; then
-   echo \"$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete.\"
+   echo "$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete."
    chown ${file_own[$counter]} ${file_name[$counter]}
    chmod ${file_acl[$counter]} ${file_name[$counter]}
   else
-   echo \"$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . .\"
+   echo "$counter ; HTTP ${file_result[$counter]} ; Failed to download ${file_name[$counter]} ; Continuing . . ."
   fi
  else
-  echo \"$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . .\"
+  echo "$counter ; Reference to the ${file_name[$counter]} was not a URL ; Continuing . . ."
  fi
 done
 
