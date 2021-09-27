@@ -1,5 +1,7 @@
 #!/bin/bash -xe
 
+echo "Executing $0"
+
 BigIPAddress="$1"
 BigIPManagementPort="$2"
 PodCIDR="$3"
@@ -147,4 +149,6 @@ kubectl get service -o wide -A
 ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net fdb tunnel $VXLANTunnelName
 ssh -o StrictHostKeyChecking=no $User@$BigIPAddress show net arp all
 
-
+#╔═════════╗
+#║   End   ║
+#╚═════════╝

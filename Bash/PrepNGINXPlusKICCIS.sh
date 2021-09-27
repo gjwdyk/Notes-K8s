@@ -14,3 +14,7 @@ kubectl get node -o wide -A
 kubectl get deployment -o wide -A
 kubectl get pod -o wide -A
 kubectl get service -o wide -A
+
+#╔═════════╗
+#║   End   ║
+#╚═════════╝

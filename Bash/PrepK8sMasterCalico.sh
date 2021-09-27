@@ -3,7 +3,7 @@
 sudo su
 echo "Executing $0"
 
-kubeadm init --pod-network-cidr=$1 --service-cidr=$2 --kubernetes-version="v1.20.7"
+kubeadm init --pod-network-cidr=$1 --service-cidr=$2 --kubernetes-version="v1.21.5"
 
 runuser -l ubuntu -c 'mkdir -p $HOME/.kube'
 runuser -l ubuntu -c 'sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config'
