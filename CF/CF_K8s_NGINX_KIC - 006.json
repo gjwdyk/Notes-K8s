@@ -450,14 +450,14 @@
   },
   "K8sMasterPreparationScript": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sMaster.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sMasterCalico.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the K8sMasterPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the Kubernetes' master node implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "ClusterNetworkConfiguration": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml",
+   "Default": "https://docs.projectcalico.org/manifests/calico.yaml",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the ClusterNetworkConfiguration parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a YAML file to be used to implement a Cluster Networking within the Kubernetes Cluster (e.g. flannel). If the YAML file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
