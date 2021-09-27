@@ -1,6 +1,7 @@
 #!/bin/bash -xe
 
 sudo su
+echo "Executing $0"
 
 WorkerNodeStatus=/home/ubuntu/WorkerNodeStatus
 Loop="Yes"
@@ -37,10 +38,14 @@ while ( [ "$Loop" == "Yes" ] ) ; do
  fi
 done
 
-
+#╔═══════════════════╗
+#║   Review Status   ║
+#╚═══════════════════╝
 
 runuser -l ubuntu -c 'kubectl get node --all-namespaces -o wide'
 runuser -l ubuntu -c 'kubectl get pod --all-namespaces -o wide'
 runuser -l ubuntu -c 'kubectl get service --all-namespaces -o wide'
 
-
+#╔═════════╗
+#║   End   ║
+#╚═════════╝

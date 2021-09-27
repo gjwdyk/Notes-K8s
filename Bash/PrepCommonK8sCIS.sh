@@ -1,6 +1,7 @@
 #!/bin/bash -xe
 
 sudo su
+echo "Executing $0"
 
 WorkerNodeStatus=/home/ubuntu/WorkerNodeStatus
 
@@ -12,4 +13,6 @@ apt install -y kubeadm=1.20.7-00 kubectl=1.20.7-00 kubelet=1.20.7-00 kubernetes-
 
 echo "`date +%Y%m%d%H%M%S` Worker Node Ready ." | tee -a $WorkerNodeStatus
 
-
+#╔═════════╗
+#║   End   ║
+#╚═════════╝

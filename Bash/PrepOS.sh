@@ -1,6 +1,7 @@
 #!/bin/bash -xe
 
 sudo su
+echo "Executing $0"
 
 apt install -y apt-transport-https curl
 
@@ -20,9 +21,10 @@ modprobe br_netfilter
 sysctl --system
 sysctl --load
 
-#
-# Test
-#
+#╔═══════════════════╗
+#║   Review Status   ║
+#╚═══════════════════╝
+
 echo "/etc/fstab :"
 cat /etc/fstab
 echo "/etc/crontab :"
@@ -37,3 +39,7 @@ echo "/etc/modules-load.d/containerd.conf :"
 cat /etc/modules-load.d/containerd.conf
 
 
+
+#╔═════════╗
+#║   End   ║
+#╚═════════╝

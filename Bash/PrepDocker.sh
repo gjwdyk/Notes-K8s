@@ -1,6 +1,7 @@
 #!/bin/bash -xe
 
 sudo su
+echo "Executing $0"
 
 apt update -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
@@ -26,6 +27,14 @@ systemctl daemon-reload
 systemctl restart docker
 systemctl enable docker --now
 
+#╔═══════════════════╗
+#║   Review Status   ║
+#╚═══════════════════╝
+
 systemctl status docker
 docker --version
 docker info | grep -i cgroup
+
+#╔═════════╗
+#║   End   ║
+#╚═════════╝

@@ -1,6 +1,7 @@
 #!/bin/bash -xe
 
 sudo su
+echo "Executing $0"
 
 kubeadm init --pod-network-cidr=$1 --service-cidr=$2 --kubernetes-version="v1.20.7"
 
@@ -51,10 +52,16 @@ done
 
 runuser -u ubuntu -- kubectl apply -f /home/ubuntu/calico.yaml
 
-
+#╔═══════════════════╗
+#║   Review Status   ║
+#╚═══════════════════╝
 
 sleep 1m
 
 runuser -l ubuntu -c 'kubectl get node --all-namespaces -o wide'
 runuser -l ubuntu -c 'kubectl get pod --all-namespaces -o wide'
 runuser -l ubuntu -c 'kubectl get service --all-namespaces -o wide'
+
+#╔═════════╗
+#║   End   ║
+#╚═════════╝
