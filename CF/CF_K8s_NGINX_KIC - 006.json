@@ -542,7 +542,7 @@
 
   "BigIPCISScript": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepBigIP.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepBigIPCalico.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "ConstraintDescription": "Kindly check the BigIPCISScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
@@ -612,13 +612,13 @@
   },
   "ConfigurationMethod": {
    "AllowedValues": [ "None", "AS3", "TMSH", "AS3 and TMSH" ],
-   "Default": "None",
+   "Default": "AS3",
    "Description": "Select the method to configure the Big-IP. Note that between AS3 and TMSH there are possibilities for conflicts, and therefore both AS3 File and TMSH Commands File need to be sync-ed between each other.",
    "Type": "String"
   },
   "AS3URL": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3_LTM_SSLoL_AVR_NOutB.json",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/OutBound_AVR_AWF_SeviceAddress.json",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL for the AS3 declaration JSON file to be deployed. Input *none* (without the *) to deploy without a service configuration."
   },
