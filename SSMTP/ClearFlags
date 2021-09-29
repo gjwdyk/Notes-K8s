@@ -1,0 +1,29 @@
+#!/bin/bash
+
+Log_File=/config/HC.Log
+if [ ! -f "$Log_File" ]; then
+  /bin/sudo /bin/touch "$Log_File"
+fi
+
+if [ -z $1 ]; then
+  Directory=/config/Flags/
+else
+  Directory=$1
+fi
+
+if [ -z $2 ]; then
+  Filter=*.flag
+else
+  Filter=$2
+fi
+
+if [ -d $Directory ]; then
+  Flag_Files=$Directory$Filter
+  for aFile in $Flag_Files
+  do
+    /bin/rm -f $aFile
+    /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` : Remove $aFile\n" >> $Log_File
+  done
+else
+  /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` : $Directory NOT Exist\n" >> $Log_File
+fi

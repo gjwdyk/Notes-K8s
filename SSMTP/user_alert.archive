@@ -1,0 +1,19 @@
+alert Product_License_Expires_On "Product license expires on" {
+ exec command="/bin/sudo /bin/bash /config/lidsa/BigIPSendMailLidsa Product_License_Expires_On '' 'Product license expires'"
+}
+
+alert Evaluation_License_Has_Expired "Evaluation license has expired" {
+ exec command="/bin/sudo /bin/bash /config/lidsa/BigIPSendMailLidsa Evaluation_License_Has_Expired '' 'license has expired'"
+}
+
+alert License_Is_Not_Operational "License is not operational" {
+ exec command="/bin/sudo /bin/bash /config/lidsa/BigIPSendMailLidsa License_Is_Not_Operational '' 'License is not operation'"
+}
+
+alert No_Members_Available_For_Pool "No members available for pool" {
+ exec command="/bin/sudo /bin/bash /config/BigIPSendMail No_Members_Available_For_Pool '' 'No members available for'"
+}
+
+alert Now_Has_Available_Members "now has available members" {
+ exec command="/bin/sudo /bin/bash /config/BigIPSendMail Now_Has_Available_Members '' 'has available members'"
+}

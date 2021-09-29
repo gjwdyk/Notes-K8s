@@ -1,0 +1,56 @@
+#!/bin/bash
+
+Log_File=/config/HC.Log
+
+if [ -z "$1" ]; then
+  Flag_File=/config/lidsa/cae/Generic_Notification.flag
+  Topic=Generic_Notification
+else
+  Flag_File="/config/lidsa/cae/$1.flag"
+  Topic="$1"
+fi
+
+if [ -z "$2" ]; then
+  Detail_File=/var/log/ltm
+else
+  Detail_File="$2"
+fi
+
+if [ -z "$3" ]; then
+  Detail_String="Error"
+else
+  Detail_String="$3"
+fi
+
+if [ -z "$4" ]; then
+  LogDetailLength=0
+else
+  LogDetailLength="$4"
+fi
+
+if [ -z "$5" ]; then
+  MailDetailLength=1
+else
+  MailDetailLength="$5"
+fi
+
+if [ ! -f "$Log_File" ]; then
+  /bin/sudo /bin/touch "$Log_File"
+fi
+
+if [ -f "$Flag_File" ]; then
+  if [ -f "$Detail_File" ]; then
+    /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` $Flag_File $Detail_File \"$Detail_String\"\n`/bin/tail --lines=$LogDetailLength $Detail_File | /bin/grep \"$Detail_String\"`\n" >> "$Log_File"
+  else
+    /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` : $Flag_File Exists, $Detail_File NOT Exist, \"$Detail_String\"\n" >> "$Log_File"
+  fi
+else
+  if [ -f "$Detail_File" ]; then
+    /bin/sudo /bin/touch "$Flag_File"
+    /bin/sudo /bin/printf "Subject: $Topic\n\n$Detail_File \"$Detail_String\"\n\n`/bin/tail --lines=$MailDetailLength $Detail_File | /bin/grep \"$Detail_String\"`\n\n\n`/bin/date +%Y%m%d%H%M%S`\n`/bin/cat /config/BigIPUnitID`\n`/bin/curl http://169.254.169.254/latest/meta-data/public-hostname`\n\n\n" | /sbin/ssmtp -v "`/bin/cat /etc/ssmtp/eMailNotificationRecipient`"  >> "$Log_File"
+    /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` `/bin/cat /config/BigIPUnitID` `/bin/curl http://169.254.169.254/latest/meta-data/public-hostname` `/bin/cat /etc/ssmtp/eMailNotificationRecipient` $Flag_File $Detail_File \"$Detail_String\"\n`/bin/tail --lines=$MailDetailLength $Detail_File | /bin/grep \"$Detail_String\"`\n" >> "$Log_File"
+    /bin/sudo /bin/bash /config/lidsa/BigIPLidsa
+  else
+    /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` : $Flag_File NOT Exist, $Detail_File NOT Exist, \"$Detail_String\"\n" >> "$Log_File"
+  fi
+fi

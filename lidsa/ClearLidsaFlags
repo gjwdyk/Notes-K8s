@@ -1,0 +1,35 @@
+#!/bin/bash
+
+Failed_Flag=/config/lidsa/cae/Lidsa_Failed.flag
+
+Log_File=/config/HC.Log
+if [ ! -f "$Log_File" ]; then
+  /bin/sudo /bin/touch "$Log_File"
+fi
+
+if [ -z "$1" ]; then
+  Directory=/config/lidsa/cae/
+else
+  Directory="$1"
+fi
+
+if [ -z "$2" ]; then
+  Filter=*.flag
+else
+  Filter="$2"
+fi
+
+if [ -d "$Directory" ]; then
+  if [ -f "$Failed_Flag" ]; then
+    /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` : $Failed_Flag Exists\n" >> "$Log_File"
+  else
+    Flag_Files="$Directory$Filter"
+    for aFile in $Flag_Files
+    do
+      /bin/rm -f $aFile
+      /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` : Remove $aFile\n" >> "$Log_File"
+    done
+  fi
+else
+  /bin/sudo /bin/printf "`/bin/date +%Y%m%d%H%M%S` : $Directory NOT Exist\n" >> "$Log_File"
+fi

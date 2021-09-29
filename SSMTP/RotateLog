@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [ -z $1 ]; then
+  Log_File=/config/HC.Log
+else
+  Log_File=$1
+fi
+
+if [ -z $2 ]; then
+  Max_Log=22
+else
+  Max_Log=$2
+fi
+
+if [ -f "$Log_File.$Max_Log" ]; then
+  rm -f "$Log_File.$Max_Log"
+fi
+
+for counter in `seq $((Max_Log-1)) -1 1`; do
+  if [ -f "$Log_File.$counter" ]; then
+    mv -f "$Log_File."{$counter,$((counter+1))}
+  fi
+done
+
+if [ -f "$Log_File" ]; then
+  cp -f "$Log_File" "$Log_File.1"
+  echo "`/bin/date +%Y%m%d%H%M%S` Rotate $Log_File" > "$Log_File"
+fi

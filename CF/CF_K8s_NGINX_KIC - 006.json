@@ -618,19 +618,19 @@
   },
   "AS3URL": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/OutBound_AVR_AWF_SeviceAddress.json",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/OutBound_AVR_AWF_SeviceAddress.json",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL for the AS3 declaration JSON file to be deployed. Input *none* (without the *) to deploy without a service configuration."
   },
   "BigIPTMSHConfiguration": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/F5_Configurations.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL of the TMSH Commands File which Big-IP will execute. If the TMSH Commands File is located at AWS S3, ensure that this CloudFormation template can read the file. If the TMSH Commands File is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "SSMTPConfiguration": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/GMailSSMTP.conf",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSMTP/GMailSSMTP.conf",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL of the SSMTP configuration. This CloudFormation template requires a SSMTP configuration (i.e. Mandatory Input). If the SSMTP configuration is located at AWS S3, ensure that this CloudFormation template can read the file. If the SSMTP configuration is located at GitHub, ensure that this CloudFormation template can read the RAW SSMTP configuration file (i.e. NOT a web page containing the SSMTP configuration file)."
   },
@@ -650,7 +650,7 @@
   },
   "UserAlertConfiguration": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/user_alert.archive",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSMTP/user_alert.archive",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL of the additional user_alert configuration."
   },
@@ -1049,7 +1049,7 @@
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sNodeNetworkAcL" ] ] } } ]
    }
   },
-  "InternalInboundTCPK8sNodeNetworkAcLEntry": {
+  "InboundTCPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
    "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
@@ -1058,76 +1058,11 @@
     "Protocol": "6",
     "RuleAction": "allow",
     "Egress": "false",
-    "CidrBlock": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, "0/24" ] ] },
+    "CidrBlock": "0.0.0.0/0",
     "PortRange": { "From": "0", "To": "65535" }
    }
   },
-  "InboundTCP22K8sNodeNetworkAcLEntry": {
-   "Type": "AWS::EC2::NetworkAclEntry",
-   "DependsOn": [ "K8sNodeNetworkAcL" ],
-   "Properties": {
-    "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
-    "RuleNumber": "101",
-    "Protocol": "6",
-    "RuleAction": "allow",
-    "Egress": "false",
-    "CidrBlock": "0.0.0.0/0",
-    "PortRange": { "From": "22", "To": "22" }
-   }
-  },
-  "InboundTCP53K8sNodeNetworkAcLEntry": {
-   "Type": "AWS::EC2::NetworkAclEntry",
-   "DependsOn": [ "K8sNodeNetworkAcL" ],
-   "Properties": {
-    "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
-    "RuleNumber": "102",
-    "Protocol": "6",
-    "RuleAction": "allow",
-    "Egress": "false",
-    "CidrBlock": "0.0.0.0/0",
-    "PortRange": { "From": "53", "To": "53" }
-   }
-  },
-  "InboundTCP80K8sNodeNetworkAcLEntry": {
-   "Type": "AWS::EC2::NetworkAclEntry",
-   "DependsOn": [ "K8sNodeNetworkAcL" ],
-   "Properties": {
-    "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
-    "RuleNumber": "103",
-    "Protocol": "6",
-    "RuleAction": "allow",
-    "Egress": "false",
-    "CidrBlock": "0.0.0.0/0",
-    "PortRange": { "From": "80", "To": "80" }
-   }
-  },
-  "InboundTCP443K8sNodeNetworkAcLEntry": {
-   "Type": "AWS::EC2::NetworkAclEntry",
-   "DependsOn": [ "K8sNodeNetworkAcL" ],
-   "Properties": {
-    "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
-    "RuleNumber": "104",
-    "Protocol": "6",
-    "RuleAction": "allow",
-    "Egress": "false",
-    "CidrBlock": "0.0.0.0/0",
-    "PortRange": { "From": "443", "To": "443" }
-   }
-  },
-  "InboundTCP8443K8sNodeNetworkAcLEntry": {
-   "Type": "AWS::EC2::NetworkAclEntry",
-   "DependsOn": [ "K8sNodeNetworkAcL" ],
-   "Properties": {
-    "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
-    "RuleNumber": "105",
-    "Protocol": "6",
-    "RuleAction": "allow",
-    "Egress": "false",
-    "CidrBlock": "0.0.0.0/0",
-    "PortRange": { "From": "8443", "To": "8443" }
-   }
-  },
-  "InternalInboundUDPK8sNodeNetworkAcLEntry": {
+  "InboundUDPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
    "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
@@ -1136,24 +1071,11 @@
     "Protocol": "17",
     "RuleAction": "allow",
     "Egress": "false",
-    "CidrBlock": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, "0/24" ] ] },
+    "CidrBlock": "0.0.0.0/0",
     "PortRange": { "From": "0", "To": "65535" }
    }
   },
-  "InboundUDP53K8sNodeNetworkAcLEntry": {
-   "Type": "AWS::EC2::NetworkAclEntry",
-   "DependsOn": [ "K8sNodeNetworkAcL" ],
-   "Properties": {
-    "NetworkAclId": { "Ref": "K8sNodeNetworkAcL" },
-    "RuleNumber": "201",
-    "Protocol": "17",
-    "RuleAction": "allow",
-    "Egress": "false",
-    "CidrBlock": "0.0.0.0/0",
-    "PortRange": { "From": "53", "To": "53" }
-   }
-  },
-  "InternalInboundICMPK8sNodeNetworkAcLEntry": {
+  "InboundICMPK8sNodeNetworkAcLEntry": {
    "Type": "AWS::EC2::NetworkAclEntry",
    "DependsOn": [ "K8sNodeNetworkAcL" ],
    "Properties": {
@@ -1163,7 +1085,7 @@
     "Icmp": { "Code": "-1", "Type": "-1" },
     "RuleAction": "allow",
     "Egress": "false",
-    "CidrBlock": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, "0/24" ] ] }
+    "CidrBlock": "0.0.0.0/0"
    }
   },
   "OutboundTCPK8sNodeNetworkAcLEntry": {
@@ -1221,7 +1143,15 @@
     "GroupDescription": "Security Group for Big-IP",
     "VpcId": { "Ref": "VPC" },
     "SecurityGroupEgress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
-    "SecurityGroupIngress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
+    "SecurityGroupIngress": [
+     { "IpProtocol": "-1", "CidrIp": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, "0/24" ] ] } },
+     { "IpProtocol" : "tcp", "FromPort" : 22, "ToPort" : 22, "CidrIp" : "0.0.0.0/0" },
+     { "IpProtocol" : "udp", "FromPort" : 53, "ToPort" : 53, "CidrIp" : "0.0.0.0/0" },
+     { "IpProtocol" : "tcp", "FromPort" : 53, "ToPort" : 53, "CidrIp" : "0.0.0.0/0" },
+     { "IpProtocol" : "tcp", "FromPort" : 80, "ToPort" : 80, "CidrIp" : "0.0.0.0/0" },
+     { "IpProtocol" : "tcp", "FromPort" : 443, "ToPort" : 443, "CidrIp" : "0.0.0.0/0" },
+     { "IpProtocol" : "tcp", "FromPort" : 8443, "ToPort" : 8443, "CidrIp" : "0.0.0.0/0" }
+    ],
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPSecurityGroup" ] ] } } ]
    }
   },
@@ -1261,7 +1191,10 @@
     "GroupDescription": "Security Group for K8s Nodes",
     "VpcId": { "Ref": "VPC" },
     "SecurityGroupEgress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
-    "SecurityGroupIngress": [ { "IpProtocol": "-1", "CidrIp": "0.0.0.0/0" } ],
+    "SecurityGroupIngress": [
+     { "IpProtocol": "-1", "CidrIp": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, "0/24" ] ] } },
+     { "IpProtocol" : "tcp", "FromPort" : 22, "ToPort" : 22, "CidrIp" : "0.0.0.0/0" }
+    ],
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sNodeSecurityGroup" ] ] } } ]
    }
   },
@@ -1834,15 +1767,15 @@
            "declare -a file_acl\n",
            "declare -a file_result\n",
 
-           "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/BigIPSendMail\"\n",
+           "file_url[0]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSMTP/BigIPSendMail\"\n",
            "file_name[0]=\"/config/BigIPSendMail\"\n",
            "file_acl[0]=\"777\"\n",
 
-           "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/ClearFlags\"\n",
+           "file_url[1]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSMTP/ClearFlags\"\n",
            "file_name[1]=\"/config/ClearFlags\"\n",
            "file_acl[1]=\"777\"\n",
 
-           "file_url[2]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/SSMTP/RotateLog\"\n",
+           "file_url[2]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/SSMTP/RotateLog\"\n",
            "file_name[2]=\"/config/RotateLog\"\n",
            "file_acl[2]=\"777\"\n",
 
@@ -1854,47 +1787,47 @@
            "file_name[4]=\"/config/user_alert.archive\"\n",
            "file_acl[4]=\"666\"\n",
 
-           "file_url[5]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPLidsa\"\n",
+           "file_url[5]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/lidsa/BigIPLidsa\"\n",
            "file_name[5]=\"/config/lidsa/BigIPLidsa\"\n",
            "file_acl[5]=\"777\"\n",
 
-           "file_url[6]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/BigIPSendMailLidsa\"\n",
+           "file_url[6]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/lidsa/BigIPSendMailLidsa\"\n",
            "file_name[6]=\"/config/lidsa/BigIPSendMailLidsa\"\n",
            "file_acl[6]=\"777\"\n",
 
-           "file_url[7]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+           "file_url[7]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/lidsa/ClearLidsaFlags\"\n",
            "file_name[7]=\"/config/lidsa/ClearLidsaFlags\"\n",
            "file_acl[7]=\"777\"\n",
 
-           "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/lidsa/ClearLidsaFlags\"\n",
+           "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/lidsa/ClearLidsaFlags\"\n",
            "file_name[8]=\"/config/lidsa/ClearLidsaFlags\"\n",
            "file_acl[8]=\"777\"\n",
 
-           "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/anacrontab\"\n",
+           "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/anacrontab\"\n",
            "file_name[9]=\"/config/anacrontab\"\n",
            "file_acl[9]=\"666\"\n",
 
-           "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/crontab\"\n",
+           "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/crontab\"\n",
            "file_name[10]=\"/config/crontab\"\n",
            "file_acl[10]=\"666\"\n",
 
-           "file_url[11]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
+           "file_url[11]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
            "file_name[11]=\"/config/AS3Configuration.sh\"\n",
            "file_acl[11]=\"777\"\n",
 
-           "file_url[12]=\"", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
+           "file_url[12]=\"", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
            "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
            "file_acl[12]=\"777\"\n",
 
-           "file_url[13]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
+           "file_url[13]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
            "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
            "file_acl[13]=\"777\"\n",
 
-           "file_url[14]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
+           "file_url[14]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
            "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
            "file_acl[14]=\"666\"\n",
 
-           "file_url[15]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
+           "file_url[15]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
            "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
            "file_acl[15]=\"666\"\n",
 
@@ -3431,6 +3364,10 @@
  },
 
  "Outputs": {
+  "BigIPIPAddress": {
+   "Description": "IP Address of Big-IP",
+   "Value": { "Ref": "BigIPEIP" }
+  },
   "K8sMaster1IPAddress": {
    "Description": "IP Address of K8s Master 1",
    "Value": { "Ref": "K8sMaster1EIP" }

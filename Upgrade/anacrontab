@@ -1,0 +1,20 @@
+# /etc/anacrontab: configuration file for anacron
+
+SHELL=/bin/sh
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=""
+
+# the maximal random delay added to the base delay of the jobs
+RANDOM_DELAY=42
+# the jobs will be started during the following hours only
+START_HOURS_RANGE=2-7
+
+# .----------------------------------- period in days
+# |         .------------------------- delay in minutes
+# |         |          .-------------- job-identifier
+# |         |          |          .--- command
+# |         |          |          |
+# *         *          *          *
+1           9   anacron.daily     nice run-parts /etc/cron.daily
+7          22   anacron.weekly    nice run-parts /etc/cron.weekly
+@monthly   42   anacron.monthly   nice run-parts /etc/cron.monthly
