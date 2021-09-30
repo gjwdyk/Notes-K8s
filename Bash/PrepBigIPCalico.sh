@@ -30,16 +30,26 @@ BigIPAddressPort=$BigIPAddress:$BigIPManagementPort
 
 
 
-if [ -z "$5" ] ; then : ; else K8sMaster1IPAddress="$5" ; fi
-if [ -z "$6" ] ; then : ; else K8sWorker1IPAddress="$6" ; fi
-if [ -z "$7" ] ; then : ; else K8sWorker2IPAddress="$7" ; fi
-if [ -z "$8" ] ; then : ; else K8sWorker3IPAddress="$8" ; fi
-if [ -z "$9" ] ; then : ; else K8sWorker4IPAddress="$9" ; fi
-if [ -z "$10" ] ; then : ; else K8sWorker5IPAddress="$10" ; fi
-if [ -z "$11" ] ; then : ; else K8sWorker6IPAddress="$11" ; fi
-if [ -z "$12" ] ; then : ; else K8sWorker7IPAddress="$12" ; fi
-if [ -z "$13" ] ; then : ; else K8sWorker8IPAddress="$13" ; fi
-if [ -z "$14" ] ; then : ; else K8sWorker9IPAddress="$14" ; fi
+if [ -z "$5" ] ; then : ; else K8sMaster1IPAddress="$5"
+ if [ -z "$6" ] ; then : ; else K8sWorker1IPAddress="$6"
+  if [ -z "$7" ] ; then : ; else K8sWorker2IPAddress="$7"
+   if [ -z "$8" ] ; then : ; else K8sWorker3IPAddress="$8"
+    if [ -z "$9" ] ; then : ; else K8sWorker4IPAddress="$9"
+     if [ -z "$10" ] ; then : ; else K8sWorker5IPAddress="$10"
+      if [ -z "$11" ] ; then : ; else K8sWorker6IPAddress="$11"
+       if [ -z "$12" ] ; then : ; else K8sWorker7IPAddress="$12"
+        if [ -z "$13" ] ; then : ; else K8sWorker8IPAddress="$13"
+         if [ -z "$14" ] ; then : ; else K8sWorker9IPAddress="$14"
+         fi
+        fi
+       fi
+      fi
+     fi
+    fi
+   fi
+  fi
+ fi
+fi
 
 
 
@@ -110,7 +120,7 @@ chmod +x calicoctl
 sudo mv calicoctl /usr/local/bin
 sudo mkdir /etc/calico
 
-cat <<'EOF' > /etc/calico/calicoctl.cfg
+sudo cat <<EOF > /home/ubuntu/calicoctl.cfg
 apiVersion: projectcalico.org/v3
 kind: CalicoAPIConfig
 metadata:
@@ -119,7 +129,11 @@ spec:
   kubeconfig: "/home/ubuntu/.kube/config"
 EOF
 
-cat <<'EOF' | calicoctl create -f -
+sudo chmod 666 /home/ubuntu/calicoctl.cfg
+sudo chown root:root /home/ubuntu/calicoctl.cfg
+sudo mv /home/ubuntu/calicoctl.cfg /etc/calico/
+
+cat <<EOF > /home/ubuntu/CalicoBGPConfiguration.yaml
 apiVersion: projectcalico.org/v3
 kind: BGPConfiguration
 metadata:
@@ -130,7 +144,9 @@ spec:
   asNumber: 64512
 EOF
 
-cat <<'EOF' | calicoctl create -f -
+calicoctl create -f /home/ubuntu/CalicoBGPConfiguration.yaml
+
+cat <<EOF > /home/ubuntu/CalicoBGPPeer.yaml
 apiVersion: projectcalico.org/v3
 kind: BGPPeer
 metadata:
@@ -139,6 +155,8 @@ spec:
   peerIP: $BigIPAddress
   asNumber: 64512
 EOF
+
+calicoctl create -f /home/ubuntu/CalicoBGPPeer.yaml
 
 
 
