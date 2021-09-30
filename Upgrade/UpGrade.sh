@@ -42,6 +42,9 @@ fi
 if ( tmsh show sys software | grep `cat $UpGradeVolume_File` | grep "complete" ); then
  echo "`date +%Y%m%d%H%M%S` Unit had been UpGraded ."
 
+ cp /home/admin/.ssh/id_rsa /root/.ssh/
+ cp /home/admin/.ssh/id_rsa.pub /root/.ssh/
+
  echo "`date +%Y%m%d%H%M%S` SSMTP Configurations ."
  cp --force /etc/pki/tls/certs/ca-bundle.crt /etc/ssmtp/ca-bundle.crt
  chmod 666 /etc/ssmtp/ca-bundle.crt
