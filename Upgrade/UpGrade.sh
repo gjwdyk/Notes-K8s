@@ -7,6 +7,7 @@ DEBUG=ON
 
 Log_File=/var/log/cloud/aws/install.log
 UpGradeImageName_File=/config/UpgradeImageFileName
+UpGradeResult=/config/UpgradeResult
 
 Log_Wait_Period="3m 33s"
 UpGrade_ShortWait_Period="22s"
@@ -44,7 +45,6 @@ if ( tmsh show sys software | grep `cat $UpGradeVolume_File` | grep "complete" )
 
  cp /home/admin/.ssh/id_rsa /root/.ssh/
  cp /home/admin/.ssh/id_rsa.pub /root/.ssh/
-
  echo "`date +%Y%m%d%H%M%S` SSMTP Configurations ."
  cp --force /etc/pki/tls/certs/ca-bundle.crt /etc/ssmtp/ca-bundle.crt
  chmod 666 /etc/ssmtp/ca-bundle.crt
@@ -93,6 +93,7 @@ if ( tmsh show sys software | grep `cat $UpGradeVolume_File` | grep "complete" )
  else
   /bin/sudo /bin/bash /config/AS3Configuration.sh
   /bin/sudo /bin/bash /config/TMSHPostCommands.sh
+  echo "`date +%Y%m%d%H%M%S` Custom Configuration Finished ." | tee -a $UpGradeResult
  fi
 
 
@@ -164,6 +165,7 @@ else
  if [ -f /shared/images/UpgradeImage.iso ] && [ -f /shared/images/UpgradeImage.iso.md5 ] && [[ `cat $UpGradeImageName_File` =~ ^(BIGIP\-)((([0-9]+)\.)+)([0-9]+)\-((([0-9]+)\.)+)([0-9]+)\.iso$ ]]; then
   if [[ $UpgradeBigIP == "No" ]]; then
    echo "`date +%Y%m%d%H%M%S` UpGrade was NOT requested ."
+   echo "`date +%Y%m%d%H%M%S` Custom Configuration Finished ." | tee -a $UpGradeResult
   else
    mv /shared/images/UpgradeImage.iso /shared/images/`cat $UpGradeImageName_File`
    mv /shared/images/UpgradeImage.iso.md5 /shared/images/`cat $UpGradeImageName_File`.md5
@@ -209,4 +211,5 @@ else
 
 
 fi
-echo "`date +%Y%m%d%H%M%S` Custom Configuration Finished ."
+
+

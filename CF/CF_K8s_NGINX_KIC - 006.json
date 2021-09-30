@@ -1832,7 +1832,7 @@
            "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
            "file_acl[15]=\"666\"\n",
 
-           "file_url[16]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGradeStatus.sh\"\n",
+           "file_url[16]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpGradeStatus.sh\"\n",
            "file_name[16]=\"/config/UpGradeStatus.sh\"\n",
            "file_acl[16]=\"777\"\n",
 
@@ -2133,7 +2133,7 @@
         "group": "root",
         "mode": "000777",
         "owner": "root",
-        "source": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/BigIPBash/UpGrade.sh"
+        "source": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpGrade.sh"
        },
        "/config/ssmtp/SMTPUserID": {
         "content": { "Ref": "SMTPUserID" },
