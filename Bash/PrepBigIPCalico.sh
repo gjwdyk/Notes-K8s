@@ -120,7 +120,7 @@ chmod +x calicoctl
 sudo mv calicoctl /usr/local/bin
 sudo mkdir /etc/calico
 
-sudo cat <<EOF > /home/ubuntu/calicoctl.cfg
+cat <<EOF > /home/ubuntu/calicoctl.cfg
 apiVersion: projectcalico.org/v3
 kind: CalicoAPIConfig
 metadata:
