@@ -2501,6 +2501,16 @@
       { "Ref": "BigIPManagementGUIPort" }, " ",
       { "Fn::FindInMap": [ "IPAddress", "K8sPod", "CIDR" ] }, " ",
       { "Ref": "BigIPAdminPassword" },
+      { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] },
+      { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] },
+      { "Fn::If": [ "CreateWorkerNode2", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode3", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker3", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode4", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker4", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode5", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker5", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode6", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker6", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode7", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] } ] ] }, "" ] },
+      { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] } ] ] }, "" ] },
 	 "\n",
 
      "\n"
