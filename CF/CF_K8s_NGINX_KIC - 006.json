@@ -1150,6 +1150,7 @@
      { "IpProtocol" : "tcp", "FromPort" : 53, "ToPort" : 53, "CidrIp" : "0.0.0.0/0" },
      { "IpProtocol" : "tcp", "FromPort" : 80, "ToPort" : 80, "CidrIp" : "0.0.0.0/0" },
      { "IpProtocol" : "tcp", "FromPort" : 443, "ToPort" : 443, "CidrIp" : "0.0.0.0/0" },
+     { "IpProtocol" : "tcp", "FromPort" : 8022, "ToPort" : 8022, "CidrIp" : "0.0.0.0/0" },
      { "IpProtocol" : "tcp", "FromPort" : 8443, "ToPort" : 8443, "CidrIp" : "0.0.0.0/0" }
     ],
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPSecurityGroup" ] ] } } ]
