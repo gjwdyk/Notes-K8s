@@ -19,7 +19,7 @@ if [[ $DeclarationURLPost =~ $url_regex ]]; then
     echo "Custom config download complete; checking for valid JSON."
     cat $file_loc | jq .class
     if [[ $? == 0 ]]; then
-      response_code=$(/usr/bin/curl -skvvu admin:`cat /config/BigIPAdminPassword` -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Expect:" https://localhost:${managementGuiPort}/mgmt/shared/appsvcs/declare -d @$file_loc -o /dev/null)
+      response_code=$(/usr/bin/curl --retry 333 -skvvu admin:`cat /config/BigIPAdminPassword` -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Expect:" https://localhost:${managementGuiPort}/mgmt/shared/appsvcs/declare -d @$file_loc -o /dev/null)
       if [[ $response_code == 200 || $response_code == 502 ]]; then
         echo "Deployment of custom application succeeded."
         deployed="yes"
