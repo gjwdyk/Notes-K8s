@@ -2306,20 +2306,6 @@
       { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] } ] ] }, "" ] },
       { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] } ] ] }, "" ] },
      "\n",
-     "sudo bash /home/ubuntu/K8sServicePreparationScript\n",
-
-     { "Fn::If": [ "SkipNGINXCompilation", "", { "Fn::Join": [ "", [
-      "sudo printf \"", { "Ref": "NGINXRepositoryCertificate" }, "\" >> /home/ubuntu/nginx-repo.crt\n",
-      "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.crt\n",
-      "chmod 600 /home/ubuntu/nginx-repo.crt\n",
-      "sudo printf \"", { "Ref": "NGINXRepositoryPrivateKey" }, "\" >> /home/ubuntu/nginx-repo.key\n",
-      "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.key\n",
-      "chmod 600 /home/ubuntu/nginx-repo.key\n"
-     ] ] } ] },
-     "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, "\n",
-     "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
-
-     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, "\n",
 
      "runuser -u ubuntu -- bash /home/ubuntu/BigIPCISScript ",
 	  { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, " ",
@@ -2337,6 +2323,21 @@
       { "Fn::If": [ "CreateWorkerNode8", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] } ] ] }, "" ] },
       { "Fn::If": [ "CreateWorkerNode9", { "Fn::Join": [ "", [ " ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] } ] ] }, "" ] },
 	 "\n",
+
+     "sudo bash /home/ubuntu/K8sServicePreparationScript\n",
+
+     { "Fn::If": [ "SkipNGINXCompilation", "", { "Fn::Join": [ "", [
+      "sudo printf \"", { "Ref": "NGINXRepositoryCertificate" }, "\" >> /home/ubuntu/nginx-repo.crt\n",
+      "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.crt\n",
+      "chmod 600 /home/ubuntu/nginx-repo.crt\n",
+      "sudo printf \"", { "Ref": "NGINXRepositoryPrivateKey" }, "\" >> /home/ubuntu/nginx-repo.key\n",
+      "chown ubuntu:ubuntu /home/ubuntu/nginx-repo.key\n",
+      "chmod 600 /home/ubuntu/nginx-repo.key\n"
+     ] ] } ] },
+     "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, "\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
+
+     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, "\n",
 
      "\n"
     ]]}}
