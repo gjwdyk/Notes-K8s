@@ -62,14 +62,6 @@ tmsh create ltm pool /Common/SSHMasterK8s_Pool { members replace-all-with { /Com
 
 
 
-#╔═════════════════════════╗
-#║ Optional: Default Route ║
-#╚═════════════════════════╝
-
-tmsh modify net route default { pool /Common/InternetGateway_Pool }
-
-
-
 #╔═════════════════════╗
 #║   Fast L4 Profile   ║
 #╚═════════════════════╝
