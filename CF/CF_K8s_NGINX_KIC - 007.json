@@ -612,7 +612,7 @@
   },
   "ConfigurationMethod": {
    "AllowedValues": [ "None", "AS3", "TMSH", "AS3 and TMSH" ],
-   "Default": "AS3",
+   "Default": "TMSH",
    "Description": "Select the method to configure the Big-IP. Note that between AS3 and TMSH there are possibilities for conflicts, and therefore both AS3 File and TMSH Commands File need to be sync-ed between each other.",
    "Type": "String"
   },
