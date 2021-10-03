@@ -590,7 +590,7 @@
   },
   "BigIPModules": {
    "Type": "String",
-   "Default": "ltm:nominal,avr:nominal,gtm:nominal,afm:nominal,asm:nominal,fps:nominal,apm:nominal",
+   "Default": "ltm:nominal,avr:nominal,gtm:nominal,afm:nominal,asm:nominal,fps:nominal",
    "Description": "Comma separated list of modules and levels to provision, for example: ltm:nominal,avr:nominal,asm:nominal,apm:nominal . Provisionable modules are: afm, am, apm, asm, avr, cgnat, dos, fps, gtm, ilx, lc, ltm, pem, sslo, swg, urldb ."
   },
   "NTPServer": {
