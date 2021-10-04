@@ -750,7 +750,7 @@ data:
       "class": "AS3",
       "declaration": {
         "class": "ADC",
-        "schemaVersion": "3.26.0",
+        "schemaVersion": "3.25.0",
         "id": "example-virtual-server-for-f5-demo-httpd",
         "label": "http",
         "remark": "A1 example",
