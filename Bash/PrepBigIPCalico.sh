@@ -217,36 +217,6 @@ done
 
 
 
-#╔══════════╗
-#║   Test   ║
-#╚══════════╝
-
-#sed 's/replicas: 2/replicas: 9/g' /home/ubuntu/agilitydocs/docs/class1/kubernetes/deployment-hello-world.yaml > /home/ubuntu/deployment-hello-world.yaml
-#kubectl create -f /home/ubuntu/deployment-hello-world.yaml
-#
-#Loop="Yes"
-#while ( [ $Loop == "Yes" ] ) ; do
-# if [ `kubectl get pods --all-namespaces | grep -i '\<f5-hello-world-web' | grep -i 'Running' | wc -l` -ge 9 ] ; then
-#  echo "`date +%Y%m%d%H%M%S` ALL pod f5-hello-world-web are running."
-#  Loop="No"
-# else
-#  echo "`date +%Y%m%d%H%M%S` Waiting for one or more pod f5-hello-world-web to run."
-#  sleep $Loop_Period
-# fi
-#done
-#
-#
-#
-#cp /home/ubuntu/agilitydocs/docs/class1/kubernetes/clusterip-service-hello-world.yaml /home/ubuntu/clusterip-service-hello-world.yaml
-#kubectl create -f /home/ubuntu/clusterip-service-hello-world.yaml
-#
-#sed s/kubernetes/$PartitionName/g /home/ubuntu/agilitydocs/docs/class1/kubernetes/ingress-hello-world.yaml > /home/ubuntu/Temporary1.yaml
-#sed s/10.1.1.4/$BigIPAddress/g /home/ubuntu/Temporary1.yaml > /home/ubuntu/ingress-hello-world.yaml
-#rm /home/ubuntu/Temporary*.yaml
-#kubectl create -f /home/ubuntu/ingress-hello-world.yaml
-
-
-
 #╔═══════════════════╗
 #║   Review Status   ║
 #╚═══════════════════╝
