@@ -351,20 +351,15 @@
    "Type": "AWS::EC2::KeyPair::KeyName",
    "Description": "EC2 KeyPair to enable SSH access to the EC2 instances. Select the SSH KeyPair you have access to."
   },
-  "ParentDomainName": {
-   "Type": "String",
-   "Default": "aadc.link",
-   "Description": "Existing registered Domain Name in AWS Route53 which you have access to add, modify and delete."
-  },
 
-  "K8sSSHPrivateKey": {
+  "SSHPrivateKey": {
    "Type": "String",
    "NoEcho": "true",
    "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$",
    "ConstraintDescription": "Kindly check the K8sSSHPrivateKey parameter input.",
    "Description": "Paste the text content of a SSH Private Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup. It is STRONGLY RECOMMENDED that you create and use your own KeyPair for security purposes."
   },
-  "K8sSSHPublicKey": {
+  "SSHPublicKey": {
    "Type": "String",
    "NoEcho": "true",
    "AllowedPattern": "^([0-9a-zA-Z\\-]+) ([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2}) ([0-9a-zA-Z\\-]+)@([0-9a-zA-Z\\-]+)$",
