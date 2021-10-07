@@ -327,6 +327,14 @@
    "ConstraintDescription": "Kindly check the TagPreFix parameter input. Only Alphanumeric characters allowed.",
    "Description": "Prefix to be given to all possible resources created by this stack-template."
   },
+  "TagOwnerEmail": {
+   "Type": "String",
+   "Default": "john.doe@domain.tld",
+   "AllowedPattern": "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$",
+   "ConstraintDescription": "Kindly check the TagOwner parameter input to follow valid email address convention.",
+   "Description": "Tag which will be attached to all possible resources created by this stack-template."
+  },
+
   "UbuntuImageID": {
    "Type": "String",
    "Default": "Default",
@@ -351,6 +359,12 @@
    "Type": "AWS::EC2::KeyPair::KeyName",
    "Description": "EC2 KeyPair to enable SSH access to the EC2 instances. Select the SSH KeyPair you have access to."
   },
+  "TimeZone": {
+   "Default": "Asia/Singapore",
+   "AllowedValues": [ "Africa/Abidjan","Africa/Accra","Africa/Algiers","Africa/Bissau","Africa/Cairo","Africa/Casablanca","Africa/Ceuta","Africa/El_Aaiun","Africa/Johannesburg","Africa/Juba","Africa/Khartoum","Africa/Lagos","Africa/Maputo","Africa/Monrovia","Africa/Nairobi","Africa/Ndjamena","Africa/Sao_Tome","Africa/Tripoli","Africa/Tunis","Africa/Windhoek","America/Adak","America/Anchorage","America/Araguaina","America/Argentina/Buenos_Aires","America/Argentina/Catamarca","America/Argentina/Cordoba","America/Argentina/Jujuy","America/Argentina/La_Rioja","America/Argentina/Mendoza","America/Argentina/Rio_Gallegos","America/Argentina/Salta","America/Argentina/San_Juan","America/Argentina/San_Luis","America/Argentina/Tucuman","America/Argentina/Ushuaia","America/Asuncion","America/Atikokan","America/Bahia","America/Bahia_Banderas","America/Barbados","America/Belem","America/Belize","America/Blanc-Sablon","America/Boa_Vista","America/Bogota","America/Boise","America/Cambridge_Bay","America/Campo_Grande","America/Cancun","America/Caracas","America/Cayenne","America/Chicago","America/Chihuahua","America/Costa_Rica","America/Creston","America/Cuiaba","America/Curacao","America/Danmarkshavn","America/Dawson","America/Dawson_Creek","America/Denver","America/Detroit","America/Edmonton","America/Eirunepe","America/El_Salvador","America/Fort_Nelson","America/Fortaleza","America/Glace_Bay","America/Goose_Bay","America/Grand_Turk","America/Guatemala","America/Guayaquil","America/Guyana","America/Halifax","America/Havana","America/Hermosillo","America/Indiana/Indianapolis","America/Indiana/Knox","America/Indiana/Marengo","America/Indiana/Petersburg","America/Indiana/Tell_City","America/Indiana/Vevay","America/Indiana/Vincennes","America/Indiana/Winamac","America/Inuvik","America/Iqaluit","America/Jamaica","America/Juneau","America/Kentucky/Louisville","America/Kentucky/Monticello","America/La_Paz","America/Lima","America/Los_Angeles","America/Maceio","America/Managua","America/Manaus","America/Martinique","America/Matamoros","America/Mazatlan","America/Menominee","America/Merida","America/Metlakatla","America/Mexico_City","America/Miquelon","America/Moncton","America/Monterrey","America/Montevideo","America/Nassau","America/New_York","America/Nipigon","America/Nome","America/Noronha","America/North_Dakota/Beulah","America/North_Dakota/Center","America/North_Dakota/New_Salem","America/Nuuk","America/Ojinaga","America/Panama","America/Pangnirtung","America/Paramaribo","America/Phoenix","America/Port-au-Prince","America/Port_of_Spain","America/Porto_Velho","America/Puerto_Rico","America/Punta_Arenas","America/Rainy_River","America/Rankin_Inlet","America/Recife","America/Regina","America/Resolute","America/Rio_Branco","America/Santarem","America/Santiago","America/Santo_Domingo","America/Sao_Paulo","America/Scoresbysund","America/Sitka","America/St_Johns","America/Swift_Current","America/Tegucigalpa","America/Thule","America/Thunder_Bay","America/Tijuana","America/Toronto","America/Vancouver","America/Whitehorse","America/Winnipeg","America/Yakutat","America/Yellowknife","Antarctica/Casey","Antarctica/Davis","Antarctica/DumontDUrville","Antarctica/Macquarie","Antarctica/Mawson","Antarctica/Palmer","Antarctica/Rothera","Antarctica/Syowa","Antarctica/Troll","Antarctica/Vostok","Asia/Almaty","Asia/Amman","Asia/Anadyr","Asia/Aqtau","Asia/Aqtobe","Asia/Ashgabat","Asia/Atyrau","Asia/Baghdad","Asia/Baku","Asia/Bangkok","Asia/Barnaul","Asia/Beirut","Asia/Bishkek","Asia/Brunei","Asia/Chita","Asia/Choibalsan","Asia/Colombo","Asia/Damascus","Asia/Dhaka","Asia/Dili","Asia/Dubai","Asia/Dushanbe","Asia/Famagusta","Asia/Gaza","Asia/Hebron","Asia/Ho_Chi_Minh","Asia/Hong_Kong","Asia/Hovd","Asia/Irkutsk","Asia/Jakarta","Asia/Jayapura","Asia/Jerusalem","Asia/Kabul","Asia/Kamchatka","Asia/Karachi","Asia/Kathmandu","Asia/Khandyga","Asia/Kolkata","Asia/Krasnoyarsk","Asia/Kuala_Lumpur","Asia/Kuching","Asia/Macau","Asia/Magadan","Asia/Makassar","Asia/Manila","Asia/Nicosia","Asia/Novokuznetsk","Asia/Novosibirsk","Asia/Omsk","Asia/Oral","Asia/Pontianak","Asia/Pyongyang","Asia/Qatar","Asia/Qostanay","Asia/Qyzylorda","Asia/Riyadh","Asia/Sakhalin","Asia/Samarkand","Asia/Seoul","Asia/Shanghai","Asia/Singapore","Asia/Srednekolymsk","Asia/Taipei","Asia/Tashkent","Asia/Tbilisi","Asia/Tehran","Asia/Thimphu","Asia/Tokyo","Asia/Tomsk","Asia/Ulaanbaatar","Asia/Urumqi","Asia/Ust-Nera","Asia/Vladivostok","Asia/Yakutsk","Asia/Yangon","Asia/Yekaterinburg","Asia/Yerevan","Atlantic/Azores","Atlantic/Bermuda","Atlantic/Canary","Atlantic/Cape_Verde","Atlantic/Faroe","Atlantic/Madeira","Atlantic/Reykjavik","Atlantic/South_Georgia","Atlantic/Stanley","Australia/Adelaide","Australia/Brisbane","Australia/Broken_Hill","Australia/Darwin","Australia/Eucla","Australia/Hobart","Australia/Lindeman","Australia/Lord_Howe","Australia/Melbourne","Australia/Perth","Australia/Sydney","Europe/Amsterdam","Europe/Andorra","Europe/Astrakhan","Europe/Athens","Europe/Belgrade","Europe/Berlin","Europe/Brussels","Europe/Bucharest","Europe/Budapest","Europe/Chisinau","Europe/Copenhagen","Europe/Dublin","Europe/Gibraltar","Europe/Helsinki","Europe/Istanbul","Europe/Kaliningrad","Europe/Kiev","Europe/Kirov","Europe/Lisbon","Europe/London","Europe/Luxembourg","Europe/Madrid","Europe/Malta","Europe/Minsk","Europe/Monaco","Europe/Moscow","Europe/Oslo","Europe/Paris","Europe/Prague","Europe/Riga","Europe/Rome","Europe/Samara","Europe/Saratov","Europe/Simferopol","Europe/Sofia","Europe/Stockholm","Europe/Tallinn","Europe/Tirane","Europe/Ulyanovsk","Europe/Uzhgorod","Europe/Vienna","Europe/Vilnius","Europe/Volgograd","Europe/Warsaw","Europe/Zaporozhye","Europe/Zurich","Indian/Chagos","Indian/Christmas","Indian/Cocos","Indian/Kerguelen","Indian/Mahe","Indian/Maldives","Indian/Mauritius","Indian/Reunion","Pacific/Apia","Pacific/Auckland","Pacific/Bougainville","Pacific/Chatham","Pacific/Chuuk","Pacific/Easter","Pacific/Efate","Pacific/Enderbury","Pacific/Fakaofo","Pacific/Fiji","Pacific/Funafuti","Pacific/Galapagos","Pacific/Gambier","Pacific/Guadalcanal","Pacific/Guam","Pacific/Honolulu","Pacific/Kiritimati","Pacific/Kosrae","Pacific/Kwajalein","Pacific/Majuro","Pacific/Marquesas","Pacific/Nauru","Pacific/Niue","Pacific/Norfolk","Pacific/Noumea","Pacific/Pago_Pago","Pacific/Palau","Pacific/Pitcairn","Pacific/Pohnpei","Pacific/Port_Moresby","Pacific/Rarotonga","Pacific/Tahiti","Pacific/Tarawa","Pacific/Tongatapu","Pacific/Wake","Pacific/Wallis","UTC" ],
+   "Description": "Select a TimeZone to be applied for all Nodes.",
+   "Type": "String"
+  },
 
   "SSHPrivateKey": {
    "Type": "String",
@@ -366,146 +380,18 @@
    "ConstraintDescription": "Kindly check the K8sSSHPublicKey parameter input.",
    "Description": "Paste the text content of a SSH Public Key used for K8s Master to connect and send instruction to K8s Worker Nodes during setup."
   },
-  "TimeZone": {
-   "Default": "Asia/Singapore",
-   "AllowedValues": [ "Africa/Abidjan","Africa/Accra","Africa/Algiers","Africa/Bissau","Africa/Cairo","Africa/Casablanca","Africa/Ceuta","Africa/El_Aaiun","Africa/Johannesburg","Africa/Juba","Africa/Khartoum","Africa/Lagos","Africa/Maputo","Africa/Monrovia","Africa/Nairobi","Africa/Ndjamena","Africa/Sao_Tome","Africa/Tripoli","Africa/Tunis","Africa/Windhoek","America/Adak","America/Anchorage","America/Araguaina","America/Argentina/Buenos_Aires","America/Argentina/Catamarca","America/Argentina/Cordoba","America/Argentina/Jujuy","America/Argentina/La_Rioja","America/Argentina/Mendoza","America/Argentina/Rio_Gallegos","America/Argentina/Salta","America/Argentina/San_Juan","America/Argentina/San_Luis","America/Argentina/Tucuman","America/Argentina/Ushuaia","America/Asuncion","America/Atikokan","America/Bahia","America/Bahia_Banderas","America/Barbados","America/Belem","America/Belize","America/Blanc-Sablon","America/Boa_Vista","America/Bogota","America/Boise","America/Cambridge_Bay","America/Campo_Grande","America/Cancun","America/Caracas","America/Cayenne","America/Chicago","America/Chihuahua","America/Costa_Rica","America/Creston","America/Cuiaba","America/Curacao","America/Danmarkshavn","America/Dawson","America/Dawson_Creek","America/Denver","America/Detroit","America/Edmonton","America/Eirunepe","America/El_Salvador","America/Fort_Nelson","America/Fortaleza","America/Glace_Bay","America/Goose_Bay","America/Grand_Turk","America/Guatemala","America/Guayaquil","America/Guyana","America/Halifax","America/Havana","America/Hermosillo","America/Indiana/Indianapolis","America/Indiana/Knox","America/Indiana/Marengo","America/Indiana/Petersburg","America/Indiana/Tell_City","America/Indiana/Vevay","America/Indiana/Vincennes","America/Indiana/Winamac","America/Inuvik","America/Iqaluit","America/Jamaica","America/Juneau","America/Kentucky/Louisville","America/Kentucky/Monticello","America/La_Paz","America/Lima","America/Los_Angeles","America/Maceio","America/Managua","America/Manaus","America/Martinique","America/Matamoros","America/Mazatlan","America/Menominee","America/Merida","America/Metlakatla","America/Mexico_City","America/Miquelon","America/Moncton","America/Monterrey","America/Montevideo","America/Nassau","America/New_York","America/Nipigon","America/Nome","America/Noronha","America/North_Dakota/Beulah","America/North_Dakota/Center","America/North_Dakota/New_Salem","America/Nuuk","America/Ojinaga","America/Panama","America/Pangnirtung","America/Paramaribo","America/Phoenix","America/Port-au-Prince","America/Port_of_Spain","America/Porto_Velho","America/Puerto_Rico","America/Punta_Arenas","America/Rainy_River","America/Rankin_Inlet","America/Recife","America/Regina","America/Resolute","America/Rio_Branco","America/Santarem","America/Santiago","America/Santo_Domingo","America/Sao_Paulo","America/Scoresbysund","America/Sitka","America/St_Johns","America/Swift_Current","America/Tegucigalpa","America/Thule","America/Thunder_Bay","America/Tijuana","America/Toronto","America/Vancouver","America/Whitehorse","America/Winnipeg","America/Yakutat","America/Yellowknife","Antarctica/Casey","Antarctica/Davis","Antarctica/DumontDUrville","Antarctica/Macquarie","Antarctica/Mawson","Antarctica/Palmer","Antarctica/Rothera","Antarctica/Syowa","Antarctica/Troll","Antarctica/Vostok","Asia/Almaty","Asia/Amman","Asia/Anadyr","Asia/Aqtau","Asia/Aqtobe","Asia/Ashgabat","Asia/Atyrau","Asia/Baghdad","Asia/Baku","Asia/Bangkok","Asia/Barnaul","Asia/Beirut","Asia/Bishkek","Asia/Brunei","Asia/Chita","Asia/Choibalsan","Asia/Colombo","Asia/Damascus","Asia/Dhaka","Asia/Dili","Asia/Dubai","Asia/Dushanbe","Asia/Famagusta","Asia/Gaza","Asia/Hebron","Asia/Ho_Chi_Minh","Asia/Hong_Kong","Asia/Hovd","Asia/Irkutsk","Asia/Jakarta","Asia/Jayapura","Asia/Jerusalem","Asia/Kabul","Asia/Kamchatka","Asia/Karachi","Asia/Kathmandu","Asia/Khandyga","Asia/Kolkata","Asia/Krasnoyarsk","Asia/Kuala_Lumpur","Asia/Kuching","Asia/Macau","Asia/Magadan","Asia/Makassar","Asia/Manila","Asia/Nicosia","Asia/Novokuznetsk","Asia/Novosibirsk","Asia/Omsk","Asia/Oral","Asia/Pontianak","Asia/Pyongyang","Asia/Qatar","Asia/Qostanay","Asia/Qyzylorda","Asia/Riyadh","Asia/Sakhalin","Asia/Samarkand","Asia/Seoul","Asia/Shanghai","Asia/Singapore","Asia/Srednekolymsk","Asia/Taipei","Asia/Tashkent","Asia/Tbilisi","Asia/Tehran","Asia/Thimphu","Asia/Tokyo","Asia/Tomsk","Asia/Ulaanbaatar","Asia/Urumqi","Asia/Ust-Nera","Asia/Vladivostok","Asia/Yakutsk","Asia/Yangon","Asia/Yekaterinburg","Asia/Yerevan","Atlantic/Azores","Atlantic/Bermuda","Atlantic/Canary","Atlantic/Cape_Verde","Atlantic/Faroe","Atlantic/Madeira","Atlantic/Reykjavik","Atlantic/South_Georgia","Atlantic/Stanley","Australia/Adelaide","Australia/Brisbane","Australia/Broken_Hill","Australia/Darwin","Australia/Eucla","Australia/Hobart","Australia/Lindeman","Australia/Lord_Howe","Australia/Melbourne","Australia/Perth","Australia/Sydney","Europe/Amsterdam","Europe/Andorra","Europe/Astrakhan","Europe/Athens","Europe/Belgrade","Europe/Berlin","Europe/Brussels","Europe/Bucharest","Europe/Budapest","Europe/Chisinau","Europe/Copenhagen","Europe/Dublin","Europe/Gibraltar","Europe/Helsinki","Europe/Istanbul","Europe/Kaliningrad","Europe/Kiev","Europe/Kirov","Europe/Lisbon","Europe/London","Europe/Luxembourg","Europe/Madrid","Europe/Malta","Europe/Minsk","Europe/Monaco","Europe/Moscow","Europe/Oslo","Europe/Paris","Europe/Prague","Europe/Riga","Europe/Rome","Europe/Samara","Europe/Saratov","Europe/Simferopol","Europe/Sofia","Europe/Stockholm","Europe/Tallinn","Europe/Tirane","Europe/Ulyanovsk","Europe/Uzhgorod","Europe/Vienna","Europe/Vilnius","Europe/Volgograd","Europe/Warsaw","Europe/Zaporozhye","Europe/Zurich","Indian/Chagos","Indian/Christmas","Indian/Cocos","Indian/Kerguelen","Indian/Mahe","Indian/Maldives","Indian/Mauritius","Indian/Reunion","Pacific/Apia","Pacific/Auckland","Pacific/Bougainville","Pacific/Chatham","Pacific/Chuuk","Pacific/Easter","Pacific/Efate","Pacific/Enderbury","Pacific/Fakaofo","Pacific/Fiji","Pacific/Funafuti","Pacific/Galapagos","Pacific/Gambier","Pacific/Guadalcanal","Pacific/Guam","Pacific/Honolulu","Pacific/Kiritimati","Pacific/Kosrae","Pacific/Kwajalein","Pacific/Majuro","Pacific/Marquesas","Pacific/Nauru","Pacific/Niue","Pacific/Norfolk","Pacific/Noumea","Pacific/Pago_Pago","Pacific/Palau","Pacific/Pitcairn","Pacific/Pohnpei","Pacific/Port_Moresby","Pacific/Rarotonga","Pacific/Tahiti","Pacific/Tarawa","Pacific/Tongatapu","Pacific/Wake","Pacific/Wallis","UTC" ],
-   "Description": "Select a TimeZone to be applied for all Nodes.",
-   "Type": "String"
-  },
 
-  "OSPreparationScript": {
+  "DomainNames": {
+   "Type": "String",
+   "Default": "aadc.link",
+   "Description": "Existing registered Domain Name in AWS Route53 which you have access to add, modify and delete."
+  },
+  "CertBotPreparationScript": {
    "Type": "String",
    "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepOS.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
    "ConstraintDescription": "Kindly check the OSPreparationScript parameter input. Ensure it follows common URL pattern.",
    "Description": "URL of a bash script used to prepare the ubuntu OS for Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "DockerPreparationScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepDocker.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-   "ConstraintDescription": "Kindly check the DockerPreparationScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to prepare the containerization platform for Kubernetes implementation (e.g. Docker). If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "CommonK8sPreparationScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepCommonK8sCIS.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-   "ConstraintDescription": "Kindly check the CommonK8sPreparationScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to prepare the common factors of Kubernetes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "K8sMasterPreparationScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sMasterCalico.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-   "ConstraintDescription": "Kindly check the K8sMasterPreparationScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to prepare the Kubernetes' master node implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "ClusterNetworkConfiguration": {
-   "Type": "String",
-   "Default": "https://docs.projectcalico.org/manifests/calico.yaml",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-   "ConstraintDescription": "Kindly check the ClusterNetworkConfiguration parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a YAML file to be used to implement a Cluster Networking within the Kubernetes Cluster (e.g. flannel). If the YAML file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "K8sWorkerPreparationScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sWorkerCIS.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$",
-   "ConstraintDescription": "Kindly check the K8sWorkerPreparationScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to prepare the Kubernetes' worker nodes implementation. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "K8sServicePreparationScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepK8sServiceCIS.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the K8sServicePreparationScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to deploy fundamental K8s services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-
-  "CompileNGINXPlusScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/CompileNGINXPlusCIS.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the CompileNGINXPlusScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script to compile NGINX+ . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "SkipNGINXPlusCompilation": {
-   "Type": "String",
-   "Default": "Yes",
-   "AllowedValues": [ "Yes", "No" ],
-   "AllowedPattern": "^Yes|No$",
-   "Description": "Whether to Skip Compilation of NGINX+ ; Example: If you have compiled the NGINX+ before."
-  },
-  "NGINXRepositoryCertificate": {
-   "Type": "String",
-   "NoEcho": "true",
-   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$|^$",
-   "ConstraintDescription": "Kindly check the NGINXRepositoryCertificate parameter input.",
-   "Description": "Paste the text content of a NGINX+ Repository Certificate (i.e. nginx-repo.crt file). You can skip this parameter if you're also skipping the NGINX+ Compilation."
-  },
-  "NGINXRepositoryPrivateKey": {
-   "Type": "String",
-   "NoEcho": "true",
-   "AllowedPattern": "^([0-9a-zA-Z\\-\\ ]+)\\\\n([0-9a-zA-Z\\/\\+\\\\]+)([\\=]{0,2})\\\\n([0-9a-zA-Z\\-\\ ]+)$|^$",
-   "ConstraintDescription": "Kindly check the NGINXRepositoryPrivateKey parameter input.",
-   "Description": "Paste the text content of a NGINX+ Repository Private Key (i.e. nginx-repo.key file). You can skip this parameter if you're also skipping the NGINX+ Compilation."
-  },
-  "DockerHubUserID": {
-   "Type": "String",
-   "Description": "User ID used to access to the (Docker Hub) Repository, for uploading to and downloading from the compiled NGINX+ container. You can skip this parameter if you're also skipping the NGINX+ Compilation. Note that the Repository's User ID must be in sync with the Repository's (Complete) Name, which contains also the User ID information."
-  },
-  "DockerHubPassword": {
-   "Type": "String",
-   "NoEcho": "true",
-   "Description": "Password for the User ID to access the (Docker Hub) Repository. You can skip this parameter if you're also skipping the NGINX+ Compilation."
-  },
-  "DockerHubRepositoryName": {
-   "Type": "String",
-   "Default": "gjwdyk/nginx-ingress",
-   "Description": "The (Docker Hub) Repository's Name, for uploading to and downloading from the compiled NGINX+ container. In case of Docker Hub, use format UserID/RepositoryName . Note that the supplied Repository's (Complete) Name, which also contains the Repository's User ID information, must be in sync with the Repository's User ID parameter."
-  },
-  "NGINXPlusVersion": {
-   "Type": "String",
-   "Default": "v1.11.3",
-   "Description": "Paste the version of NGINX+ to be implemented."
-  },
-  "NGINXPlusIngressScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepNGINXPlusKICCIS.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the NGINXPlusIngressScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script to implement NGINX+ as K8s Ingress Controller . If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-
-  "ApplicationServiceScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepApplicationServiceCIS.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the ApplicationServiceScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-
-  "BigIPCISScript": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/PrepBigIPCalico.sh",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the BigIPCISScript parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a bash script used to End User's Application Services within the Kubernetes cluster. If the bash script file is located at AWS S3, ensure that this CloudFormation template can read the file. If the bash script file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "BigIPCISNodeTemplate": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/yaml/bigip-node.template",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the BigIPCISNodeTemplate parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a YAML template used to integrate Big-IP as external node within the Kubernetes cluster. If the YAML template file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML template file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "BigIPCISClusterDeploymentTemplate": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/yaml/bigip-cluster-deployment.template",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "ConstraintDescription": "Kindly check the BigIPCISClusterDeploymentTemplate parameter input. Ensure it follows common URL pattern.",
-   "Description": "URL of a YAML template used to deploy the K8s Big-IP Controller (F5's CIS) within the Kubernetes cluster. If the YAML template file is located at AWS S3, ensure that this CloudFormation template can read the file. If the YAML template file is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
 
   "BigIPImageID": {
@@ -618,24 +504,13 @@
    "AllowedPattern": "^(BIGIP\\-)((([0-9]+)\\.)+)([0-9]+)\\-((([0-9]+)\\.)+)([0-9]+)\\.iso$|^none$",
    "Description": "File Name of the upgrade .iso image."
   },
-  "BigIPTrafficTLSKey": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Certificates/aadc.link.rsa.key",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "Description": "URL of the Private Key used to create the below TLS Certificate. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
-  "BigIPTrafficTLSCertificate": {
-   "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/BigIP-Lab/master/Certificates/aadc.link.rsa.crt",
-   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "Description": "URL of the TLS Certificate which Big-IP will use to encrypt or decrypt the requests and responses between users and servers. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
-  },
   "AllowPhoneHome": {
    "AllowedValues": [ "Yes", "No" ],
    "Default": "No",
    "Description": "This deployment can send anonymous device statistics to F5 to help us determine how to improve our solutions. If you select **No**, statistics are not sent.",
    "Type": "String"
   },
+
   "Lidsa": {
    "Type": "String",
    "NoEcho": "true",
@@ -653,7 +528,8 @@
       "default": "Name Tags Parameters"
      },
      "Parameters": [
-      "TagPreFix"
+      "TagPreFix",
+      "TagOwnerEmail"
      ]
     },
     {
