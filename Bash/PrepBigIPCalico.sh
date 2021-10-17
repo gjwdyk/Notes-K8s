@@ -186,9 +186,6 @@ if [ $DEBUG == "ON" ] ; then echo "`date +%Y%m%d%H%M%S` BigIPMAC=$BigIPMAC" ; fi
 
 
 
-git clone -b develop https://github.com/gjwdyk/f5-agility-labs-containers.git ~/agilitydocs
-cd ~/agilitydocs/docs/class1/kubernetes
-
 kubectl create secret generic bigip-login -n kube-system --from-literal=username=$User --from-literal=password=$Password
 kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
 kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr

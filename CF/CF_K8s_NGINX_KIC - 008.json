@@ -3218,66 +3218,12 @@
   },
   "BigIPManagementURL": {
    "Description": "URL of Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Ref": "BigIPEIP" }, ":8443/" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
   },
-
-  "K8sDashboardURL": {
-   "Description": "URL of K8s Dashboard. Run this command to obtain a token: kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath=\"{.secrets[0].name}\") -o go-template=\"{{.data.token | base64decode}}\"",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Ref": "BigIPEIP" }, ":30443/" ] ] }
-  },
-  "PrometheusURL": {
-   "Description": "URL of Prometheus",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":30081/" ] ] }
-  },
-  "GrafanaURL": {
-   "Description": "URL of Grafana",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":30082/" ] ] }
-  },
-  "CafeWaterURL": {
-   "Description": "URL of Cafe's Water API/Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/water" ] ] }
-  },
-  "CafeTeaURL": {
-   "Description": "URL of Cafe's Tea API/Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/tea" ] ] }
-  },
-  "CafeCoffeeURL": {
-   "Description": "URL of Cafe's Coffee API/Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/coffee" ] ] }
-  },
-  "CafeMilkURL": {
-   "Description": "URL of Cafe's Milk API/Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":31080/milk" ] ] }
-  },
-  "DVWAURL": {
-   "Description": "URL of DVWA Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":31081/" ] ] }
-  },
-  "HackazonURL": {
-   "Description": "URL of Hackazon Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":31082/" ] ] }
-  },
-  "JuiceShopURL": {
-   "Description": "URL of Juice-Shop Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":31083/" ] ] }
-  },
-  "F5DemoApplicationURL": {
-   "Description": "URL of F5-Demo API/Application",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":31084/" ] ] }
-  },
-  "F5DemoHTTPOrangeURL": {
-   "Description": "URL of F5-Demo HTTP API/Application in Orange Color",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":31085/" ] ] }
-  },
-  "F5DemoHTTPGreenURL": {
-   "Description": "URL of F5-Demo HTTP API/Application in Green Color",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":31086/" ] ] }
-  },
-  "F5DemoHTTPBlueURL": {
-   "Description": "URL of F5-Demo HTTP API/Application in Blue Color",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Ref": "BigIPEIP" }, ":31087/" ] ] }
+  "ServiceURL": {
+   "Description": "URL of Service (F5-Demo HTTP API/Application)",
+   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":80/" ] ] }
   }
-
  }
 
 }
