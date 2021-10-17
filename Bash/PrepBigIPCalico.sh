@@ -122,6 +122,7 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 # Original URL is https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
 # however unfortunately some people have short-circuit in the head
 # Original URL can not be downloaded by script, download manual is OK
+# So to do Automation, one must do it manually. Great!
 #
 #curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
 
