@@ -4,6 +4,11 @@ echo "Executing $0"
 
 cd /home/ubuntu
 
+Loop="Yes"
+Loop_Period="1m"
+
+
+
 kubectl create -f - <<EOF
 apiVersion: v1
 kind: Namespace
