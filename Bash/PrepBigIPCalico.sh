@@ -119,7 +119,13 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 
 
 
-curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
+# Original URL is https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
+# however unfortunately some people have short-circuit in the head
+# Original URL can not be downloaded by script, download manual is OK
+#
+#curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
+
+curl -O -L https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.20.2/calicoctl
 chmod +x calicoctl
 sudo mv calicoctl /usr/local/bin
 sudo mkdir /etc/calico
