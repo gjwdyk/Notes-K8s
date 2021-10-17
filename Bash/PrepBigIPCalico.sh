@@ -209,8 +209,9 @@ rm /home/ubuntu/Temporary*.yaml
 kubectl create -f /home/ubuntu/BigIPCISClusterDeployment.yaml
 
 Loop="Yes"
+ItemCount=`kubectl get pods --all-namespaces | grep -i '\<k8s-bigip-ctlr' | wc -l`
 while ( [ $Loop == "Yes" ] ) ; do
- if [ `kubectl get pods --all-namespaces | grep -i '\<k8s-bigip-ctlr' | grep -i 'Running' | wc -l` -ge 1 ] ; then
+ if [ `kubectl get pods --all-namespaces | grep -i '\<k8s-bigip-ctlr' | grep -i 'Running' | wc -l` -ge $ItemCount ] ; then
   echo "`date +%Y%m%d%H%M%S` Pod k8s-bigip-ctlr is running."
   Loop="No"
  else

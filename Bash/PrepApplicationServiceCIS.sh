@@ -795,12 +795,13 @@ EOF
 
 
 Loop="Yes"
+ItemCount=`kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | wc -l`
 while ( [ "$Loop" == "Yes" ] ) ; do
- if [ `kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | grep -i 'Running' | wc -l` -ge 18 ] ; then
+ if [ `kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | grep -i 'Running' | wc -l` -ge $ItemCount ] ; then
   echo "`date +%Y%m%d%H%M%S` ALL pod f5-demo-httpd are running."
   Loop="No"
  else
-  echo "`date +%Y%m%d%H%M%S` Waiting for one or more pod f5-demo-httpd to run."
+  echo "`date +%Y%m%d%H%M%S` Waiting for all pod(s) f5-demo-httpd to run."
   sleep $Loop_Period
  fi
 done

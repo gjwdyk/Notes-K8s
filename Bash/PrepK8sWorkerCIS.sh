@@ -33,7 +33,7 @@ while ( [ "$Loop" == "Yes" ] ) ; do
   echo "`date +%Y%m%d%H%M%S` All Nodes Already Joined The Kubernetes Cluster."
   Loop="No"
  else
-  echo "`date +%Y%m%d%H%M%S` Waiting for one or more node(s) to join the K8s cluster."
+  echo "`date +%Y%m%d%H%M%S` Waiting for all node(s) to join the K8s cluster."
   sleep $Loop_Period
  fi
 done
