@@ -761,7 +761,7 @@ data:
         "remark": "A1 example",
         "AS3": {
           "class": "Tenant",
-          "K8sApplication": {
+          "A1": {
             "class": "Application",
             "template": "http",
             "serviceMain": {
