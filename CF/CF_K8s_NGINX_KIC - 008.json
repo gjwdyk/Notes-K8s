@@ -3222,7 +3222,7 @@
   },
   "ServiceURL": {
    "Description": "URL of Service (F5-Demo HTTP API/Application)",
-   "Value": { "Fn::Join" : [ "", [ "http://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":80/" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
   }
  }
 

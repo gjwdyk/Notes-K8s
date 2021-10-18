@@ -771,7 +771,7 @@ data:
               ],
               "serverTLS": "ServiceHTTPS_TLSServer",
               "pool": "web_pool",
-              "virtualPort": 80,
+              "virtualPort": 443,
               "persistenceMethods": []
             },
             "web_pool": {
