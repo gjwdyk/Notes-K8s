@@ -1561,6 +1561,7 @@
            "tmsh+=(\n",
            "\"tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\"\n",
            "\"tmsh load sys application template /config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\"\n",
+           "\"tmsh restart /sys service httpd\"\n",
            "\"tmsh install /sys crypto cert HC-Imported-SSL-Key-Certificate from-local-file /config/cloud/certificate.pem\"\n",
            "\"tmsh install /sys crypto key HC-Imported-SSL-Key-Certificate from-local-file /config/cloud/privatekey.pem\"\n",
            "\"tmsh save /sys config\")\n",
