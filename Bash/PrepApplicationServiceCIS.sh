@@ -761,14 +761,15 @@ data:
         "remark": "A1 example",
         "AS3": {
           "class": "Tenant",
-          "A1": {
+          "K8sApplication": {
             "class": "Application",
-            "template": "http",
+            "template": "https",
             "serviceMain": {
-              "class": "Service_HTTP",
+              "class": "Service_HTTPS",
               "virtualAddresses": [
                 "10.1.1.245"
               ],
+              "serverTLS": "ServiceHTTPS_TLSServer",
               "pool": "web_pool",
               "virtualPort": 80,
               "persistenceMethods": []
@@ -785,6 +786,20 @@ data:
                   "serverAddresses": []
                 }
               ]
+            }
+            "ServiceHTTPS_TLSServer": {
+              "class": "TLS_Server",
+              "label": "TLS Profile for Clients to Connects to Big-IP",
+              "certificates": [
+                {
+                  "certificate": "TLSServer_Certificate"
+                }
+              ]
+            },
+            "TLSServer_Certificate": {
+              "class": "Certificate",
+              "certificate": {"bigip":"/Common/HC-Imported-SSL-Certificate"},
+              "privateKey": {"bigip":"/Common/HC-Imported-SSL-Key"}
             }
           }
         }
