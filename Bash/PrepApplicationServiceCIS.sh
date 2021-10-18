@@ -727,7 +727,7 @@ metadata:
   labels:
     app: f5-demo-httpd
     cis.f5.com/as3-tenant: AS3
-    cis.f5.com/as3-app: A1
+    cis.f5.com/as3-app: K8sApplication
     cis.f5.com/as3-pool: web_pool
 spec:
   ports:
