@@ -763,13 +763,12 @@ data:
           "class": "Tenant",
           "K8sApplication": {
             "class": "Application",
-            "template": "https",
+            "template": "http",
             "serviceMain": {
-              "class": "Service_HTTPS",
+              "class": "Service_HTTP",
               "virtualAddresses": [
                 "10.1.1.245"
               ],
-              "serverTLS": "ServiceHTTPS_TLSServer",
               "pool": "web_pool",
               "virtualPort": 443,
               "persistenceMethods": []
