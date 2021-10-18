@@ -681,13 +681,13 @@
   },
   "BigIPTrafficTLSKey": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/KeyPair/privkey.pem",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/KeyPair/private.key",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL of the Private Key used to create the below TLS Certificate. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "BigIPTrafficTLSCertificate": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/KeyPair/cert.pem",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/KeyPair/certificate.crt",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL of the TLS Certificate which Big-IP will use to encrypt or decrypt the requests and responses between users and servers. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
