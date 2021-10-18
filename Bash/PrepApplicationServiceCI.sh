@@ -785,20 +785,6 @@ data:
                   "serverAddresses": []
                 }
               ]
-            },
-            "ServiceHTTPS_TLSServer": {
-              "class": "TLS_Server",
-              "label": "TLS Profile for Clients to Connects to Big-IP",
-              "certificates": [
-                {
-                  "certificate": "TLSServer_Certificate"
-                }
-              ]
-            },
-            "TLSServer_Certificate": {
-              "class": "Certificate",
-              "certificate": {"bigip":"/Common/HC-Imported-SSL-Key-Certificate"},
-              "privateKey": {"bigip":"/Common/HC-Imported-SSL-Key-Certificate"}
             }
           }
         }
