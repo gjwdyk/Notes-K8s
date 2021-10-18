@@ -786,7 +786,7 @@ data:
                   "serverAddresses": []
                 }
               ]
-            }
+            },
             "ServiceHTTPS_TLSServer": {
               "class": "TLS_Server",
               "label": "TLS Profile for Clients to Connects to Big-IP",
