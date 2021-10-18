@@ -770,7 +770,7 @@ data:
                 "10.1.1.245"
               ],
               "pool": "web_pool",
-              "virtualPort": 443,
+              "virtualPort": 80,
               "persistenceMethods": []
             },
             "web_pool": {
