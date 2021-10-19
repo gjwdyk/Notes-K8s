@@ -3219,6 +3219,10 @@
    "Description": "IP Address of Big-IP",
    "Value": { "Ref": "BigIPEIP" }
   },
+  "K8sMaster1SSH": {
+   "Description": "SSH to K8s Master",
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8022/" ] ] }
+  },
   "BigIPManagementURL": {
    "Description": "URL of Big-IP Management Interface",
    "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
