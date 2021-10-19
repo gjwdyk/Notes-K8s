@@ -687,9 +687,9 @@
   },
   "BigIPTrafficTLSCertificate": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/KeyPair/cert.pem",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/KeyPair/fullchain.pem",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
-   "Description": "URL of the TLS Certificate which Big-IP will use to encrypt or decrypt the requests and responses between users and servers. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
+   "Description": "URL of the TLS Certificate (along with chain/intermediate certificates) which Big-IP will use to encrypt or decrypt the requests and responses between users and servers. This CloudFormation template requires the TLS Private Key and Certificate (i.e. Mandatory Input). If the Private Key is located at AWS S3, ensure that this CloudFormation template can read the file. If the Private Key is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
   "AllowPhoneHome": {
    "AllowedValues": [ "Yes", "No" ],
@@ -1561,6 +1561,7 @@
            "tmsh+=(\n",
            "\"tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\"\n",
            "\"tmsh load sys application template /config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\"\n",
+           "\"tmsh modify /sys httpd ssl-certchainfile /config/httpd/conf/ssl.crt/server.crt\"\n",
            "\"tmsh restart /sys service httpd\"\n",
            "\"tmsh install /sys crypto cert HC-Imported-SSL-Key-Certificate from-local-file /config/cloud/certificate.pem\"\n",
            "\"tmsh install /sys crypto key HC-Imported-SSL-Key-Certificate from-local-file /config/cloud/privatekey.pem\"\n",
