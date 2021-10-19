@@ -3220,7 +3220,7 @@
    "Value": { "Ref": "BigIPEIP" }
   },
   "K8sMaster1SSH": {
-   "Description": "SSH to K8s Master",
+   "Description": "SSH to K8s Master. Refer to https:\/\/raw.githubusercontent.com\/gjwdyk\/Notes-K8s\/main\/Reg\/Associate_SSH_Putty.reg to associate ssh:\/\/ to putty .",
    "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8022/" ] ] }
   },
   "BigIPManagementURL": {
