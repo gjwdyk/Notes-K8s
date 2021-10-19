@@ -2159,9 +2159,10 @@
        ],
        "Version": "2012-10-17"
       },
-      "PolicyName": "BigIPServiceDiscoveryPolicy"
+      "PolicyName": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPServiceDiscoveryAccessPolicy" ] ] }
      }
-    ]
+    ],
+    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPServiceDiscoveryAccessRole" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
    },
    "Type": "AWS::IAM::Role"
   },
@@ -3221,7 +3222,7 @@
   },
   "K8sMaster1SSH": {
    "Description": "SSH to K8s Master. Refer to https:\/\/raw.githubusercontent.com\/gjwdyk\/Notes-K8s\/main\/Reg\/Associate_SSH_Putty.reg to associate ssh:\/\/ to putty .",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8022/" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
   },
   "BigIPManagementURL": {
    "Description": "URL of Big-IP Management Interface",

@@ -9,4 +9,4 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\ssh\shell\open]
 
 [HKEY_CLASSES_ROOT\ssh\shell\open\command]
-@="C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Command \"$val='%l'; $val = $val.TrimEnd('/');if ($val.StartsWith('ssh://')) { $val = $val.SubString(6) }; & 'C:\\Program Files (x86)\\PuTTY\\putty.exe' \"$val\"\""
+@="C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Command \"$val='%l'; $val = $val.TrimEnd('/');if ($val.StartsWith('ssh://')) { $val = $val.SubString(6) }; & 'C:\\Program Files\\PuTTY\\putty.exe' \"$val\"\""
