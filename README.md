@@ -145,11 +145,10 @@ The F5 Big-IP provides a gateway for each K8s nodes to connect to services on th
 
 ![K8s Cluster Logical Diagram with Big-IP CIS](Figures/K8sClusterLogicalDiagramBigIPOneNICIncoming.png)
 
-This CloudFormation Template is intermediary, since the One NIC / One Logical Leg / One SubNet configuration implies greater difficulties
+This CloudFormation Template is intermediary, since the One NIC / One Logical Leg / One SubNet configuration implies greater difficulties in managing traffic on both direction; and impossible to add Lambda Function which needs to interact to external services in the Internet.
+The CloudFormation will be further developed to have multiple NIC as below:
 
-
-
-
+![K8s Cluster Logical Diagram with Big-IP Multi NIC](Figures/CISMultiNICK8s.png)
 
 
 
