@@ -133,7 +133,11 @@ THE LIMITATIONS OF THIS SUBSECTION SHALL APPLY TO ANY THEORY OF LIABILITY, WHETH
 
 # F5 Big-IP Container Ingress Services (Cluster IP Mode)
 
-[F5 Big-IP Container Ingress Services](https://clouddocs.f5.com/containers/latest/userguide/what-is.html)
+[CF_F5_CIS_K8s.json](CF/CF_F5_CIS_K8s.json) CloudFormation Template deploys CloudFormation Stack according to the below diagram, where F5 Big-IP is deployed as Gateway between K8s Cluster and the Internet.
+The F5 Big-IP provides a gateway for each K8s nodes to connect to services on the Internet, example to download software for installations including to install the K8s cluster itself, as well as further software updates.
+
+(Micro) Services which K8s provides also implemented on F5 Big-IP through orchestration from the K8s cluster using [F5 Big-IP Container Ingress Services](https://clouddocs.f5.com/containers/latest/userguide/what-is.html).
+
 
 ![K8s Cluster Logical Diagram with Big-IP CIS One NIC](Figures/K8sClusterLogicalDiagramBigIPOneNIC.png)
 
