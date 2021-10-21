@@ -3220,8 +3220,12 @@
    "Description": "IP Address of Big-IP",
    "Value": { "Ref": "BigIPEIP" }
   },
+  "BigIPSSH": {
+   "Description": "SSH to Big-IP Management Interface",
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
+  },
   "K8sMaster1SSH": {
-   "Description": "SSH to K8s Master. Refer to https:\/\/raw.githubusercontent.com\/gjwdyk\/Notes-K8s\/main\/Reg\/Associate_SSH_Putty.reg to associate ssh:\/\/ to putty .",
+   "Description": "SSH to K8s Master",
    "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
   },
   "BigIPManagementURL": {
