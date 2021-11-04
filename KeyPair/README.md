@@ -95,6 +95,73 @@ ubuntu@ubuntu:~$
 
 
 
+The above result can be achieved with tools, in several ways:
+
+```
+awk '{printf "%s\\n", $0}' file
+```
+Example:
+```
+ubuntu@ubuntu:~$ awk '{printf "%s\\n", $0}' /home/ubuntu/.ssh/id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----\nubuntu@ubuntu:~$
+```
+Adding echo at the end of the command helps to separate the next prompt:
+```
+ubuntu@ubuntu:~$ awk '{printf "%s\\n", $0}' /home/ubuntu/.ssh/id_rsa ; echo
+-----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----\n
+ubuntu@ubuntu:~$
+```
+Putting the result into a file, so the result can be copy-pasted multiple times into the future:
+```
+ubuntu@ubuntu:~$ awk '{printf "%s\\n", $0}' /home/ubuntu/.ssh/id_rsa > result.txt
+ubuntu@ubuntu:~$ cat result.txt ; echo
+-----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----\n
+ubuntu@ubuntu:~$
+```
+
+Other methods:
+
+```
+awk -v ORS='\\n' '1' file
+```
+Example:
+```
+ubuntu@ubuntu:~$ awk -v ORS='\\n' '1' /home/ubuntu/.ssh/id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----\nubuntu@ubuntu:~$
+```
+
+
+
+```
+sed 's/$/\\n/' file | tr -d '\n'
+```
+Example:
+```
+ubuntu@ubuntu:~$ sed 's/$/\\n/' /home/ubuntu/.ssh/id_rsa | tr -d '\n'
+-----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----\nubuntu@ubuntu:~$
+```
+
+
+
+This last one does not add the last `\n` unlike the other methods above:
+```
+sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' file
+```
+Example:
+```
+ubuntu@ubuntu:~$ sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' /home/ubuntu/.ssh/id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----ubuntu@ubuntu:~$
+```
+
+```
+ubuntu@ubuntu:~$ sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' /home/ubuntu/.ssh/id_rsa > result.txt
+ubuntu@ubuntu:~$ cat result.txt ; echo
+-----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----
+ubuntu@ubuntu:~$
+```
+
+
+
 <br><br><br>
 ***
 
