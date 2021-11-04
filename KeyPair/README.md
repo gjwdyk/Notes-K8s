@@ -93,7 +93,7 @@ ubuntu@ubuntu:~$ cat /home/ubuntu/.ssh/id_rsa
 ubuntu@ubuntu:~$
 ```
 
-
+<br><br><br>
 
 The above result can be achieved with tools, in several ways:
 
@@ -119,6 +119,8 @@ ubuntu@ubuntu:~$ cat result.txt ; echo
 ubuntu@ubuntu:~$
 ```
 
+<br><br>
+
 Other methods:
 
 ```
@@ -130,7 +132,7 @@ ubuntu@ubuntu:~$ awk -v ORS='\\n' '1' /home/ubuntu/.ssh/id_rsa
 -----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----\nubuntu@ubuntu:~$
 ```
 
-
+<br><br>
 
 ```
 sed 's/$/\\n/' file | tr -d '\n'
@@ -141,7 +143,7 @@ ubuntu@ubuntu:~$ sed 's/$/\\n/' /home/ubuntu/.ssh/id_rsa | tr -d '\n'
 -----BEGIN OPENSSH PRIVATE KEY-----\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ012345\nabcdefghijklmnopqrstuvwxyz+0123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ==\n-----END OPENSSH PRIVATE KEY-----\nubuntu@ubuntu:~$
 ```
 
-
+<br><br>
 
 This last one does not add the last `\n` unlike the other methods above:
 ```
