@@ -125,8 +125,10 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 # So to do Automation, one must do it manually. Great!
 #
 #curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
+#curl -O -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.20.2/calicoctl
 
-curl -O -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.20.2/calicoctl
+curl -O -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.22.0/calicoctl-linux-amd64
+
 chmod +x calicoctl
 sudo mv calicoctl /usr/local/bin
 sudo mkdir /etc/calico
