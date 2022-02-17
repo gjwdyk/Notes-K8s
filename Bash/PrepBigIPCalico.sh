@@ -126,6 +126,12 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 #
 #curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
 #curl -O -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.20.2/calicoctl
+#
+# Changes on Calico's GitHub structures.
+# Go to https://github.com/projectcalico/calico/releases/
+# Identify your targeted version, and download for example the "release-v3.22.0.tgz" (or similar filename pattern).
+# UnZip the file and browse through the file structure and use the appropriate calicoctl file.
+# release-v3.22.0.tgz\release-v3.22.0.tar\release-v3.22.0\bin\calicoctl\calicoctl-linux-amd64
 
 curl -o calicoctl -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.22.0/calicoctl-linux-amd64
 
