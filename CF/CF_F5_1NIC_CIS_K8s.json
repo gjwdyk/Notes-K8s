@@ -1448,7 +1448,7 @@
            "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
            "nohup /config/waitThenRun.sh",
            "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/onboard.js",
-           "--install-ilx-package file:///var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm",
+           "--install-ilx-package file:///var/config/rest/downloads/f5-appsvcs-3.32.1-1.noarch.rpm",
            "--port 8443",
            "--ssl-port ", { "Ref": "BigIPManagementGUIPort" },
            "--wait-for NETWORK_CONFIG_DONE",
@@ -1830,7 +1830,7 @@
            "  exit",
            "fi",
            "echo loaded verifyHash",
-           "declare -a filesToVerify=(\"/config/cloud/f5-cloud-libs.tar.gz\" \"/config/cloud/f5-cloud-libs-aws.tar.gz\" \"/var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm\" \"/config/cloud/aws/f5.service_discovery.tmpl\" \"/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\")",
+           "declare -a filesToVerify=(\"/config/cloud/f5-cloud-libs.tar.gz\" \"/config/cloud/f5-cloud-libs-aws.tar.gz\" \"/var/config/rest/downloads/f5-appsvcs-3.32.1-1.noarch.rpm\" \"/config/cloud/aws/f5.service_discovery.tmpl\" \"/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl\")",
            "for fileToVerify in \"${filesToVerify[@]}\"",
            "do",
            "  echo verifying \"$fileToVerify\"",
@@ -1957,11 +1957,11 @@
         "owner": "root",
         "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs-aws/v2.10.0/f5-cloud-libs-aws.tar.gz"
        },
-       "/var/config/rest/downloads/f5-appsvcs-3.26.1-1.noarch.rpm": {
+       "/var/config/rest/downloads/f5-appsvcs-3.32.1-1.noarch.rpm": {
         "group": "root",
         "mode": "000777",
         "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/f5-appsvcs-extension/v3.26.1/f5-appsvcs-3.26.1-1.noarch.rpm"
+        "source": "https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.32.1/f5-appsvcs-3.32.1-1.noarch.rpm"
        },
        "/config/cloud/aws/f5.service_discovery.tmpl": {
         "group": "root",
