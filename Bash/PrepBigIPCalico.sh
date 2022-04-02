@@ -133,7 +133,7 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 # UnZip the file and browse through the file structure and use the appropriate calicoctl file.
 # release-v3.22.0.tgz\release-v3.22.0.tar\release-v3.22.0\bin\calicoctl\calicoctl-linux-amd64
 
-curl -o calicoctl -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.22.0/calicoctl-linux-amd64
+curl -o calicoctl -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.22.1/calicoctl-linux-amd64
 
 chmod +x calicoctl
 sudo mv calicoctl /usr/local/bin
