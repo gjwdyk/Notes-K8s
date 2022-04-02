@@ -119,6 +119,21 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 
 
 
+# If you see error message(s) similar to below:
+#
+# Failed to get resources: Version mismatch.
+# Client Version:   v3.22.0
+# Cluster Version:  v3.22.1
+# Use --allow-version-mismatch to override.
+#
+# Most probably due to Calico mismatch version; between what version is installed as CNI for Kubernetes, and which CalicoCtl version installed below.
+#
+# ubuntu@ip-10-1-1-11:~$ kubectl describe deployments -n kube-system calico-kube-controllers | grep "Image"
+#     Image:      docker.io/calico/kube-controllers:v3.22.1
+# ubuntu@ip-10-1-1-11:~$
+#
+# How to get proper CalicoCtl version:
+#
 # Original URL is https://github.com/projectcalico/calicoctl/releases/download/v3.20.1/calicoctl
 # however unfortunately some people have short-circuit in the head
 # Original URL can not be downloaded by script, download manual is OK
