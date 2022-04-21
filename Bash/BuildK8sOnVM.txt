@@ -1,0 +1,134 @@
+
+
+
+Execute these commands on the Control Plane node:
+cd $HOME;sudo curl -k -L -O --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/BuildK8sOnVM/VMWrapMaster.sh;sudo chmod 777 $HOME/VMWrapMaster.sh;/bin/bash $HOME/VMWrapMaster.sh
+
+
+
+Execute these commands on each of Worker nodes:
+cd $HOME;sudo curl -k -L -O --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/BuildK8sOnVM/VMWrapWorker.sh;sudo chmod 777 $HOME/VMWrapWorker.sh;/bin/bash $HOME/VMWrapWorker.sh
+
+
+
+Note that the /etc/hosts file must be preconfigured as described below:
+
+ubuntu@Master1:~$ cat /etc/hosts
+127.0.0.1       Master1 Master1.Ubuntu localhost
+192.168.101.11  Master1 Master1.Ubuntu
+192.168.101.12  Master2 Master2.Ubuntu
+192.168.101.13  Master3 Master3.Ubuntu
+192.168.101.21  Client1 Client1.Ubuntu
+192.168.101.22  Client2 Client2.Ubuntu
+192.168.101.23  Client3 Client3.Ubuntu
+192.168.101.101 Worker1 Worker1.Ubuntu
+192.168.101.102 Worker2 Worker2.Ubuntu
+192.168.101.103 Worker3 Worker3.Ubuntu
+192.168.101.201 Server1 Server1.Ubuntu
+192.168.101.202 Server2 Server2.Ubuntu
+192.168.101.203 Server3 Server3.Ubuntu
+192.168.123.11  Master1 Master1.Ubuntu
+192.168.123.12  Master2 Master2.Ubuntu
+192.168.123.13  Master3 Master3.Ubuntu
+192.168.123.21  Client1 Client1.Ubuntu
+192.168.123.22  Client2 Client2.Ubuntu
+192.168.123.23  Client3 Client3.Ubuntu
+192.168.123.101 Worker1 Worker1.Ubuntu
+192.168.123.102 Worker2 Worker2.Ubuntu
+192.168.123.103 Worker3 Worker3.Ubuntu
+192.168.123.201 Server1 Server1.Ubuntu
+192.168.123.202 Server2 Server2.Ubuntu
+192.168.123.203 Server3 Server3.Ubuntu
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ubuntu@Master1:~$
+
+
+
+Ready to use Template with Networking (IP Addresses) and /etc/hosts already preconfigured:
+
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client1.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client1.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client1.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client1.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client1.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client1.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client2.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client2.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client2.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client2.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client2.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client2.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client3.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client3.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client3.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client3.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client3.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Client3.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master1.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master1.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master1.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master1.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master1.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master1.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master2.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master2.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master2.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master2.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master2.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master2.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master3.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master3.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master3.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master3.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master3.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Master3.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server1.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server1.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server1.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server1.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server1.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server1.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server2.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server2.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server2.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server2.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server2.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server2.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server3.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server3.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server3.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server3.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server3.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Server3.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker1.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker1.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker1.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker1.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker1.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker1.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker2.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker2.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker2.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker2.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker2.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker2.txt
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker3.7z
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker3.7z.md5
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker3.7z.sha1
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker3.7z.sha256
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker3.7z.sha512
+s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20.04.4 Worker3.txt
+
+
+
+╔═════════╗
+║   End   ║
+╚═════════╝
+
+
