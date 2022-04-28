@@ -126,7 +126,7 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 # Cluster Version:  v3.22.1
 # Use --allow-version-mismatch to override.
 #
-# Most probably due to Calico mismatch version; between what version is installed as CNI for Kubernetes, and which CalicoCtl version installed below.
+# Most probably due to Calico mismatch version; between what version is installed as CNI for Kubernetes (https://docs.projectcalico.org/manifests/calico.yaml), and which CalicoCtl version installed below.
 #
 # ubuntu@ip-10-1-1-11:~$ kubectl describe deployments -n kube-system calico-kube-controllers | grep "Image"
 #     Image:      docker.io/calico/kube-controllers:v3.22.1
@@ -148,7 +148,7 @@ ssh -o StrictHostKeyChecking=no $User@$BigIPAddress restart /sys service tmroute
 # UnZip the file and browse through the file structure and use the appropriate calicoctl file.
 # release-v3.22.0.tgz\release-v3.22.0.tar\release-v3.22.0\bin\calicoctl\calicoctl-linux-amd64
 
-curl -o calicoctl -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.22.1/calicoctl-linux-amd64
+curl -o calicoctl -L --retry 333 https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.22.2/calicoctl-linux-amd64
 
 chmod +x calicoctl
 sudo mv calicoctl /usr/local/bin
