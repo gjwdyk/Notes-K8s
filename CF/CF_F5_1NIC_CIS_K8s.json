@@ -669,13 +669,13 @@
   },
   "UpgradeImageURLPath": {
    "Type": "String",
-   "Default": "https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/Big-IP/16.1.2.1/",
+   "Default": "https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/Big-IP/16.1.2.2/",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL Path of the upgrade .iso image. Keep the last / character."
   },
   "UpgradeImageFileName": {
    "Type": "String",
-   "Default": "BIGIP-16.1.2.1-0.0.10.iso",
+   "Default": "BIGIP-16.1.2.2-0.0.28.iso",
    "AllowedPattern": "^(BIGIP\\-)((([0-9]+)\\.)+)([0-9]+)\\-((([0-9]+)\\.)+)([0-9]+)\\.iso$|^none$",
    "Description": "File Name of the upgrade .iso image."
   },
