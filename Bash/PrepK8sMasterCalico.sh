@@ -30,7 +30,7 @@ max_counter=0
 URLRegEx="^(http:\/\/|https:\/\/)?[a-z0-9]+((\-|\.)[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?(\/.*)*$"
 
 for counter in $(seq 0 $max_counter); do
- if [[ ${file_url[$counter]} =~ $URLRegEx ]] ; then
+ if [[ ${file_url[$counter]} =~ $URLRegEx ]]; then
   file_result[$counter]=$(/usr/bin/curl -sk --retry 333 -w "%{http_code}" ${file_url[$counter]} -o ${file_name[$counter]})
   if [[ ${file_result[$counter]} == 200 ]]; then
    echo "$counter ; HTTP ${file_result[$counter]} ; ${file_name[$counter]} download complete."
