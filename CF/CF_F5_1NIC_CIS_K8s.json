@@ -1008,7 +1008,7 @@
    "Properties": {
     "VpcId": { "Ref": "VPC" },
     "AvailabilityZone": { "Fn::Select": [ "0", { "Fn::GetAZs": { "Ref": "AWS::Region" } } ] },
-    "MapPublicIpOnLaunch": "true",
+    "MapPublicIpOnLaunch": "false",
     "CidrBlock": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, "0/24" ] ] },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sNodeSubnet" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
    }
