@@ -2128,7 +2128,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sMaster1NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sMaster1NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sMaster1Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2311,7 +2311,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker1NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker1NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker1Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2406,7 +2406,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker2NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker2NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker2Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2501,7 +2501,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker3NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker3NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker3Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2596,7 +2596,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker4NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker4NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker4Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2691,7 +2691,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker5NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker5NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker5Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2786,7 +2786,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker6NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker6NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker6Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2881,7 +2881,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker7NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker7NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker7Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -2976,7 +2976,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker8NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker8NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker8Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
@@ -3071,7 +3071,7 @@
    "Properties": {
     "ImageId": { "Fn::If": [ "DefaultK8sNodeImageID", { "Fn::FindInMap": [ "RegionAMI", { "Ref": "AWS::Region" }, { "Ref": "K8sNodeImageType" } ] }, { "Ref": "K8sNodeImageID" } ] },
     "InstanceType": { "Ref": "K8sNodeInstanceType" },
-    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker9NetworkInterface" }, "DeviceIndex": "0", "AssociatePublicIpAddress": false } ],
+    "NetworkInterfaces": [ { "NetworkInterfaceId": { "Ref": "K8sWorker9NetworkInterface" }, "DeviceIndex": "0" } ],
     "KeyName": { "Ref": "EC2SSHKeyPair" },
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker9Instance" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ],
     "UserData": { "Fn::Base64": { "Fn::Join": [ "", [
