@@ -639,7 +639,7 @@ data:
               "loadBalancingMode": "round-robin",
               "members": [
                 {
-                  "servicePort": 80,
+                  "servicePort": 8080,
                   "serverAddresses": []
                 }
               ]
