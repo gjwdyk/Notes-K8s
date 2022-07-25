@@ -754,7 +754,7 @@ data:
       "class": "AS3",
       "declaration": {
         "class": "ADC",
-        "schemaVersion": "3.25.0",
+        "schemaVersion": "3.36.1",
         "id": "example-virtual-server-for-f5-demo-httpd",
         "label": "http",
         "remark": "A1 example",
@@ -771,7 +771,11 @@ data:
               "serverTLS": "ServiceHTTPS_TLSServer",
               "pool": "web_pool",
               "virtualPort": 443,
-              "persistenceMethods": []
+              "persistenceMethods": [],
+              "ipIntelligencePolicy": { "use": "IP_Intelligence_Policy" },
+              "profileDOS": { "use": "HTTP_Network_DoS_Protection_Profile" },
+              "profileAnalytics": { "use": "HTTP_Analytics_Profile" },
+              "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
             },
             "web_pool": {
               "class": "Pool",
