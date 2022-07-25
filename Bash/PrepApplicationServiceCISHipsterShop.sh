@@ -4,9 +4,6 @@ echo "Executing $0"
 
 cd /home/ubuntu
 
-Loop="Yes"
-Loop_Period="1m"
-
 
 
 kubectl create -f - <<EOF
@@ -665,17 +662,33 @@ EOF
 
 
 
-# Loop="Yes"
-# ItemCount=`kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | wc -l`
-# while ( [ "$Loop" == "Yes" ] ) ; do
-#  if [ `kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | grep -i 'Running' | wc -l` -ge $ItemCount ] ; then
-#   echo "`date +%Y%m%d%H%M%S` ALL pod f5-demo-httpd are running."
-#   Loop="No"
-#  else
-#   echo "`date +%Y%m%d%H%M%S` Waiting for all pod(s) f5-demo-httpd to run."
-#   sleep $Loop_Period
-#  fi
-# done
+#╔════════════════════════════════════════════════════════════════════════╗
+#║   Just a note if you want to clean up the deployments of hipstershop   ║
+#╚════════════════════════════════════════════════════════════════════════╝
+#
+# kubectl delete --namespace hipstershop --force deployment.apps/emailservice
+# kubectl delete --namespace hipstershop --force service/emailservice
+# kubectl delete --namespace hipstershop --force deployment.apps/paymentservice
+# kubectl delete --namespace hipstershop --force service/paymentservice
+# kubectl delete --namespace hipstershop --force deployment.apps/productcatalogservice
+# kubectl delete --namespace hipstershop --force service/productcatalogservice
+# kubectl delete --namespace hipstershop --force deployment.apps/cartservice
+# kubectl delete --namespace hipstershop --force service/cartservice
+# kubectl delete --namespace hipstershop --force deployment.apps/currencyservice
+# kubectl delete --namespace hipstershop --force service/currencyservice
+# kubectl delete --namespace hipstershop --force deployment.apps/shippingservice
+# kubectl delete --namespace hipstershop --force service/shippingservice
+# kubectl delete --namespace hipstershop --force deployment.apps/recommendationservice
+# kubectl delete --namespace hipstershop --force service/recommendationservice
+# kubectl delete --namespace hipstershop --force deployment.apps/checkoutservice
+# kubectl delete --namespace hipstershop --force service/checkoutservice
+# kubectl delete --namespace hipstershop --force deployment.apps/frontend
+# kubectl delete --namespace hipstershop --force service/frontend
+# kubectl delete --namespace hipstershop --force deployment.apps/redis-cart
+# kubectl delete --namespace hipstershop --force service/redis-cart
+# kubectl delete --namespace hipstershop --force deployment.apps/loadgenerator
+# kubectl delete --namespace hipstershop --force configmap/hipstershop-configmap
+# kubectl delete --force namespace/hipstershop
 
 
 
