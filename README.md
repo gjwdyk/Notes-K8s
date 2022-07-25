@@ -133,7 +133,7 @@ THE LIMITATIONS OF THIS SUBSECTION SHALL APPLY TO ANY THEORY OF LIABILITY, WHETH
 
 # F5 Big-IP Container Ingress Services (Cluster IP Mode)
 
-[CF_F5_1NIC_CIS_K8s.json](CF/CF_F5_1NIC_CIS_K8s.json) CloudFormation Template deploys CloudFormation Stack according to the below diagram, where F5 Big-IP is deployed as Gateway between K8s Cluster and the Internet.
+[CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json](CF/CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json) CloudFormation Template deploys CloudFormation Stack according to the below diagram, where F5 Big-IP is deployed as Gateway between K8s Cluster and the Internet.
 
 ![K8s Cluster Logical Diagram with Big-IP One NIC](Figures/K8sClusterLogicalDiagramBigIPOneNIC.png)
 
@@ -145,9 +145,19 @@ The F5 Big-IP provides a gateway for each K8s nodes to connect to services on th
 
 ![K8s Cluster Logical Diagram with Big-IP CIS](Figures/K8sClusterLogicalDiagramBigIPOneNICIncoming.png)
 
-The [CF_F5_1NIC_CIS_K8s.json](CF/CF_F5_1NIC_CIS_K8s.json) CloudFormation Template is intermediary, since the One Logical Leg / One SubNet configuration implies greater difficulties in managing traffic on both directions; and not practical / very complicated to add Lambda Function which needs to interact to external services in the Internet.
+The [CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json](CF/CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json) CloudFormation Template deploys F5 CIS with sample [F5-Demo-HTTPD](https://github.com/f5devcentral/f5-demo-httpd).
 
-The CloudFormation will be further developed to have multiple SubNets as below:
+<br>
+
+<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
+
+<br><br><br>
+
+
+
+<br><br><br>
+
+The CloudFormation will be further developed to have separated SubNets as below:
 
 ![K8s Cluster Logical Diagram with Big-IP Multi NIC](Figures/CISMultiNICK8s.png)
 
