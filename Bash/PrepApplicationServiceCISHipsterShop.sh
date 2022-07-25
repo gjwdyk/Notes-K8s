@@ -627,9 +627,9 @@ data:
               "virtualPort": 443,
               "persistenceMethods": [],
               "ipIntelligencePolicy": { "bigip": "/Common/IP_Intelligence_Policy" },
-              "profileDOS": { "use": "/Common/HTTP_Network_DoS_Protection_Profile" },
-              "profileAnalytics": { "use": "/Common/HTTP_Analytics_Profile" },
-              "profileAnalyticsTcp": { "use": "/Common/TCP_Analytics_Profile" }
+              "profileDOS": { "bigip": "/Common/HTTP_Network_DoS_Protection_Profile" },
+              "profileAnalytics": { "bigip": "/Common/HTTP_Analytics_Profile" },
+              "profileAnalyticsTcp": { "bigip": "/Common/TCP_Analytics_Profile" }
             },
             "web_pool": {
               "class": "Pool",
