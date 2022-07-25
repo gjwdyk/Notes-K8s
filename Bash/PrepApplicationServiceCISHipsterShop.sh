@@ -10,10 +10,16 @@ Loop_Period="1m"
 
 
 kubectl create -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hipstershop
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: emailservice
+  namespace: hipstershop
   annotations:
     ves.io/workload-flavor: medium
 spec:
@@ -50,6 +56,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: emailservice
+  namespace: hipstershop
   labels:
     app: emailservice
   annotations:
@@ -68,6 +75,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: paymentservice
+  namespace: hipstershop
   annotations:
     ves.io/workload-flavor: medium
 spec:
@@ -99,6 +107,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: paymentservice
+  namespace: hipstershop
   labels:
     app: paymentservice
   annotations:
@@ -117,6 +126,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: productcatalogservice
+  namespace: hipstershop
   annotations:
     ves.io/workload-flavor: medium
 spec:
@@ -148,6 +158,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: productcatalogservice
+  namespace: hipstershop
   labels:
     app: productcatalogservice
   annotations:
@@ -166,6 +177,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cartservice
+  namespace: hipstershop
   annotations:
     ves.io/workload-flavor: medium
 spec:
@@ -204,6 +216,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cartservice
+  namespace: hipstershop
   labels:
     app: cartservice
   annotations:
@@ -222,6 +235,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: currencyservice
+  namespace: hipstershop
   annotations:
     ves.io/workload-flavor: medium
 spec:
@@ -254,6 +268,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: currencyservice
+  namespace: hipstershop
   labels:
     app: currencyservice
   annotations:
@@ -272,6 +287,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: shippingservice
+  namespace: hipstershop
   annotations:
     ves.io/workload-flavor: medium
 spec:
@@ -303,6 +319,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: shippingservice
+  namespace: hipstershop
   labels:
     app: shippingservice
   annotations:
@@ -321,6 +338,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: recommendationservice
+  namespace: hipstershop
   annotations:
     ves.io/workload-flavor: medium
 spec:
@@ -358,6 +376,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: recommendationservice
+  namespace: hipstershop
   labels:
     app: recommendationservice
   annotations:
@@ -376,6 +395,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: checkoutservice
+  namespace: hipstershop
 spec:
   selector:
     matchLabels:
@@ -416,6 +436,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: checkoutservice
+  namespace: hipstershop
   labels:
     app: checkoutservice
   annotations:
@@ -433,60 +454,8 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
-spec:
-  selector:
-    matchLabels:
-      app: frontend
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-        - name: server
-          image: gcr.io/solutions-team-280017/hipster-frontend:latest
-          ports:
-          - containerPort: 8080
-          env:
-          - name: PORT
-            value: "8080"
-          - name: PRODUCT_CATALOG_SERVICE_ADDR
-            value: "productcatalogservice:3550"
-          - name: CURRENCY_SERVICE_ADDR
-            value: "currencyservice:7000"
-          - name: CART_SERVICE_ADDR
-            value: "cartservice:7070"
-          - name: RECOMMENDATION_SERVICE_ADDR
-            value: "recommendationservice:8089"
-          - name: SHIPPING_SERVICE_ADDR
-            value: "shippingservice:50051"
-          - name: CHECKOUT_SERVICE_ADDR
-            value: "checkoutservice:5050"
-          - name: AD_SERVICE_ADDR
-            value: "adservice:9555"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend
-  annotations:
-    ves.io/proxy-type: HTTP_PROXY
-  labels:
-    app: frontend
-    svc_name: frontend
-spec:
-  selector:
-    app: frontend
-  ports:
-  - name: frontend
-    port: 80
-    targetPort: 8080
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: redis-cart
+  namespace: hipstershop
 spec:
   selector:
     matchLabels:
@@ -524,6 +493,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redis-cart
+  namespace: hipstershop
 spec:
   type: ClusterIP
   selector:
@@ -537,6 +507,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loadgenerator
+  namespace: hipstershop
 spec:
   selector:
     matchLabels:
@@ -566,21 +537,146 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: hipstershop
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: server
+          image: gcr.io/solutions-team-280017/hipster-frontend:latest
+          ports:
+          - containerPort: 8080
+          env:
+          - name: PORT
+            value: "8080"
+          - name: PRODUCT_CATALOG_SERVICE_ADDR
+            value: "productcatalogservice:3550"
+          - name: CURRENCY_SERVICE_ADDR
+            value: "currencyservice:7000"
+          - name: CART_SERVICE_ADDR
+            value: "cartservice:7070"
+          - name: RECOMMENDATION_SERVICE_ADDR
+            value: "recommendationservice:8089"
+          - name: SHIPPING_SERVICE_ADDR
+            value: "shippingservice:50051"
+          - name: CHECKOUT_SERVICE_ADDR
+            value: "checkoutservice:5050"
+          - name: AD_SERVICE_ADDR
+            value: "adservice:9555"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: hipstershop
+  annotations:
+    ves.io/proxy-type: HTTP_PROXY
+  labels:
+    app: frontend
+    svc_name: frontend
+    cis.f5.com/as3-tenant: AS3
+    cis.f5.com/as3-app: K8sApplication
+    cis.f5.com/as3-pool: web_pool
+spec:
+  selector:
+    app: frontend
+  ports:
+  - name: frontend
+    port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hipstershop-configmap
+  namespace: hipstershop
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.25.0",
+        "id": "example-virtual-server-for-hipstershop",
+        "label": "http",
+        "remark": "A1 example",
+        "AS3": {
+          "class": "Tenant",
+          "K8sApplication": {
+            "class": "Application",
+            "template": "https",
+            "serviceMain": {
+              "class": "Service_HTTPS",
+              "virtualAddresses": [
+                "10.1.1.245"
+              ],
+              "serverTLS": "ServiceHTTPS_TLSServer",
+              "pool": "web_pool",
+              "virtualPort": 443,
+              "persistenceMethods": []
+            },
+            "web_pool": {
+              "class": "Pool",
+              "monitors": [
+                "http"
+              ],
+              "loadBalancingMode": "round-robin",
+              "members": [
+                {
+                  "servicePort": 80,
+                  "serverAddresses": []
+                }
+              ]
+            },
+            "ServiceHTTPS_TLSServer": {
+              "class": "TLS_Server",
+              "label": "TLS Profile for Clients to Connects to Big-IP",
+              "certificates": [
+                {
+                  "certificate": "TLSServer_Certificate"
+                }
+              ]
+            },
+            "TLSServer_Certificate": {
+              "class": "Certificate",
+              "certificate": {"bigip":"/Common/HC-Imported-SSL-Key-Certificate"},
+              "privateKey": {"bigip":"/Common/HC-Imported-SSL-Key-Certificate"}
+            }
+          }
+        }
+      }
+    }
 EOF
 
 
 
-Loop="Yes"
-ItemCount=`kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | wc -l`
-while ( [ "$Loop" == "Yes" ] ) ; do
- if [ `kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | grep -i 'Running' | wc -l` -ge $ItemCount ] ; then
-  echo "`date +%Y%m%d%H%M%S` ALL pod f5-demo-httpd are running."
-  Loop="No"
- else
-  echo "`date +%Y%m%d%H%M%S` Waiting for all pod(s) f5-demo-httpd to run."
-  sleep $Loop_Period
- fi
-done
+# Loop="Yes"
+# ItemCount=`kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | wc -l`
+# while ( [ "$Loop" == "Yes" ] ) ; do
+#  if [ `kubectl get pods --all-namespaces | grep -i '\<f5-demo-httpd-' | grep -i 'Running' | wc -l` -ge $ItemCount ] ; then
+#   echo "`date +%Y%m%d%H%M%S` ALL pod f5-demo-httpd are running."
+#   Loop="No"
+#  else
+#   echo "`date +%Y%m%d%H%M%S` Waiting for all pod(s) f5-demo-httpd to run."
+#   sleep $Loop_Period
+#  fi
+# done
 
 
 
