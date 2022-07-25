@@ -153,7 +153,7 @@ The [CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json](CF/CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.
 
 <br><br><br>
 
-The [CF_F5_1NIC_CIS_K8s_HipsterShop.json](CF_F5_1NIC_CIS_K8s_HipsterShop.json) CloudFormation Template deploys F5 CIS with sample [Hipster-Shop](https://gitlab.com/volterra.io/samples/-/blob/master/hipster-shop/kubernetes-manifests.yaml).
+The [CF_F5_1NIC_CIS_K8s_HipsterShop.json](CF/CF_F5_1NIC_CIS_K8s_HipsterShop.json) CloudFormation Template deploys F5 CIS with sample [Hipster-Shop](https://gitlab.com/volterra.io/samples/-/blob/master/hipster-shop/kubernetes-manifests.yaml).
 
 <br>
 
