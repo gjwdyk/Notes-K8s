@@ -823,6 +823,34 @@ done
 
 
 
+#╔══════════════════════════════════════════════════════════════════════════╗
+#║   Just a note if you want to clean up the deployments of f5-demo-httpd   ║
+#╚══════════════════════════════════════════════════════════════════════════╝
+#
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-aqua
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-blue
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-dodgerblue
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-fuchsia
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-green
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-lawngreen
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-lime
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-maroon
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-navy
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-olive
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-orange
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-pink
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-purple
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-red
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-springgreen
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-teal
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-violet
+# kubectl delete --namespace f5-demo-httpd --force deployment/f5-demo-httpd-yellow
+# kubectl delete --namespace f5-demo-httpd --force configmap/f5-demo-httpd-configmap
+# kubectl delete --namespace f5-demo-httpd --force service/f5-demo-httpd
+# kubectl delete --force namespace/f5-demo-httpd
+
+
+
 #╔═══════════════════╗
 #║   Review Status   ║
 #╚═══════════════════╝
