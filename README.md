@@ -153,6 +153,14 @@ The [CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json](CF/CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.
 
 <br><br><br>
 
+The [CF_F5_1NIC_CIS_K8s_HipsterShop.json](CF_F5_1NIC_CIS_K8s_HipsterShop.json) CloudFormation Template deploys F5 CIS with sample [Hipster-Shop](https://gitlab.com/volterra.io/samples/-/blob/master/hipster-shop/kubernetes-manifests.yaml).
+
+<br>
+
+<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_F5_1NIC_CIS_K8s_HipsterShop.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
+
+<br><br><br>
+
 
 
 <br><br><br>
