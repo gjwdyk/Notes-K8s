@@ -608,7 +608,7 @@ data:
       "class": "AS3",
       "declaration": {
         "class": "ADC",
-        "schemaVersion": "3.36.1",
+        "schemaVersion": "3.36.0",
         "id": "example-virtual-server-for-hipstershop",
         "label": "http",
         "remark": "A1 example",
