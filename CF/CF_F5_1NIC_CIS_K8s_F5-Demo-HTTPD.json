@@ -1648,43 +1648,39 @@
            "file_name[7]=\"/config/lidsa/ClearLidsaFlags\"\n",
            "file_acl[7]=\"777\"\n",
 
-           "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/lidsa/ClearLidsaFlags\"\n",
-           "file_name[8]=\"/config/lidsa/ClearLidsaFlags\"\n",
-           "file_acl[8]=\"777\"\n",
+           "file_url[8]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/anacrontab\"\n",
+           "file_name[8]=\"/config/anacrontab\"\n",
+           "file_acl[8]=\"666\"\n",
 
-           "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/anacrontab\"\n",
-           "file_name[9]=\"/config/anacrontab\"\n",
+           "file_url[9]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/crontab\"\n",
+           "file_name[9]=\"/config/crontab\"\n",
            "file_acl[9]=\"666\"\n",
 
-           "file_url[10]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/crontab\"\n",
-           "file_name[10]=\"/config/crontab\"\n",
-           "file_acl[10]=\"666\"\n",
+           "file_url[10]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
+           "file_name[10]=\"/config/AS3Configuration.sh\"\n",
+           "file_acl[10]=\"777\"\n",
 
-           "file_url[11]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/EmptyAS3Configuration.sh", { "Fn::If": [ "UseAS3File", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/AS3Configuration.sh", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/EmptyAS3Configuration.sh" ] } ] }, "\"\n",
-           "file_name[11]=\"/config/AS3Configuration.sh\"\n",
+           "file_url[11]=\"", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
+           "file_name[11]=\"/config/TMSHPreCommands.sh\"\n",
            "file_acl[11]=\"777\"\n",
 
-           "file_url[12]=\"", { "Fn::If": [ "NotDownLoadImage", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] }, "\"\n",
-           "file_name[12]=\"/config/TMSHPreCommands.sh\"\n",
+           "file_url[12]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
+           "file_name[12]=\"/config/TMSHPostCommands.sh\"\n",
            "file_acl[12]=\"777\"\n",
 
-           "file_url[13]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh", { "Fn::If": [ "UseTMSHCommandsFile", { "Ref": "BigIPTMSHConfiguration" }, "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/EmptyTMSHConfiguration.sh" ] } ] }, "\"\n",
-           "file_name[13]=\"/config/TMSHPostCommands.sh\"\n",
-           "file_acl[13]=\"777\"\n",
+           "file_url[13]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
+           "file_name[13]=\"/shared/images/UpgradeImage.iso.md5\"\n",
+           "file_acl[13]=\"666\"\n",
 
-           "file_url[14]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpgradeImage.iso.md5", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" }, ".md5" ] ] } ] }, "\"\n",
-           "file_name[14]=\"/shared/images/UpgradeImage.iso.md5\"\n",
+           "file_url[14]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
+           "file_name[14]=\"/shared/images/UpgradeImage.iso\"\n",
            "file_acl[14]=\"666\"\n",
 
-           "file_url[15]=\"", { "Fn::If": [ "NotDownLoadImage", "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpgradeImage.iso", { "Fn::Join" : [ "", [ { "Ref": "UpgradeImageURLPath" }, { "Ref": "UpgradeImageFileName" } ] ] } ] }, "\"\n",
-           "file_name[15]=\"/shared/images/UpgradeImage.iso\"\n",
-           "file_acl[15]=\"666\"\n",
+           "file_url[15]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpGradeStatus.sh\"\n",
+           "file_name[15]=\"/config/UpGradeStatus.sh\"\n",
+           "file_acl[15]=\"777\"\n",
 
-           "file_url[16]=\"https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Upgrade/UpGradeStatus.sh\"\n",
-           "file_name[16]=\"/config/UpGradeStatus.sh\"\n",
-           "file_acl[16]=\"777\"\n",
-
-           "max_counter=16\n",
+           "max_counter=15\n",
 
            "URLRegEx=\"^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+((\\-|\\.)[a-z0-9]+)*\\.[a-z]{2,}(:[0-9]{1,5})?(\\/.*)*$\"\n",
 
