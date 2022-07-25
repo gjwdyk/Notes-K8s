@@ -735,7 +735,6 @@ spec:
     port: 80
     protocol: TCP
     targetPort: 80
-  type: NodePort
   selector:
     app: f5-demo-httpd
 
