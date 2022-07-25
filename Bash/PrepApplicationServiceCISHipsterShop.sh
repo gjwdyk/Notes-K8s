@@ -626,10 +626,10 @@ data:
               "pool": "web_pool",
               "virtualPort": 443,
               "persistenceMethods": [],
-              "ipIntelligencePolicy": { "use": "IP_Intelligence_Policy" },
-              "profileDOS": { "use": "HTTP_Network_DoS_Protection_Profile" },
-              "profileAnalytics": { "use": "HTTP_Analytics_Profile" },
-              "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
+              "ipIntelligencePolicy": { "bigip": "/Common/IP_Intelligence_Policy" },
+              "profileDOS": { "use": "/Common/HTTP_Network_DoS_Protection_Profile" },
+              "profileAnalytics": { "use": "/Common/HTTP_Analytics_Profile" },
+              "profileAnalyticsTcp": { "use": "/Common/TCP_Analytics_Profile" }
             },
             "web_pool": {
               "class": "Pool",
