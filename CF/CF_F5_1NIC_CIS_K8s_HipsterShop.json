@@ -50,6 +50,11 @@
     "CIDR": "10.96.0.0/12"
    }
   },
+  "Name": {
+   "Domain": {
+    "PreFix": "hipster"
+   }
+  },
   "RegionAMI": {
    "af-south-1": {
     "ubuntu1804amd64": "ami-075520a13dc442833",
@@ -1339,12 +1344,12 @@
    }
   },
 
-  "CafeDNSRecord": {
+  "DNSNameRecord": {
    "Type": "AWS::Route53::RecordSet",
    "DependsOn": [ "BigIPEIP" ],
    "Properties": {
     "HostedZoneName": { "Fn::Join": [ "", [ { "Ref": "ParentDomainName" }, "." ] ] },
-    "Name": { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" }, "." ] ] },
+    "Name": { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" }, "." ] ] },
     "Type": "A",
     "TTL": "22",
     "ResourceRecords": [ { "Ref": "BigIPEIP" } ]
@@ -2299,7 +2304,7 @@
      "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, "\n",
      "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
-     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, "\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, "\n",
 
      "\n"
     ]]}}
@@ -3169,19 +3174,19 @@
   },
   "BigIPSSH": {
    "Description": "SSH to Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
   },
   "K8sMaster1SSH": {
    "Description": "SSH to K8s Master",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
   },
   "BigIPManagementURL": {
    "Description": "URL of Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
   },
   "ServiceURL": {
    "Description": "URL of Service (F5-Demo HTTP API/Application)",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ "cafe.", { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
   }
  }
 
