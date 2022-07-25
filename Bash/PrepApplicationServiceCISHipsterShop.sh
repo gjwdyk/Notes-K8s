@@ -596,7 +596,6 @@ spec:
   - name: frontend
     port: 80
     targetPort: 8080
-  type: NodePort
 ---
 apiVersion: v1
 kind: ConfigMap
