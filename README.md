@@ -159,6 +159,20 @@ The [CF_F5_1NIC_CIS_K8s_HipsterShop.json](CF/CF_F5_1NIC_CIS_K8s_HipsterShop.json
 
 
 
+The [CF_CIS_K8s_F5DemoHTTPD_XCACL.json](CF/CF_CIS_K8s_F5DemoHTTPD_XCACL.json) CloudFormation Template deploys F5 CIS with sample [F5-Demo-HTTPD](https://github.com/f5devcentral/f5-demo-httpd), with SecurityGroupIngress restricting [access from F5 Distributed Cloud](https://docs.cloud.f5.com/docs/reference/network-cloud-ref) (i.e. this CF is intended to be implemented with F5 Distributed Cloud services).
+
+<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_CIS_K8s_F5DemoHTTPD_XCACL.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
+
+<br><br><br>
+
+The [CF_CIS_K8s_HipsterShop_XCACL.json](CF/CF_CIS_K8s_HipsterShop_XCACL.json) CloudFormation Template deploys F5 CIS with sample [Hipster-Shop](https://gitlab.com/volterra.io/samples/-/blob/master/hipster-shop/kubernetes-manifests.yaml), with SecurityGroupIngress restricting [access from F5 Distributed Cloud](https://docs.cloud.f5.com/docs/reference/network-cloud-ref) (i.e. this CF is intended to be implemented with F5 Distributed Cloud services).
+
+<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_CIS_K8s_HipsterShop_XCACL.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
+
+<br><br><br>
+
+
+
 <br><br><br>
 
 The CloudFormation will be further developed to have separated SubNets as below:
