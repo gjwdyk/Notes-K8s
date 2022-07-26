@@ -668,7 +668,7 @@
   },
   "UpgradeBigIP": {
    "AllowedValues": [ "Yes", "No" ],
-   "Default": "No",
+   "Default": "Yes",
    "Description": "Whether the Big-IP should be Upgraded automatically. If you select **Yes** the Big-IP will be Upgraded, and therefore the corresponding new image URL Path and File Name should be provided. Additional time is also needed for the Upgrade process.",
    "Type": "String"
   },
