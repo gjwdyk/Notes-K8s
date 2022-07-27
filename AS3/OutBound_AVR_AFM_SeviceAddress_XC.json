@@ -1,0 +1,196 @@
+{
+  "class": "AS3",
+  "action": "deploy",
+  "persist": true,
+  "declaration": {
+    "class": "ADC",
+    "schemaVersion": "3.26.0",
+    "id": "OutBound-VS-for-Kubernetes-Nodes",
+    "label": "OutBound VS for Kubernetes Nodes",
+    "remark": "OutBound VS for Kubernetes Nodes",
+    "OutBound": {
+      "class": "Tenant",
+      "defaultRouteDomain": 0,
+      "Application_Class": {
+        "class": "Application",
+        "template": "http",
+        "serviceMain": {
+          "class": "Service_HTTP",
+          "allowVlans": [ "internal" ],
+          "virtualAddresses": [ { "use": "Any_Service_Address" } ],
+          "virtualPort": 80,
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool",
+          "profileAnalytics": { "use": "HTTP_Analytics_Profile" },
+          "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
+        },
+        "SSH_Service_TCP": {
+          "class": "Service_TCP",
+          "shareAddresses": true,
+          "virtualAddresses": [
+            "10.1.1.245"
+          ],
+          "virtualPort": 8022,
+          "allowVlans": [ "internal" ],
+          "pool": "ServerSSH_Pool"
+        },
+        "ServerSSH_Pool": {
+          "class": "Pool",
+          "monitors": [
+            { "use": "TCPHalfOpen_Monitor" }
+          ],
+          "members": [
+            {
+              "servicePort": 22,
+              "serverAddresses": [
+                "10.1.1.11"
+              ]
+            }
+          ]
+        },
+        "TCPHalfOpen_Monitor": {
+          "class": "Monitor",
+          "monitorType": "tcp-half-open"
+        },
+        "OutboundTCP": {
+          "class": "Service_TCP",
+          "virtualAddresses": [ { "use": "Any_Service_Address" } ],
+          "virtualPort": 0,
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool",
+          "profileAnalyticsTcp": { "use": "TCP_Analytics_Profile" }
+        },
+        "OutboundUDP": {
+          "class": "Service_UDP",
+          "virtualAddresses": [ { "use": "Any_Service_Address" } ],
+          "virtualPort": 0,
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+        },
+        "OutboundICMP": {
+          "class": "Service_L4",
+          "virtualAddresses": [ { "use": "Any_Service_Address" } ],
+          "virtualPort": 0,
+          "layer4": "icmp",
+          "allowVlans": [ "internal" ],
+          "translateServerAddress": false,
+          "translateServerPort": false,
+          "pool": "InternetGateway_Pool"
+        },
+        "Any_Service_Address": {
+          "class": "Service_Address",
+          "label": "Label_Any_Service_Address",
+          "remark": "Remark Any Service Address",
+          "virtualAddress": "0.0.0.0",
+          "arpEnabled": false,
+          "icmpEcho": "disable",
+          "spanningEnabled": false,
+          "routeAdvertisement": "disable"
+        },
+        "InternetGateway_Pool": {
+          "class": "Pool",
+          "members": [
+            {
+              "servicePort": 0,
+              "serverAddresses": [
+                "10.1.1.1"
+              ]
+            }
+          ]
+        },
+        "HTTP_Analytics_Profile": {
+          "class": "Analytics_Profile",
+          "remark": "HTTP_Analytics_Profile_Remark",
+          "label": "HTTP_Analytics_Profile_Label",
+          "capturedTrafficInternalLogging": true,
+          "collectedStatsInternalLogging": true,
+          "collectClientSideStatistics": true,
+          "collectGeo": true,
+          "collectIp": true,
+          "collectMaxTpsAndThroughput": true,
+          "collectMethod": true,
+          "collectOsAndBrowser": true,
+          "collectPageLoadTime": true,
+          "collectResponseCode": true,
+          "collectSubnet": true,
+          "collectUrl": true,
+          "collectUserAgent": true,
+          "collectUserSession": true,
+          "publishIruleStatistics": true,
+          "sessionCookieSecurity": "always-secure",
+          "sessionTimeoutMinutes": 10,
+          "captureFilter": {
+            "capturedProtocols": "all",
+            "capturedReadyForJsInjection": "disabled",
+            "dosActivity": "any",
+            "requestCapturedParts": "all",
+            "responseCapturedParts": "all"
+          }
+        },
+        "TCP_Analytics_Profile": {
+          "class": "Analytics_TCP_Profile",
+          "remark": "TCP_Analytics_Profile_Remark",
+          "label": "TCP_Analytics_Profile_Label",
+          "collectedStatsInternalLogging": true,
+          "collectCity": true,
+          "collectContinent": true,
+          "collectCountry": true,
+          "collectPostCode": true,
+          "collectRegion": true,
+          "collectedByClientSide": true,
+          "collectedByServerSide": true,
+          "collectNexthop": true,
+          "collectRemoteHostIp": true,
+          "collectRemoteHostSubnet": true
+        },
+        "SSH_Network_DOS_Profile": {
+          "class": "DOS_Profile",
+          "label": "SSH_Network_DOS_Profile",
+          "remark": "Network DOS Profile for Incoming SSH/TCP Connection",
+          "network": {
+            "dynamicSignatures": {
+              "detectionMode": "enabled",
+              "mitigationMode": "medium",
+              "scrubbingDuration": 321,
+              "scrubbingEnabled": true
+            },
+            "vectors": [
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "ext-hdr-too-large",            "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "hop-cnt-low",                  "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "host-unreachable",             "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "icmpv4-flood",                 "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "icmpv6-flood",                 "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "icmp-frag",                    "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "ip-frag-flood",                "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "ip-low-ttl",                   "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "ip-opt-frames",                "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "ipv6-ext-hdr-frames",          "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "ipv6-frag-flood",              "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "non-tcp-connection",           "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "opt-present-with-illegal-len", "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-opt-overruns-tcp-hdr",     "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-psh-flood",                "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-rst-flood",                "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-syn-flood",                "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-synack-flood",             "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-syn-oversize",             "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-bad-urg",                  "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-window-size",              "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tidcmp",                       "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "too-many-ext-hdrs",            "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "udp-flood",                    "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "unk-tcp-opt-type",             "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": true, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": true, "state": "mitigate", "thresholdMode": "manual", "type": "tcp-half-open", "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": false, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": false, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": false, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } },
+              { "autoAttackCeiling": 333, "autoAttackFloor": 22, "rateIncreaseThreshold": 100, "rateLimit": 333, "rateThreshold": 22, "simulateAutoThresholdEnabled": false, "state": "mitigate", "thresholdMode": "manual", "type": "sweep",                        "autoBlacklistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "autoDenylistSettings": { "attackDetectionTime": 9, "category": { "bigip": "/Common/denial_of_service" }, "categoryDuration": 321, "enabled": true, "externalAdvertisementEnabled": true }, "badActorSettings": { "enabled": false, "sourceDetectionThreshold": 22, "sourceMitigationThreshold": 98 } }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

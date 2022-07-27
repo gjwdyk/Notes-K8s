@@ -630,13 +630,13 @@
   },
   "AS3URL": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/OutBound_AVR_AFM_SeviceAddress.json",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/AS3/OutBound_AVR_AFM_SeviceAddress_XC.json",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL for the AS3 declaration JSON file to be deployed. Input *none* (without the *) to deploy without a service configuration."
   },
   "BigIPTMSHConfiguration": {
    "Type": "String",
-   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/F5_Configurations.sh",
+   "Default": "https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/TMSH/F5_Configurations_XC.sh",
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$",
    "Description": "URL of the TMSH Commands File which Big-IP will execute. If the TMSH Commands File is located at AWS S3, ensure that this CloudFormation template can read the file. If the TMSH Commands File is located at GitHub, ensure that this CloudFormation template can read the RAW file (i.e. not a web page containing the file)."
   },
