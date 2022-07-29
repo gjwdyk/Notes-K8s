@@ -41,7 +41,9 @@
     "SufFix": "109"
    },
    "BigIP": {
-    "SufFix": "245"
+    "SufFix0": "245",
+    "SufFix1": "246",
+    "SufFix2": "247"
    },
    "K8sPod": {
     "CIDR": "10.244.0.0/16"
@@ -52,7 +54,9 @@
   },
   "Name": {
    "Domain": {
-    "PreFix": "demo"
+    "PreFix0": "demo",
+    "PreFix1": "hipster",
+    "PreFix2": "juice"
    }
   },
   "RegionAMI": {
@@ -1466,12 +1470,26 @@
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPSecurityGroupXCEuAmerica" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
    }
   },
-
-  "BigIPEIP": {
+  "BigIPEIP0": {
    "Type": "AWS::EC2::EIP",
    "Properties": {
     "Domain": "vpc",
-    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
+    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP0" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
+   }
+  },
+
+  "BigIPEIP1": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP1" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
+   }
+  },
+  "BigIPEIP2": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP2" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
    }
   },
   "BigIPNetworkInterface": {
@@ -1482,20 +1500,41 @@
     "GroupSet": [ {"Ref": "BigIPSecurityGroupInternalCentrin"}, {"Ref": "BigIPSecurityGroupISPiNet"}, {"Ref": "BigIPSecurityGroupXCAsiaDNS"}, {"Ref": "BigIPSecurityGroupXCEurope"}, {"Ref": "BigIPSecurityGroupXCEuAmerica"} ],
     "SourceDestCheck": "false",
     "SubnetId": { "Ref": "K8sNodeSubnet" },
-    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] },
+    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] },
+    "PrivateIpAddresses": [
+     { "Primary": "false", "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix1" ] } ] ] } },
+     { "Primary": "false", "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix2" ] } ] ] } }
+    ],
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPNetworkInterface" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
    }
   },
-  "BigIPEIPAssociation": {
+  "BigIPEIPAssociation0": {
    "Type": "AWS::EC2::EIPAssociation",
-   "DependsOn": [ "BigIPEIP", "BigIPNetworkInterface" ],
+   "DependsOn": [ "BigIPEIP0", "BigIPNetworkInterface" ],
    "Properties": {
-    "AllocationId": { "Fn::GetAtt": [ "BigIPEIP", "AllocationId" ] },
+    "AllocationId": { "Fn::GetAtt": [ "BigIPEIP0", "AllocationId" ] },
     "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" },
-    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }
+    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }
    }
   },
-
+  "BigIPEIPAssociation1": {
+   "Type": "AWS::EC2::EIPAssociation",
+   "DependsOn": [ "BigIPEIP1", "BigIPNetworkInterface" ],
+   "Properties": {
+    "AllocationId": { "Fn::GetAtt": [ "BigIPEIP1", "AllocationId" ] },
+    "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" },
+    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix1" ] } ] ] }
+   }
+  },
+  "BigIPEIPAssociation2": {
+   "Type": "AWS::EC2::EIPAssociation",
+   "DependsOn": [ "BigIPEIP2", "BigIPNetworkInterface" ],
+   "Properties": {
+    "AllocationId": { "Fn::GetAtt": [ "BigIPEIP2", "AllocationId" ] },
+    "NetworkInterfaceId": { "Ref": "BigIPNetworkInterface" },
+    "PrivateIpAddress": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix2" ] } ] ] }
+   }
+  },
   "K8sNodeSecurityGroup": {
    "Type": "AWS::EC2::SecurityGroup",
    "DependsOn": [ "VPC" ],
@@ -1637,21 +1676,41 @@
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "K8sWorker9NetworkInterface" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
    }
   },
-
-  "DNSNameRecord": {
+  "DNSNameRecord0": {
    "Type": "AWS::Route53::RecordSet",
-   "DependsOn": [ "BigIPEIP" ],
+   "DependsOn": [ "BigIPEIP0" ],
    "Properties": {
     "HostedZoneName": { "Fn::Join": [ "", [ { "Ref": "ParentDomainName" }, "." ] ] },
-    "Name": { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" }, "." ] ] },
+    "Name": { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" }, "." ] ] },
     "Type": "A",
     "TTL": "22",
-    "ResourceRecords": [ { "Ref": "BigIPEIP" } ]
+    "ResourceRecords": [ { "Ref": "BigIPEIP0" } ]
    }
   },
-
+  "DNSNameRecord1": {
+   "Type": "AWS::Route53::RecordSet",
+   "DependsOn": [ "BigIPEIP1" ],
+   "Properties": {
+    "HostedZoneName": { "Fn::Join": [ "", [ { "Ref": "ParentDomainName" }, "." ] ] },
+    "Name": { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" }, "." ] ] },
+    "Type": "A",
+    "TTL": "22",
+    "ResourceRecords": [ { "Ref": "BigIPEIP1" } ]
+   }
+  },
+  "DNSNameRecord2": {
+   "Type": "AWS::Route53::RecordSet",
+   "DependsOn": [ "BigIPEIP2" ],
+   "Properties": {
+    "HostedZoneName": { "Fn::Join": [ "", [ { "Ref": "ParentDomainName" }, "." ] ] },
+    "Name": { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" }, "." ] ] },
+    "Type": "A",
+    "TTL": "22",
+    "ResourceRecords": [ { "Ref": "BigIPEIP2" } ]
+   }
+  },
   "BigIPInstance": {
-   "DependsOn": [ "BigIPEIPAssociation" ],
+   "DependsOn": [ "BigIPEIPAssociation0", "BigIPEIPAssociation1", "BigIPEIPAssociation2" ],
    "Metadata": {
     "AWS::CloudFormation::Init": {
      "config": {
@@ -2326,7 +2385,7 @@
         "owner": "root"
        },
        "/config/lidsa/IPToAWSInstanceMetaData": {
-        "content": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] },
+        "content": { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] },
         "group": "root",
         "mode": "000666",
         "owner": "root"
@@ -2447,13 +2506,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sMaster1", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -2567,7 +2626,7 @@
      "\n",
 
      "runuser -u ubuntu -- bash /home/ubuntu/BigIPCISScript ",
-	  { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, " ",
+	  { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, " ",
       { "Ref": "BigIPManagementGUIPort" }, " ",
       { "Fn::FindInMap": [ "IPAddress", "K8sPod", "CIDR" ] }, " ",
       { "Ref": "BigIPAdminPassword" }, " ",
@@ -2596,7 +2655,7 @@
      "sudo bash /home/ubuntu/CompileNGINXPlusScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, " ", { "Ref": "SkipNGINXPlusCompilation" }, " ", { "Ref": "DockerHubUserID" }, " ", { "Ref": "DockerHubPassword" }, "\n",
      "runuser -u ubuntu -- bash /home/ubuntu/NGINXPlusIngressScript ", { "Ref": "DockerHubRepositoryName" }, " ", { "Ref": "NGINXPlusVersion" }, "\n",
 
-     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, "\n",
+     "runuser -u ubuntu -- bash /home/ubuntu/ApplicationServiceScript ", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, "\n",
 
      "\n"
     ]]}}
@@ -2630,13 +2689,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker1", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -2725,13 +2784,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker2", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -2820,13 +2879,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker3", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker3", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -2915,13 +2974,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker4", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker4", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -3010,13 +3069,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker5", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker5", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -3105,13 +3164,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker6", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker6", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -3200,13 +3259,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker7", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -3295,13 +3354,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker8", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -3390,13 +3449,13 @@
      "echo \"`date +%Y%m%d%H%M%S` Interface Name : $IFName .\"\n",
      "sudo printf \"network: {config: disabled}\" >> /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg\n",
      "sudo rm -frv /etc/netplan/*\n",
-     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
+     "sudo printf \"network:\\n  ethernets:\\n    $IFName:\\n      addresses: [", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sWorker9", "SufFix" ] } ] ] }, "/24]\\n      gateway4: ", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\\n      nameservers:\\n        addresses: [", { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, ".0.2]\\n  version: 2\\n\" > /etc/netplan/50-cloud-init.yaml\n",
      "sudo netplan apply\n",
 
      "Loop=\"Yes\"\n",
      "Loop_Period=\"1m\"\n",
      "User=admin\n",
-     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix" ] } ] ] }, "\"\n",
+     "BigIPAddress=\"", { "Fn::Join": [ ".", [ { "Fn::FindInMap": [ "IPAddress", "VPC", "PreFix" ] }, { "Fn::FindInMap": [ "IPAddress", "K8sNode", "InFix" ] }, { "Fn::FindInMap": [ "IPAddress", "BigIP", "SufFix0" ] } ] ] }, "\"\n",
      "while ( [ \"$Loop\" == \"Yes\" ] ) ; do\n",
      " if ( runuser -u ubuntu -- ssh -o StrictHostKeyChecking=no $User@$BigIPAddress run util bash -c /config/UpGradeStatus.sh | egrep -o \"^([0-9]{14} Custom Configuration Finished \\.)$\" ) ; then\n",
      "  echo \"`date +%Y%m%d%H%M%S` Big-IP is Ready .\"\n",
@@ -3460,25 +3519,69 @@
  },
 
  "Outputs": {
-  "BigIPIPAddress": {
-   "Description": "IP Address of Big-IP",
-   "Value": { "Ref": "BigIPEIP" }
+  "BigIPIPAddress0": {
+   "Description": "IP Address 0 of Big-IP",
+   "Value": { "Ref": "BigIPEIP0" }
   },
-  "BigIPSSH": {
+  "BigIPIPAddress1": {
+   "Description": "IP Address 1 of Big-IP",
+   "Value": { "Ref": "BigIPEIP1" }
+  },
+  "BigIPIPAddress2": {
+   "Description": "IP Address 2 of Big-IP",
+   "Value": { "Ref": "BigIPEIP2" }
+  },
+
+  "BigIPSSH0": {
    "Description": "SSH to Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
   },
-  "K8sMaster1SSH": {
+  "BigIPSSH1": {
+   "Description": "SSH to Big-IP Management Interface",
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
+  },
+  "BigIPSSH2": {
+   "Description": "SSH to Big-IP Management Interface",
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
+  },
+
+  "K8sMaster1SSH0": {
    "Description": "SSH to K8s Master",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
   },
-  "BigIPManagementURL": {
+  "K8sMaster1SSH1": {
+   "Description": "SSH to K8s Master",
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
+  },
+  "K8sMaster1SSH2": {
+   "Description": "SSH to K8s Master",
+   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
+  },
+
+  "BigIPManagementURL0": {
    "Description": "URL of Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
   },
-  "ServiceURL": {
+  "BigIPManagementURL1": {
+   "Description": "URL of Big-IP Management Interface",
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
+  },
+  "BigIPManagementURL2": {
+   "Description": "URL of Big-IP Management Interface",
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
+  },
+
+  "ServiceURL0": {
    "Description": "URL of Service (F5-Demo-HTTPD API/Application)",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
+  },
+  "ServiceURL1": {
+   "Description": "URL of Service (Hipster-Shop API/Application)",
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
+  },
+  "ServiceURL2": {
+   "Description": "URL of Service (Juice-Shop API/Application)",
+   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
   }
  }
 
