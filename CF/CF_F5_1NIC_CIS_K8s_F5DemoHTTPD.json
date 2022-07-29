@@ -3183,7 +3183,7 @@
    "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
   },
   "ServiceURL": {
-   "Description": "URL of Service (F5-Demo HTTP API/Application)",
+   "Description": "URL of Service (F5-Demo-HTTPD API/Application)",
    "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":443/" ] ] }
   }
  }
