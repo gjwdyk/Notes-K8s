@@ -772,6 +772,7 @@ data:
               "pool": "web_pool",
               "virtualPort": 443,
               "persistenceMethods": [],
+              "profileHTTP": { "use": "ServiceHTTPS_HTTPProfile" },
               "ipIntelligencePolicy": { "bigip": "/Common/IP_Intelligence_Policy" },
               "profileDOS": { "bigip": "/Common/HTTP_Network_DoS_Protection_Profile" },
               "profileAnalytics": { "bigip": "/Common/HTTP_Analytics_Profile" },
@@ -789,6 +790,12 @@ data:
                   "serverAddresses": []
                 }
               ]
+            },
+            "ServiceHTTPS_HTTPProfile": {
+              "class": "HTTP_Profile",
+              "otherXFF": [ "x-envoy-external-address" ],
+              "trustXFF": true,
+              "xForwardedFor": true
             },
             "ServiceHTTPS_TLSServer": {
               "class": "TLS_Server",
