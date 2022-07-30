@@ -1416,7 +1416,7 @@
    }
   },
   "BigIPInstance": {
-   "DependsOn": [ "BigIPEIPAssociation" ],
+   "DependsOn": [ "BigIPEIPAssociation0", "BigIPEIPAssociation1", "BigIPEIPAssociation2" ],
    "Metadata": {
     "AWS::CloudFormation::Init": {
      "config": {
