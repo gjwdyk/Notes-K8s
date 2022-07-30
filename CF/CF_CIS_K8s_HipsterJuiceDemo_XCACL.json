@@ -1477,7 +1477,6 @@
     "Tags": [ { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "TagPreFix" }, { "Ref": "AWS::StackName" }, "BigIPEIP0" ] ] } }, { "Key": "Owner", "Value": { "Ref": "TagOwnerEmail" } } ]
    }
   },
-
   "BigIPEIP1": {
    "Type": "AWS::EC2::EIP",
    "Properties": {
