@@ -145,6 +145,8 @@ The F5 Big-IP provides a gateway for each K8s nodes to connect to services on th
 
 ![K8s Cluster Logical Diagram with Big-IP CIS](Figures/K8sClusterLogicalDiagramBigIPOneNICIncoming.png)
 
+
+
 The [CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json](CF/CF_F5_1NIC_CIS_K8s_F5-Demo-HTTPD.json) CloudFormation Template deploys F5 CIS with sample [F5-Demo-HTTPD](https://github.com/f5devcentral/f5-demo-httpd).
 
 <a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_F5_1NIC_CIS_K8s_F5DemoHTTPD.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
@@ -160,6 +162,12 @@ The [CF_F5_1NIC_CIS_K8s_HipsterShop.json](CF/CF_F5_1NIC_CIS_K8s_HipsterShop.json
 The [CF_F5_1NIC_CIS_K8s_JuiceShop.json](CF/CF_F5_1NIC_CIS_K8s_JuiceShop.json) CloudFormation Template deploys F5 CIS with sample [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/), [OWASP Juice Shop GitHub](https://github.com/juice-shop/juice-shop).
 
 <a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_F5_1NIC_CIS_K8s_JuiceShop.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
+
+<br><br><br>
+
+The [CF_F5_1NIC_CIS_K8s_HipsterJuiceDemo.json](CF/CF_F5_1NIC_CIS_K8s_HipsterJuiceDemo.json) CloudFormation Template deploys F5 CIS with all the above sample applications [F5-Demo-HTTPD](https://github.com/f5devcentral/f5-demo-httpd), [Hipster-Shop](https://gitlab.com/volterra.io/samples/-/blob/master/hipster-shop/kubernetes-manifests.yaml) and [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/), [OWASP Juice Shop GitHub](https://github.com/juice-shop/juice-shop).
+
+<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_F5_1NIC_CIS_K8s_HipsterJuiceDemo.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
 
 <br><br><br>
 
@@ -180,6 +188,12 @@ The [CF_CIS_K8s_HipsterShop_XCACL.json](CF/CF_CIS_K8s_HipsterShop_XCACL.json) Cl
 The [CF_CIS_K8s_JuiceShop_XCACL.json](CF/CF_CIS_K8s_JuiceShop_XCACL.json) CloudFormation Template deploys F5 CIS with sample [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/), [OWASP Juice Shop GitHub](https://github.com/juice-shop/juice-shop), with SecurityGroupIngress restricting [access from F5 Distributed Cloud](https://docs.cloud.f5.com/docs/reference/network-cloud-ref) (i.e. this CF is intended to be implemented with F5 Distributed Cloud services).
 
 <a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_CIS_K8s_JuiceShop_XCACL.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
+
+<br><br><br>
+
+The [CF_CIS_K8s_HipsterJuiceDemo_XCACL.json](CF/CF_CIS_K8s_HipsterJuiceDemo_XCACL.json) CloudFormation Template deploys F5 CIS with all the above sample applications [F5-Demo-HTTPD](https://github.com/f5devcentral/f5-demo-httpd), [Hipster-Shop](https://gitlab.com/volterra.io/samples/-/blob/master/hipster-shop/kubernetes-manifests.yaml) and [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/), [OWASP Juice Shop GitHub](https://github.com/juice-shop/juice-shop), with SecurityGroupIngress restricting [access from F5 Distributed Cloud](https://docs.cloud.f5.com/docs/reference/network-cloud-ref) (i.e. this CF is intended to be implemented with F5 Distributed Cloud services).
+
+<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=F5-CIS-K8s&templateURL=https://aws-f5-singapore-hc-demo-bucket-files.s3-ap-southeast-1.amazonaws.com/CF/CF_CIS_K8s_HipsterJuiceDemo_XCACL.json"><img align="center" src="https://github.com/gjwdyk/Notes-K8s/raw/main/Figures/LaunchStackJigokuShoujo.png" width="140" height="22"/></a>
 
 <br><br><br>
 
