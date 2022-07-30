@@ -3531,43 +3531,17 @@
    "Value": { "Ref": "BigIPEIP2" }
   },
 
-  "BigIPSSH0": {
+  "BigIPSSH": {
    "Description": "SSH to Big-IP Management Interface",
    "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
   },
-  "BigIPSSH1": {
-   "Description": "SSH to Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
-  },
-  "BigIPSSH2": {
-   "Description": "SSH to Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":22" ] ] }
-  },
-
-  "K8sMaster1SSH0": {
+  "K8sMaster1SSH": {
    "Description": "SSH to K8s Master",
    "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
   },
-  "K8sMaster1SSH1": {
-   "Description": "SSH to K8s Master",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
-  },
-  "K8sMaster1SSH2": {
-   "Description": "SSH to K8s Master",
-   "Value": { "Fn::Join" : [ "", [ "ssh://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8022" ] ] }
-  },
-
-  "BigIPManagementURL0": {
+  "BigIPManagementURL": {
    "Description": "URL of Big-IP Management Interface",
    "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix0" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
-  },
-  "BigIPManagementURL1": {
-   "Description": "URL of Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix1" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
-  },
-  "BigIPManagementURL2": {
-   "Description": "URL of Big-IP Management Interface",
-   "Value": { "Fn::Join" : [ "", [ "https://", { "Fn::Join": [ "", [ { "Fn::Join": [ "", [ { "Fn::FindInMap": [ "Name", "Domain", "PreFix2" ] }, "." ] ] }, { "Ref": "ParentDomainName" } ] ] }, ":8443/" ] ] }
   },
 
   "ServiceURL0": {
