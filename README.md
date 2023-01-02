@@ -200,16 +200,6 @@ The [CF_CIS_K8s_HipsterJuiceDemo_XCACL.json](CF/CF_CIS_K8s_HipsterJuiceDemo_XCAC
 ***
 
 <br><br><br>
-
-The CloudFormation will be further developed to have separated SubNets as below:
-
-![K8s Cluster Logical Diagram with Big-IP Multi NIC](Figures/CISMultiNICK8s.png)
-
-
-
-***
-
-<br><br><br>
 ```
 ╔═╦═════════════════╦═╗
 ╠═╬═════════════════╬═╣
