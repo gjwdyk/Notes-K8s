@@ -1921,8 +1921,8 @@
            "cli script /Common/verifyHash {",
            "  proc script::run {} {",
            "    if {[catch {",
-           "      set hashes(f5-cloud-libs.tar.gz) 04cd9b161f619bf0f06f52466f7e1891912737b8b50bda4fe521edd6f7f54818c705d87f745c4f37964c9ab80bcb6f755596917d8b83bffca124e87d7f5efabd",
-           "      set hashes(f5-cloud-libs-aws.tar.gz) 091ea7b18aca7f18a0ec377a6886d5d666cc81349eafa5725ab0758ddcc17c10e03737195384eafd63c117d25913c15a11284d2cc3b221d7ba3c31422172142b",
+           "      set hashes(f5-cloud-libs.tar.gz) 3cb16d5d65e0213fdce46d503b6849d30e5d796e08284d2412655f2dde93f0050631274e67eae56a839331cae49527bf6493c0dd3ec2c925e6301f879449c2c6",
+           "      set hashes(f5-cloud-libs-aws.tar.gz) c2eadf04a910e28a52c21e1b9af9015b5a4e5a50501bc0dfbd354d03d08d5a82fe8c0326dd4138b835ff88fc17232e957b8f2d3fb031ed1809fd3d0b973afe09",
            "      set hashes(f5-cloud-libs-azure.tar.gz) e7973a1fe85b5a832c5ecd1cfce66b43b84e42cf2a06b2751734f79812de187ee1ad8730a129cb08198a452157c466bb87180c17dfd2e09b49be6efe9e9a57fe",
            "      set hashes(f5-cloud-libs-gce.tar.gz) cd95a5cc36c39f80f95476ad000f7dcc21a9fef414c8edac82be2e491c0fa9eba51b145f75ba0f3c0dae48e1c731432217b3bb700f71fe1912152dbe439e8967",
            "      set hashes(f5-cloud-libs-openstack.tar.gz) 5c83fe6a93a6fceb5a2e8437b5ed8cc9faf4c1621bfc9e6a0779f6c2137b45eab8ae0e7ed745c8cf821b9371245ca29749ca0b7e5663949d77496b8728f4b0f9",
@@ -1940,7 +1940,7 @@
            "      set hashes(asm-policy.tar.gz) 2d39ec60d006d05d8a1567a1d8aae722419e8b062ad77d6d9a31652971e5e67bc4043d81671ba2a8b12dd229ea46d205144f75374ed4cae58cefa8f9ab6533e6",
            "      set hashes(deploy_waf.sh) 1a3a3c6274ab08a7dc2cb73aedc8d2b2a23cd9e0eb06a2e1534b3632f250f1d897056f219d5b35d3eed1207026e89989f754840fd92969c515ae4d829214fb74",
            "      set hashes(f5.policy_creator.tmpl) 06539e08d115efafe55aa507ecb4e443e83bdb1f5825a9514954ef6ca56d240ed00c7b5d67bd8f67b815ee9dd46451984701d058c89dae2434c89715d375a620",
-           "      set hashes(f5.service_discovery.tmpl) 4811a95372d1dbdbb4f62f8bcc48d4bc919fa492cda012c81e3a2fe63d7966cc36ba8677ed049a814a930473234f300d3f8bced2b0db63176d52ac99640ce81b",
+           "      set hashes(f5.service_discovery.tmpl) 8bb47fcefbe75f75ec85456d5f121676a2c0b9dd91b78aebc5683bd261bb0a47d6309cf96688fed3993eea3961857307cefbab4e272810e0a73e8bd8daf22106",
            "      set hashes(f5.cloud_logger.v1.0.0.tmpl) 64a0ed3b5e32a037ba4e71d460385fe8b5e1aecc27dc0e8514b511863952e419a89f4a2a43326abb543bba9bc34376afa114ceda950d2c3bd08dab735ff5ad20",
            "      set hashes(f5-appsvcs-3.5.1-5.noarch.rpm) ba71c6e1c52d0c7077cdb25a58709b8fb7c37b34418a8338bbf67668339676d208c1a4fef4e5470c152aac84020b4ccb8074ce387de24be339711256c0fa78c8",
            "      set hashes(f5-appsvcs-3.18.0-4.noarch.rpm) e72ee8005a27070ac399ab097e8aa507a72aae4721d7491589cfeb821db3ef86cbc979e796ab319ec727bb51400ccda813c4b9eb4a6b3d1220a396b582f8f400",
@@ -1950,6 +1950,7 @@
            "      set hashes(f5-appsvcs-3.32.1-1.noarch.rpm) 7cc3755dc287b0ad7bb91500d5564f34a3b3cc741d37345f4bce8f2e00c6f987191d72fcd248b2dc7a65b3119c83e398f09af8c8da5410b5bf3d0b000c55058d",
            "      set hashes(f5-appsvcs-3.36.1-1.noarch.rpm) 8b8b94f85651220a91956492a7d501dd78cd70936f4ada6b950529661bb84590f6036b5fb37e70d2b3db126bef1e9ec2c9c2e0d20093caefce54f44ae8d3360a",
            "      set hashes(f5-appsvcs-3.38.0-4.noarch.rpm) 505de1a4dc80c6f78f3c0f678440a64d6dfe19c1a7185b5cd569b144d0d12e0107e5a8a9b7b9f2a6de9e4856f9461104770bbe3ac26f3ad59544874a99b378cb",
+           "      set hashes(f5-appsvcs-3.47.0-8.noarch.rpm) 12e803a19f39cadadea457389d49c7b2a71afff7a4ac2bcb63188118098599adbdf4b323a324b14bfd0b3e61fd7035fa07e68277f54b00a8402c8e120d03f190",
            "      set hashes(f5-cloud-failover-1.1.0-0.noarch.rpm) 15a440c299f9e4af86a3d0f5b0d75b0054385b95e47c3ef116d2e0bfb0041a26dcbf549028e2a26d2c718ec61446bd657be38fbbcd9db781efe5414c174ac68c",
            "      set hashes(f5-cloud-failover-1.3.0-0.noarch.rpm) 19681eb33d9f910c913f8180199485eb653b4b5ebeaae0b90a6ce8341d7a22fed8d21815b5ba148c468852d20cc26fad4c4242e50ecc184f1f8770dacced6f6a",
            "      set hashes(f5-cloud-failover-1.4.0-0.noarch.rpm) 49e9108a070e0c8713aeb7b330662358542e61b7c53a9d45108d37a9bf5246f9e4aaae10cc61064801dcccd20bfd5108347b0f694510e7ece07f96c45ba683b0",
@@ -2010,25 +2011,25 @@
         "group": "root",
         "mode": "000777",
         "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs/v4.25.0/f5-cloud-libs.tar.gz"
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs/v4.28.1/f5-cloud-libs.tar.gz"
        },
        "/config/cloud/f5-cloud-libs-aws.tar.gz": {
         "group": "root",
         "mode": "000777",
         "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs-aws/v2.10.0/f5-cloud-libs-aws.tar.gz"
+        "source": "http://cdn.f5.com/product/cloudsolutions/f5-cloud-libs-aws/v2.10.1/f5-cloud-libs-aws.tar.gz"
        },
        "/var/config/rest/downloads/f5-appsvcs-3.38.0-4.noarch.rpm": {
         "group": "root",
         "mode": "000777",
         "owner": "root",
-        "source": "https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.38.0/f5-appsvcs-3.38.0-4.noarch.rpm"
+        "source": "https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.47.0/f5-appsvcs-3.47.0-8.noarch.rpm"
        },
        "/config/cloud/aws/f5.service_discovery.tmpl": {
         "group": "root",
         "mode": "000777",
         "owner": "root",
-        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-service-discovery/v2.3.2/f5.service_discovery.tmpl"
+        "source": "http://cdn.f5.com/product/cloudsolutions/iapps/common/f5-service-discovery/v2.4.1/f5.service_discovery.tmpl"
        },
        "/config/cloud/aws/f5.cloud_logger.v1.0.0.tmpl": {
         "group": "root",
