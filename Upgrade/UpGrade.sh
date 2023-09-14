@@ -78,7 +78,7 @@ if ( tmsh show sys software | grep `cat $UpGradeVolume_File` | grep "complete" )
   "tmsh modify auth user admin password `cat /config/BigIPAdminPassword`"
   "tmsh save /sys config"
  )
- for CMD in "${tmsh[@]}"; do
+ for CMD in "${tmsh[@]}";do
   "/config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/waitForMcp.sh"
   if $CMD; then
    echo "command $CMD successfully executed."
