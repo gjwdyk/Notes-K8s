@@ -28,19 +28,18 @@
 
 
 
-sudo su
-echo "Executing $0"
+sudo echo "Executing $0"
 
-apt update -y
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-apt update -y
-#apt install -y containerd.io=1.4.9-1 docker-ce=5:19.03.15~3-0~ubuntu-focal docker-ce-cli=5:19.03.15~3-0~ubuntu-focal
-apt install -y containerd.io=1.4.12-1 docker-ce=5:20.10.12~3-0~ubuntu-focal docker-ce-cli=5:20.10.12~3-0~ubuntu-focal
+sudo apt update -y
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt update -y
+#sudo apt install -y containerd.io=1.4.9-1 docker-ce=5:19.03.15~3-0~ubuntu-focal docker-ce-cli=5:19.03.15~3-0~ubuntu-focal
+sudo apt install -y containerd.io=1.4.12-1 docker-ce=5:20.10.12~3-0~ubuntu-focal docker-ce-cli=5:20.10.12~3-0~ubuntu-focal
 
-# sed -i '/^ExecStart/ s/$/ --exec-opt native.cgroupdriver=systemd/' /usr/lib/systemd/system/docker.service
-mkdir -p /etc/systemd/system/docker.service.d
-tee /etc/docker/daemon.json <<EOF
+# sudo sed -i '/^ExecStart/ s/$/ --exec-opt native.cgroupdriver=systemd/' /usr/lib/systemd/system/docker.service
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo tee /etc/docker/daemon.json <<EOF
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
   "log-driver": "json-file",
@@ -52,17 +51,17 @@ tee /etc/docker/daemon.json <<EOF
 }
 EOF
 
-systemctl daemon-reload
-systemctl restart docker
-systemctl enable docker --now
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+sudo systemctl enable docker --now
 
 #╔═══════════════════╗
 #║   Review Status   ║
 #╚═══════════════════╝
 
-systemctl status docker
-docker --version
-docker info | grep -i cgroup
+sudo systemctl status docker
+sudo docker --version
+sudo docker info | grep -i cgroup
 
 #╔═════════╗
 #║   End   ║
