@@ -9,7 +9,7 @@ else
 fi
 
 if [ -z "$2" ]; then
-  WorkerNodeNamePrefix='Worker'
+  WorkerNodeNamePrefix='Server'
 else
   WorkerNodeNamePrefix="$2"
 fi

@@ -21,7 +21,7 @@ else
 fi
 
 if [ -z "$4" ]; then
-  ContainerNetworkInterface='https://docs.projectcalico.org/manifests/calico.yaml'
+  ContainerNetworkInterface='https://aws-f5-singapore-hc-demo-bucket-files.s3.ap-southeast-1.amazonaws.com/Calico/CalicoCtl/v3.23.3/calico.yaml'
 else
   ContainerNetworkInterface="$4"
 fi
