@@ -134,12 +134,12 @@ s3://aws-f5-singapore-hc-demo-bucket-files/Ubuntu20.04.4/20220420 0100/Ubuntu 20
 
 
 Execute these commands on the Control Plane node:
-cd $HOME;sudo curl -k -L -O --retry 333 https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/VMWrapMaster.sh;sudo chmod 777 $HOME/VMWrapMaster.sh;/bin/bash $HOME/VMWrapMaster.sh
+cd $HOME;sudo curl -k -L -O --retry 333 https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/VMWrapMasterFFF.sh;sudo chmod 777 $HOME/VMWrapMasterFFF.sh;/bin/bash $HOME/VMWrapMasterFFF.sh
 
 
 
 Execute these commands on each of Worker nodes:
-cd $HOME;sudo curl -k -L -O --retry 333 https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/VMWrapWorker.sh;sudo chmod 777 $HOME/VMWrapWorker.sh;/bin/bash $HOME/VMWrapWorker.sh
+cd $HOME;sudo curl -k -L -O --retry 333 https://raw.githubusercontent.com/gjwdyk/Notes-K8s/main/Bash/VMWrapWorkerFFF.sh;sudo chmod 777 $HOME/VMWrapWorkerFFF.sh;/bin/bash $HOME/VMWrapWorkerFFF.sh
 
 
 
